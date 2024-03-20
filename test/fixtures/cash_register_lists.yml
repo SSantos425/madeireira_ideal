@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cash_register: one
+  date: 2024-03-20
+  balance: 1.5
+  note: MyString
+  type: 1
+
+two:
+  cash_register: two
+  date: 2024-03-20
+  balance: 1.5
+  note: MyString
+  type: 1

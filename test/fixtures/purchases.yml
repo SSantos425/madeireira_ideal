@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  supplier: one
+  nota_number: 1
+  serie: 1
+  issue_date: 2024-03-20
+  receipt_date: 2024-03-20
+  total_nota: 1.5
+  total_products: 1.5
+  discount: 1.5
+  additon: 1.5
+  tax: 1.5
+  shipping: 1.5
+  type: 1
+
+two:
+  supplier: two
+  nota_number: 1
+  serie: 1
+  issue_date: 2024-03-20
+  receipt_date: 2024-03-20
+  total_nota: 1.5
+  total_products: 1.5
+  discount: 1.5
+  additon: 1.5
+  tax: 1.5
+  shipping: 1.5
+  type: 1

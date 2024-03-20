@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  cpf: MyString
+  customer_type: MyString
+  cep: 1
+  address: MyString
+  district: MyString
+  city: MyString
+  state: MyString
+  cnpj: MyString
+  state_registration: MyString
+  municipal_registration: MyString
+  business_sector: MyString
+  ibge_code: 1
+  notes: MyText
+
+two:
+  name: MyString
+  cpf: MyString
+  customer_type: MyString
+  cep: 1
+  address: MyString
+  district: MyString
+  city: MyString
+  state: MyString
+  cnpj: MyString
+  state_registration: MyString
+  municipal_registration: MyString
+  business_sector: MyString
+  ibge_code: 1
+  notes: MyText

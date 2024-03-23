@@ -14,11 +14,7 @@
  *= require_self
  */
  
-// Estilos do AdminLTE 3.2.0
-@import 'adminlte/dist/css/adminlte.css';
+@import "bootstrap";
 
-// Estilos do Font Awesome
-@import 'adminlte/plugins/fontawesome-free/css/fontawesome.css';
-
-
+@import "app/assets/stylesheets/adminlte.css";
 

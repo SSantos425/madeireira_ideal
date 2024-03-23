@@ -10,7 +10,17 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="hold-transition layout-top-nav">
+    <div class="wrapper">
+      <%= render "layouts/header" %>
+      <div class="content-wrapper"> 
+        <div class="content-header">
+          <div class="container">            
+            <%= yield %>    
+          </div>
+        </div>      
+      </div>
+    <div>
+    
   </body>
 </html>

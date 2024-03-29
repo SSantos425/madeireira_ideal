@@ -14,7 +14,9 @@
  *= require_self
  */
  
-@import "bootstrap";
+ @import 'adminlte/plugins/fontawesome-free/css/all.min.css';
 
-@import "app/assets/stylesheets/adminlte.css";
+ @import 'adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css';
+
+ @import 'adminlte/dist/css/adminlte.css';
 

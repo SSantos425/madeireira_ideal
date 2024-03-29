@@ -1,0 +1,62 @@
+<div class="card card-outline card-primary larger-card">
+    <div class="card-header text-center">
+        <h1><i class="fas fa-user"></i> Detalhes do Cliente</h1>
+    </div>
+    <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="card col-md-5">
+                <div class="form-group">
+                    <label>Tipo de Cliente:</label>
+                    <%= @client.customer_type %>
+                </div>
+
+                <div class="form-group">
+                    <label>Nome:</label>
+                    <%= @client.name %>
+                </div>
+
+                <div class="form-group">
+                    <label>CPF:</label>
+                    <%= @client.cpf %>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label>CEP:</label>
+                    <%= @client.cep %>
+                </div>
+
+                <div class="form-group">
+                    <label>Logradouro:</label>
+                    <%= @client.address %>
+                </div>
+
+                <div class="form-group">
+                    <label>Bairro:</label>
+                    <%= @client.district %>
+                </div>
+
+                <div class="form-group">
+                    <label>Cidade:</label>
+                    <%= @client.city %>
+                </div>
+
+                <div class="form-group">
+                    <label>Numero:</label>
+                    <%= @client.number %>
+                </div>
+
+                <div class="form-group">
+                    <label>UF:</label>
+                    <%= @client.state %>
+                </div>
+
+                <div class="form-group">
+                    <label>Observação:</label>
+                    <%= @client.notes %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

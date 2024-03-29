@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
+  get 'clients/index'
   devise_for :users
 
   resources :products, only: [:index, :edit, :new, :create, :destroy]
+  resources :clients
 
   resources :inventorylists #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
   resources :vendas #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
@@ -9,7 +11,7 @@ Rails.application.routes.draw do
   resources :cartlist #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
   resources :cartlist_orderables #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
   resources :fornecedores #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
-  resources :clientes #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
+
   resources :wallets #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
   resources :compras #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
   resources :list_wallets

@@ -1,0 +1,92 @@
+<div class="card card-outline card-primary larger-card">
+  <div class="card-header text-center">
+    <div>
+      <h1><i class="fas fa-user"></i> Novo Cliente</h1>
+    </div>
+  </div>
+  <div class="card-body">
+    <%= form_with model: @client, url: (@client.persisted? ? client_path(@client) : clients_path), html: { class: 'form' } do |form| %>
+      <div class="row" style="justify-content: center;">
+        <div class="card col-md-5">
+          <div class="form-group">
+            <%= form.label :customer_type, "Tipo de Cliente" %>
+            <%= form.text_field :customer_type, { class: 'form-control', readonly: true } %>
+          </div>
+          
+
+          <div class="form-group">
+            <%= form.label :name, "Nome" %>
+            <%= form.text_field :name, class: 'form-control', placeholder: "Nome" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :cpf, "CPF"%>
+            <%= form.text_field :cpf, class: 'form-control', placeholder: "CPF" %>
+          </div>
+
+          <div class="form-group cnpj" style="display: none;">
+            <%= form.label :cnpj, "CNPJ" %>
+            <%= form.text_field :cnpj, class: 'form-control', placeholder: "CNPJ" %>
+          </div>
+          
+
+          <div class="form-group inscricao-estadual" style="display: none;">
+            <%= form.label :state_registration, "Inscrição Estadual" %>
+            <%= form.text_field :state_registration, class: 'form-control', placeholder: "Inscrição Estadual" %>
+          </div>
+
+          <div class="form-group inscricao-municipal" style="display: none;">
+            <%= form.label :municipal_registration, "Inscrição Municipal" %>
+            <%= form.text_field :municipal_registration, class: 'form-control', placeholder: "Inscrição Municipal" %>
+          </div>
+
+          <div class="form-group ramo-de-atividade" style="display: none;">
+            <%= form.label :business_sector, "Ramo de Atividade" %>
+            <%= form.text_field :business_sector, class: 'form-control', placeholder: "Ramo de Atividade" %>
+          </div>
+
+          <div class="form-group cod-ibge" style="display: none;">
+            <%= form.label :ibge_code, "Código IBGE" %>
+            <%= form.text_field :ibge_code, class: 'form-control', placeholder: "Código IBGE" %>
+          </div>
+        </div>
+
+        <div class="col-md-5">
+          <div class="form-group">
+            <%= form.label :cep, "CEP" %>
+            <%= form.text_field :cep, class: 'form-control', placeholder: "CEP" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :state, "Logradouro" %>
+            <%= form.text_field :state, class: 'form-control', placeholder: "Logradouro" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :district, "Bairro" %>
+            <%= form.text_field :district, class: 'form-control', placeholder: "Bairro" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :city, "Cidade" %>
+            <%= form.text_field :city, class: 'form-control', placeholder: "Localidade" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :state, "UF" %>
+            <%= form.text_field :state, class: 'form-control', placeholder: "UF" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :note, "Observação" %>
+            <%= form.text_area :note, class: 'form-control', placeholder: "Observação" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <%= form.submit 'Salvar', class: 'btn btn-block btn-primary' %>
+      </div>
+    <% end %>
+  </div>
+</div>

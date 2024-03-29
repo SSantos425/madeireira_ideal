@@ -1,0 +1,6 @@
+<% if @client.customer_type === "Pessoa Fisica" %>
+    <%= render "formshowpfisica"%>
+<% else %>
+    <%= render "formshowpjuridica"%>
+<% end %>
+

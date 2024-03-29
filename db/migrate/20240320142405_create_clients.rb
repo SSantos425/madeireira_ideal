@@ -15,6 +15,7 @@ class CreateClients < ActiveRecord::Migration[7.0]
       t.string :business_sector
       t.integer :ibge_code
       t.text :notes
+      t.integer :number
 
       t.timestamps
     end

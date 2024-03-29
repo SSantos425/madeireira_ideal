@@ -87,6 +87,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_20_144929) do
     t.string "business_sector"
     t.integer "ibge_code"
     t.text "notes"
+    t.integer "number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

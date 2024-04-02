@@ -1,0 +1,113 @@
+<div class="card card-outline card-primary larger-card">
+  <div class="card-header text-center">
+    <div>
+      <h1><i class="fa fa-building"></i> Novo Fornecedor</h1>
+    </div>
+  </div>
+  <div class="card-body">
+    <%= form_with model: @supplier, url: suppliers_path, class: 'mb-3' do |form| %>
+  <div class="form-group">
+    <%= form.label :name, "Nome" %>
+    <%= form.text_field :name, class: 'form-control', placeholder: "Nome" %>
+    <% @supplier.errors.full_messages_for(:name).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :cep, "CEP" %>
+    <%= form.text_field :cep, class: 'form-control', placeholder: "CEP" %>
+    <% @supplier.errors.full_messages_for(:cep).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :address, "Endereço" %>
+    <%= form.text_field :address, class: 'form-control', placeholder: "Endereço" %>
+    <% @supplier.errors.full_messages_for(:address).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :number, "Número" %>
+    <%= form.text_field :number, class: 'form-control', placeholder: "Número" %>
+    <% @supplier.errors.full_messages_for(:number).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :complement, "Complemento" %>
+    <%= form.text_field :complement, class: 'form-control', placeholder: "Complemento" %>
+    <% @supplier.errors.full_messages_for(:complement).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :district, "Bairro" %>
+    <%= form.text_field :district, class: 'form-control', placeholder: "Bairro" %>
+    <% @supplier.errors.full_messages_for(:district).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :city, "Cidade" %>
+    <%= form.text_field :city, class: 'form-control', placeholder: "Cidade" %>
+    <% @supplier.errors.full_messages_for(:city).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :state, "Estado" %>
+    <%= form.text_field :state, class: 'form-control', placeholder: "Estado" %>
+    <% @supplier.errors.full_messages_for(:state).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :phone, "Telefone" %>
+    <%= form.text_field :phone, class: 'form-control', placeholder: "Telefone" %>
+    <% @supplier.errors.full_messages_for(:phone).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :cnpj, "CNPJ" %>
+    <%= form.text_field :cnpj, class: 'form-control', placeholder: "CNPJ" %>
+    <% @supplier.errors.full_messages_for(:cnpj).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :state_registration, "Inscrição Estadual" %>
+    <%= form.text_field :state_registration, class: 'form-control', placeholder: "Inscrição Estadual" %>
+    <% @supplier.errors.full_messages_for(:state_registration).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :corporate_name, "Razão Social" %>
+    <%= form.text_field :corporate_name, class: 'form-control', placeholder: "Razão Social" %>
+    <% @supplier.errors.full_messages_for(:corporate_name).each do |message| %>
+      <div style="color: red;"><%= message %></div>
+    <% end %>
+  </div>
+
+  <div class="mt-3">
+    <%= form.submit 'Salvar', class: 'btn btn-block btn-primary' %>
+  </div>
+<% end %>
+
+  </div>
+  <!-- /.card-body -->
+</div>
+<!-- /.card -->

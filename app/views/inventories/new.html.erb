@@ -1,0 +1,18 @@
+<h1>Adiconar produto ao estoque</h1>
+
+<%= form_with model: @inventory |form| %>
+  <div>
+    <%= form.label :product_id %><br>
+    <%= form.text_field :product_id %>
+  </div>
+
+
+  <div>
+    <%= form.label :quantity %><br>
+    <%= form.text_field :quantity %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

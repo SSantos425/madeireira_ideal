@@ -11,6 +11,7 @@ class ProductsController < ApplicationController
         @product = Product.new(product_params)
 
         if @product.save
+            Inventory.create(product_id:@product.id,quantity:0.0)
             redirect_to products_path,notice: 'Produto adicionado com sucesso !!'
         else
             render :new, status: :unprocessable_entity

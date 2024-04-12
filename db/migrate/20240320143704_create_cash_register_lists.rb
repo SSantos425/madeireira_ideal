@@ -5,7 +5,7 @@ class CreateCashRegisterLists < ActiveRecord::Migration[7.0]
       t.date :date
       t.float :balance
       t.string :note
-      t.integer :type
+      t.integer :cash_register_type
 
       t.timestamps
     end

@@ -1,0 +1,67 @@
+<div class="card card-primary">
+  <div class="card-header">
+      <h1>Detalhes da Compra</h1>
+  </div>
+
+  <div class="card-body" style="text-align: center;">    
+      <table class="table table-hover">
+          <thead>
+              <tr>
+                  <th>Nota</th>
+                  <th>Série</th>
+                  <th>Data de Emissão</th>
+                  <th>Data de Recebimento</th>
+                  <th>Total da Nota</th>
+                  <th>Total Produtos</th>
+                  <th>Desconto</th>
+                  <th>Acréscimos</th>
+                  <th>Frete</th>
+                  <th>Imposto</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td><%= @purchase.nota_number %></td>
+                  <td><%= @purchase.serie %></td>
+                  <td><%= @purchase.issue_date.strftime('%d/%m/%Y') %></td>
+                  <td><%= @purchase.receipt_date.strftime('%d/%m/%Y') %></td>
+                  <td><%= number_to_currency(@purchase.total_nota, unit: 'R$', separator: ',', delimiter: '.') %></td>
+                  <td><%= number_to_currency(@purchase.total_products, unit: 'R$', separator: ',', delimiter: '.') %></td>
+                  <td><%= number_to_currency(@purchase.discount, unit: 'R$', separator: ',', delimiter: '.') %></td>
+                  <td><%= number_to_currency(@purchase.additon, unit: 'R$', separator: ',', delimiter: '.') %></td>
+                  <td><%= number_to_currency(@purchase.shipping, unit: 'R$', separator: ',', delimiter: '.') %></td>
+                  <td><%= number_to_currency(@purchase.tax, unit: 'R$', separator: ',', delimiter: '.') %></td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+
+  <div class="card-footer">
+      <table class="table table-bordered table-hover">
+          <thead>
+              <tr>
+                  <th>Nome</th>
+                  <th>Unidade</th>
+                  <th>Preço de Compra</th>
+                  <th>Quantidade</th>                
+                  <th>Preço Parcial</th>
+              </tr>
+          </thead>
+          <tbody>
+              <% @purchase_lists.each do |purchase_list| %>
+                  <% if purchase_list.purchase_id == @purchase.id %>
+                      <tr>
+                          <td><%= purchase_list.product.name %></td>
+                          <td><%= purchase_list.product.unity %></td>
+                          <td><%= number_to_currency(purchase_list.product.purchase_price, unit: 'R$', separator: ',', delimiter: '.') %></td>
+                          <td><%= purchase_list.quantity %></td>
+                          <td><%= number_to_currency(purchase_list.total_parcial, unit: 'R$', separator: ',', delimiter: '.') %></td>
+                      </tr>
+                  <% end %>
+              <% end %>
+          </tbody>
+      </table>
+    
+      <strong><%= "TOTAL: #{number_to_currency(@purchase.total_compra(@purchase.id), unit: 'R$', separator: ',', delimiter: '.')}" %></strong>
+  </div>
+</div>

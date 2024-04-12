@@ -1,0 +1,13 @@
+
+<%= turbo_frame_tag "purchaselist" do %>
+  <% if @purchase.purchase_type === 1 %>
+    <%= render "purchases/purchase_cart" %>
+  <% else %>
+    <%= render "purchases/purchase_cart_finished" %>
+  <% end%>
+<% end %>
+
+
+
+
+

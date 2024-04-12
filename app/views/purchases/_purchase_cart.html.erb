@@ -1,0 +1,129 @@
+      <div class="card card-primary">
+      
+        <div class="card-header">
+          <h1>Detalhes da Compra</h1>
+        </div>
+
+        <div class="card-body" style="text-align: center;">    
+          <table class="table table-hover" >
+            <thead>
+              <tr>
+                <th>Nota</th>
+                <th>Serie</th>
+                <th>Data de Emissao</th>
+                <th>Data de Recebimento</th>
+                <th>Total da Nota</th>
+                <th>Total Produtos</th>
+                <th>Desconto</th>
+                <th>Acrescimos</th>
+                <th>Frete</th>
+                <th>Imposto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><%= @purchase.nota_number %></td>
+                <td><%= @purchase.serie %></td>
+                <td><%= @purchase.issue_date%></td>
+                <td><%= @purchase.receipt_date%></td>
+                <td><%= @purchase.total_nota %></td>
+                <td><%= @purchase.total_products %></td>
+                <td><%= @purchase.discount %></td>
+                <td><%= @purchase.additon %></td>
+                <td><%= @purchase.shipping %></td>
+                <td><%= @purchase.tax%></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      
+        <div class="card-footer" >
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Unidade</th>
+                <th>Preço de Compra</th>
+                <th>Quantidade</th>                
+                <th>Preço Parcial</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% @purchase_lists.each do |purchase_list| %>
+                  <% if purchase_list.purchase.id === @purchase.id %>
+                    <tr>
+                      <td><%= purchase_list.product.name %></td>
+                      <td><%= purchase_list.product.unity %></td>
+                      <td><%= purchase_list.product.purchase_price %></td>
+                      <td>
+                        <div class="form-inline">
+                          <%= form_with(url: update_item_purchaselist_cart_path) do |f| %> 
+                            <%= f.hidden_field :purchase_list,value:purchase_list.id %>                  
+                            <%= f.hidden_field :purchase_id, value:purchase_list.purchase_id %> 
+                            <%= f.number_field :quantity, step:0.01, value: purchase_list.quantity, min: 0, class: "form-control"%>           
+                            <%= f.submit "Atualizar", class: "btn btn-success btn-sm mr-1" %>
+                          <% end %>
+              
+                          <%= form_with(url: remove_item_purchaselist_cart_path) do |f| %> 
+                            <%= f.hidden_field :purchase_list,value:purchase_list.id %>                  
+                            <%= f.hidden_field :purchase_id, value:purchase_list.purchase_id %>     
+                            <%= f.submit "Remover", class: "btn btn-danger btn-sm " %>
+                          <% end %>
+                        </div>
+                      </td>
+
+                      <td><%= purchase_list.total_compra_parcial %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+            </tbody>
+          </table>
+          
+          <strong><%= "TOTAL: #{@purchase.total_compra(@purchase.id)}"  %></strong>
+          <%= form_with(url: buy_purchaselist_cart_path) do |form| %>
+          <%= form.hidden_field :data, value:@purchase.receipt_date%>
+          <%= form.hidden_field :purchase_id, value: @purchase.id %>
+          <%= form.hidden_field :total_value, value: @purchase.total_compra(@purchase.id) %>
+            <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
+              
+              Finalizar Compra A vista
+            <% end %>
+          <% end %>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Lista de Produtos</h5>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Unidade</th>
+              <th>Preço</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @products.each do |product| %>
+              <tr>
+                <td><%= product.name %></td>
+                <td><%= product.unity %></td>
+                <td><%= product.purchase_price %></td>
+                <td>
+                  <%= form_with(url: include_products_path) do |form| %>
+                    <%= form.hidden_field :purchase_id, value: @purchase.id %>
+                    <%= form.hidden_field :product_id, value: product.id %>
+                    <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade' %>
+                    <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
+                      Incluir na compra
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>

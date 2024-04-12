@@ -31,7 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_20_144929) do
     t.float "balance"
     t.integer "payment_method"
     t.date "date"
-    t.float "discoutn"
+    t.float "discount"
     t.float "additon"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -52,7 +52,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_20_144929) do
     t.date "date"
     t.float "balance"
     t.string "note"
-    t.integer "type"
+    t.integer "cash_register_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cash_register_id"], name: "index_cash_register_lists_on_cash_register_id"
@@ -121,6 +121,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_20_144929) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "purchase_lists", force: :cascade do |t|
+    t.bigint "purchase_id", null: false
+    t.bigint "product_id", null: false
+    t.float "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_purchase_lists_on_product_id"
+    t.index ["purchase_id"], name: "index_purchase_lists_on_purchase_id"
+  end
+
   create_table "purchases", force: :cascade do |t|
     t.bigint "supplier_id", null: false
     t.integer "nota_number"
@@ -133,20 +143,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_20_144929) do
     t.float "additon"
     t.float "tax"
     t.float "shipping"
-    t.integer "type"
+    t.integer "purchase_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["supplier_id"], name: "index_purchases_on_supplier_id"
-  end
-
-  create_table "puschase_lists", force: :cascade do |t|
-    t.bigint "purchase_id", null: false
-    t.bigint "product_id", null: false
-    t.float "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_puschase_lists_on_product_id"
-    t.index ["purchase_id"], name: "index_puschase_lists_on_purchase_id"
   end
 
   create_table "sales", force: :cascade do |t|
@@ -196,8 +196,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_20_144929) do
   add_foreign_key "orderables", "carts"
   add_foreign_key "orderables", "clients"
   add_foreign_key "orderables", "products"
+  add_foreign_key "purchase_lists", "products"
+  add_foreign_key "purchase_lists", "purchases"
   add_foreign_key "purchases", "suppliers"
-  add_foreign_key "puschase_lists", "products"
-  add_foreign_key "puschase_lists", "purchases"
   add_foreign_key "sales", "products"
 end

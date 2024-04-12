@@ -1,0 +1,41 @@
+
+<div class="card card-outline card-primary "style="width: 30rem;">
+  <div class="card-header text-center">
+    <div>
+      <h1>Abrir o Caixa</h1>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <%= form_with(model: @cash_register, local: true) do |form| %>
+    <div class="row" style="justify-content: center;">
+      <div class="col-md-5">
+        <%= form.hidden_field :user_id ,value:current_user.id%>
+        <div class="form-group">
+            <%= form.label :balance, "Valor" %>
+            <%= form.number_field :balance, step:0.01, class: 'form-control', placeholder: "Valor"%>
+
+        </div>
+
+        <div class="form-group">
+          <%= form.label :date, "Data" %>
+          <%= form.date_field :date, class: 'form-control', placeholder: "Data"  %>
+          <% @cash_register.errors.full_messages_for(:date).each do |message| %>
+              <div style="color: red;"><%= "Selecione uma Data "%></div>
+          <% end %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :cash_replenishment, "Reforço" %>
+          <%= form.number_field :cash_replenishment, step:0.01, class: 'form-control', placeholder: "reforco"  %>
+        </div>
+
+
+        <div class="actions">
+          <%= form.submit 'Abrir', class: 'btn btn-block btn-primary'  %>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>

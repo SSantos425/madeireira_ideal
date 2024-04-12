@@ -1,0 +1,269 @@
+<%if @cash_register_last.cash_register_status===0 %>
+  <div class="card card-primary">
+    <div class="card-header">
+      <div class="form-inline" style="justify-content: space-between;">
+        <h1>
+          <%="Saldo do dia: #{number_to_currency(@cash_register_last.balance, unit: 'R$' , separator: ',' ,
+            delimiter: '.' )}" %>
+        </h1>
+        <%= form_with(url: close_cash_register_path) do |f| %>
+          <%= f.hidden_field :cash_register_id, value: @cash_register_last.id %>
+            <%= f.hidden_field :date, value: @cash_register_last.date %>
+
+              <%= f.submit "Fechar o Caixa" , class: "btn btn-warning" , date: {
+                turbo_confirm: "Tem certeza que deseja fechar o caixa?" } %>
+                <% end %>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card border border-primary">
+            <div class="card-body ">
+              <%= form_with(url: cash_replenishment_path) do |f| %>
+                <%= f.hidden_field :cash_register_id, value: @cash_register_last.id %>
+                  <%= f.hidden_field :date, value: @cash_register_last.date %>
+
+                    <div class="form-group">
+                      <%= f.label :value, "Valor Reforço" %>
+                        <%= f.number_field :value, step:0.01, class: "form-control" , placeholder: "Valor"
+                          %>
+                    </div>
+
+                    <div class="form-group">
+                      <%= f.label :notes, "Justificativa" %>
+                        <%= f.text_area :notes, class: "form-control" , placeholder: "Justificativa" %>
+                    </div>
+
+                    <%= f.submit "Reforço" , class: "btn btn-primary btn-sm" %>
+                      <% end %>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+          <div class="card border border-danger">
+            <div class="card-body">
+              <%= form_with(url: withdraw_cash_register_path) do |f| %>
+                <%= f.hidden_field :cash_register_id, value: @cash_register_last.id %>
+                  <%= f.hidden_field :date, value: @cash_register_last.date %>
+
+                    <div class="form-group">
+                      <%= f.label :value, "Valor Retirada" %>
+                        <%= f.number_field :value, step:0.01, class: 'form-control' , placeholder: "Valor"%>
+
+                    </div>
+
+                    <div class="form-group">
+                      <%= f.label :notes, "Justificativa" %>
+                        <%= f.text_area :notes, class: "form-control" , placeholder: "Justificativa" %>
+                    </div>
+
+                    <%= f.submit "Retirada" , class: "btn btn-primary btn-sm" %>
+                      <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h1>Reforços e Retiradas</h1>
+      <table class="table table-bordered table-hover mt-4">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Valor</th>
+            <th>Justificativa</th>
+            <!--
+            <th>Ações</th>
+            -->
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @cash_register_lists.each do |cash_register_list| %>
+            <% if cash_register_list.date===@cash_register_last.date %>
+              <tr>
+                <td>
+                  <%= cash_register_list.date.strftime("%d/%m/%Y") %>
+                </td>
+                <% if cash_register_list.cash_register_type===1 %>
+                  <td style="color: blue;">
+                    <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ +' , separator: ',' , delimiter: '.'
+                      )}" %>
+                  </td>
+                  <% else %>
+                    <td style="color: red;">
+                      <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ -' , separator: ',' , delimiter: '.'
+                        )}" %>
+                    </td>
+                    <% end %>
+
+
+                      <td>
+                        <%= cash_register_list.note %>
+                      </td>
+              </tr>
+              <% end %>
+                <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<%else%>
+
+  <div class="card card-primary">
+
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>
+        <strong>
+          <%= "Saldo de Abertura: #{number_to_currency(@cash_register_last.open_value, unit: 'R$' , separator: ',' , delimiter: '.' )}"
+            %>
+        </strong>
+      </div>
+
+      <div>
+        <strong>
+          <%= "Saldo de Fechamento: #{number_to_currency(@cash_register_last.close_value, unit: 'R$' , separator: ',' , delimiter: '.' )}"
+            %>
+        </strong>
+      </div>
+    </div>
+
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Valor</th>
+          <th>Justificativa</th>
+          <!--
+        <th>Ações</th>
+        -->
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @cash_register_lists.each do |cash_register_list| %>
+          <% if cash_register_list.date===@cash_register_last.date %>
+            <tr>
+              <td>
+                <%= cash_register_list.date.strftime("%d/%m/%Y") %>
+              </td>
+              <% if cash_register_list.cash_register_type===1 %>
+                <td style="color: blue;">
+                  <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ +' , separator: ',' , delimiter: '.' )}" %>
+                </td>
+                <%= %>
+                  <% else %>
+                    <td style="color: red;">
+                      <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ -' , separator: ',' , delimiter: '.' )}"
+                        %>
+                    </td>
+                    <% end %>
+
+
+                      <td>
+                        <%= cash_register_list.note %>
+                      </td>
+            </tr>
+            <% end %>
+              <% end %>
+      </tbody>
+    </table>
+
+    <div class="card-footer">
+      <strong>
+        <h1>Saldo do dia:</h1>
+      </strong>
+      <% if @cash_register_last.balance>= 0 %>
+        <div style="color: blue;">
+          <%= number_to_currency(@cash_register_last.balance, unit: 'R$' , separator: ',' , delimiter: '.' ) %>
+        </div>
+        <% else %>
+          <div style="color: red;">
+            <%= number_to_currency(@cash_register_last.balance, unit: 'R$' , separator: ',' , delimiter: '.' ) %>
+          </div>
+          <% end %>
+    </div>
+
+
+  </div>
+
+  <div class="card card-primary">
+    <div class="card-header">
+      <strong>Entradas e Saidas</strong>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card border border-primary">
+            <div class="card-body">
+              <h5 class="card-title">Entradas</h5>
+              <table class="table table-bordered table-hover mt-4">
+                <thead>
+                  <tr>
+                    <th>Valor</th>
+                    <th>Justificativa</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @cash_register_lists.each do |cash_register_list| %>
+                    <% if cash_register_list.date===@cash_register_last.date %>
+                      <% if cash_register_list.cash_register_type===1 %>
+                        <tr>
+                          <td style="color: blue;">
+                            <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ +' , separator: ',' , delimiter: '.'
+                              )}" %>
+                          </td>
+                          <td>
+                            <%= cash_register_list.note %>
+                          </td>
+                        </tr>
+                        <% end %>
+                          <% end %>
+                            <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card border border-danger">
+            <div class="card-body">
+              <h5 class="card-title">Saídas</h5>
+              <table class="table table-bordered table-hover mt-4">
+                <thead>
+                  <tr>
+                    <th>Valor</th>
+                    <th>Justificativa</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @cash_register_lists.each do |cash_register_list| %>
+                    <% if cash_register_list.date===@cash_register_last.date %>
+                      <% if cash_register_list.cash_register_type !=1 %>
+                        <tr>
+                          <td style="color: red;">
+                            <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ -' , separator: ',' , delimiter: '.'
+                              )}" %>
+                          </td>
+                          <td>
+                            <%= cash_register_list.note %>
+                          </td>
+                        </tr>
+                        <% end %>
+                          <% end %>
+                            <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<% end %>

@@ -5,7 +5,7 @@ class CreateCartLists < ActiveRecord::Migration[7.0]
       t.float :balance
       t.integer :payment_method
       t.date :date
-      t.float :discoutn
+      t.float :discount
       t.float :additon
 
       t.timestamps

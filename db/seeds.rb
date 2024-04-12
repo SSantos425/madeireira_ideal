@@ -5,8 +5,56 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-Inventory.delete_all
-Product.delete_all
+
+
+Inventory.destroy_all
+Purchase.destroy_all
+PurchaseList.destroy_all
+Product.destroy_all
+CashRegisterList.destroy_all
+CashRegister.destroy_all
+User.destroy_all
+Supplier.destroy_all
+
+
+user = User.create(email:"aaraujoborges@uol.com.br", password:830325)
+cash_register = CashRegister.create(user_id:user.id, balance:0.0,date:Date.today, cash_replenishment:0.0,cash_register_status:0)
+
+customer1 = Client.create(name:"CLIENTES DIVERSOS", customer_type:"Pessoa Fisica") #0 P.FISICA
+customer2 = Client.create(name:"AB CONSTRUÇÕES", customer_type:"Pessoa Juridica") #1 P.JURIDICA
+
+
+
+supplier1 = Supplier.create(
+  name: "ABRAMAX MADEIRAS",
+  cep: "68450-000",
+  address: "VIA MARGEM DIREITA DO RIO MOJU",
+  number: "0",
+  complement: "-",
+  district: "PARAISO",
+  city: "MOJU",
+  state: "Pará",
+  phone: "91 99292-1254",
+  cnpj: "08.990.062/0001-08",
+  state_registration: "15.263.622-6",
+  corporate_name: "ABRAMAX COMERCIO EXPORTAÇÃO DE MADEIRAS LTDA-EPP"
+)
+
+supplier2 = Supplier.create(
+  name: "MADEIREIRA NOVA ERA",
+  cep: "68450-000",
+  address: "Rua Agropalma",
+  number: "0",
+  complement: "CAIXA POSTAL 083, ESQUINA COM RUA ARAUARI",
+  district: "Altos",
+  city: "MOJU",
+  state: "Pará",
+  phone: "91 99916-1022",
+  cnpj: "08.242.838/0001-01",
+  state_registration: "15.257.811-0",
+  corporate_name: "NOVA ERA INDUSTRIA COMERCIO EXPORTAÇÃO DE MADEIRAS LIMITADA me"
+)
+
 
 
 # VIGAS

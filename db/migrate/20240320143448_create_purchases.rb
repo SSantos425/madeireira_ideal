@@ -12,7 +12,7 @@ class CreatePurchases < ActiveRecord::Migration[7.0]
       t.float :additon
       t.float :tax
       t.float :shipping
-      t.integer :type
+      t.integer :purchase_type
 
       t.timestamps
     end

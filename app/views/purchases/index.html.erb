@@ -1,0 +1,52 @@
+<div class="card card-primary">
+  <div class="card-header">
+    <h3 class="card-title">Lista de Compras fechadas</h3>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Data Recebimento</th>
+          <th>Fornecedor</th>
+          <th>Nota</th>
+          <th>Serie</th>
+          <th>Total da Nota</th>
+          <th>Total Produtos</th>
+          <th>Desconto</th>
+          <th>Acrescimos</th>
+          <th>Frete</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @purchases.each do |purchase| %>
+          <% if purchase.purchase_type === 1 %>
+            <tr>
+              <td><%= purchase.receipt_date%></td>
+              <td><%= purchase.supplier.name %></td>
+              <td><%= purchase.nota_number %></td>
+              <td><%= purchase.serie %></td>
+              <td><%= purchase.total_nota %></td>
+              <td><%= purchase.total_products %></td>
+              <td><%= purchase.discount %></td>
+              <td><%= purchase.shipping %></td>
+              <td><%= link_to "Incluir Produtos", purchase_path(purchase), class: "btn btn-primary btn-sm" %></td>
+            </tr>
+          <% else %>
+            <tr>
+              <td><%= purchase.receipt_date %></td>
+              <td><%= purchase.supplier.name %></td>
+              <td><%= purchase.nota_number %></td>
+              <td><%= purchase.serie %></td>
+              <td><%= purchase.total_nota %></td>
+              <td><%= purchase.total_products %></td>
+              <td><%= purchase.discount %></td>
+              <td><%= purchase.shipping %></td>
+              <td><%= link_to "Detalhes", purchase_path(purchase), class: "btn btn-warning btn-sm" %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

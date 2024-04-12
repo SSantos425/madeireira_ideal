@@ -1,0 +1,27 @@
+<div class="card card-primary">
+    <div class="card-header">
+      Relatório de Caixas
+    </div>
+  
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Valor</th>
+            <th>Observações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @cash_register.each do |cash_register| %>
+            <tr>
+              <td><%= cash_register.date.strftime('%d/%m/%Y') %></td>
+              <td><%= number_to_currency(cash_register.balance, unit: 'R$', separator: ',', delimiter: '.')%></td>
+              <td><%= link_to 'Detalhes', cash_register_path(cash_register), class: 'btn btn-warning' %></td>
+            </tr>
+            <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

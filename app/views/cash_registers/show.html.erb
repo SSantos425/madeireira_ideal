@@ -2,11 +2,11 @@
 
   <div class="card-header d-flex justify-content-between align-items-center">
     <div>
-      <%= "<b>Saldo de Abertura:</b> #{number_to_currency(@wallet.valor_inicial, unit: 'R$', separator: ',', delimiter: '.')}".html_safe %>
+      <%= "<b>Saldo de Abertura:</b> #{number_to_currency(@cash_register.open_value, unit: 'R$', separator: ',', delimiter: '.')}".html_safe %>
     </div>
     
     <div>
-      <%= "<b>Saldo de Fechamento:</b> #{number_to_currency(@wallet.valor_final, unit: 'R$', separator: ',', delimiter: '.')}".html_safe %>
+      <%= "<b>Saldo de Fechamento:</b> #{number_to_currency(@cash_register.close_value, unit: 'R$', separator: ',', delimiter: '.')}".html_safe %>
     </div>
     
   </div>
@@ -24,25 +24,25 @@
     </thead>
 
     <tbody>
-      <% @list_wallets.each do |list_wallet| %>
-        <% if list_wallet.data===@wallet.data %>
+      <%@cash_register_lists.each do |cash_register_list| %>
+        <% if cash_register_list.date===@cash_register.date %>
           <tr>
             <td>
-              <%= list_wallet.data.strftime("%d/%m/%Y") %>
+              <%= cash_register_list.date.strftime("%d/%m/%Y") %>
             </td>
-            <% if list_wallet.tipo===1 %>
+            <% if cash_register_list.cash_register_type===1 %>
               <td style="color: blue;">
-                <%="#{number_to_currency(list_wallet.valor, unit: 'R$ +' , separator: ',' , delimiter: '.' )}" %>
+                <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ +' , separator: ',' , delimiter: '.' )}" %>
               </td>
             <% else %>
                 <td style="color: red;">
-                  <%="#{number_to_currency(list_wallet.valor, unit: 'R$ -' , separator: ',' , delimiter: '.' )}" %>
+                  <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ -' , separator: ',' , delimiter: '.' )}" %>
                 </td>
             <% end %>
 
 
                     <td>
-                      <%= list_wallet.obs %>
+                      <%= cash_register_list.note %>
                     </td>
           </tr>
           <% end %>
@@ -54,13 +54,13 @@
     <strong>
       <h1>Saldo do dia:</h1>
     </strong>
-    <% if @wallet.balance>= 0 %>
+    <% if @cash_register.balance>= 0 %>
       <div style="color: blue;">
-        <%= number_to_currency(@wallet.balance, unit: 'R$' , separator: ',' , delimiter: '.' ) %>
+        <%= number_to_currency(@cash_register.balance, unit: 'R$' , separator: ',' , delimiter: '.' ) %>
       </div>
       <% else %>
         <div style="color: red;">
-          <%= number_to_currency(@wallet.balance, unit: 'R$' , separator: ',' , delimiter: '.' ) %>
+          <%= number_to_currency(@cash_register.balance, unit: 'R$' , separator: ',' , delimiter: '.' ) %>
         </div>
       <% end %>
   </div>
@@ -89,16 +89,16 @@
                 </tr>
               </thead>
               <tbody>
-                <% @list_wallets.each do |list_wallet| %>
-                  <% if list_wallet.data===@wallet.data %>
-                    <% if list_wallet.tipo===1 %>
+                <% @cash_register_lists.each do |cash_register_list| %>
+                  <% if cash_register_list.date===@cash_register.date %>
+                    <% if cash_register_list.cash_register_type===1 %>
                       <tr>
                         <td style="color: blue;">
-                          <%="#{number_to_currency(list_wallet.valor, unit: 'R$ +' , separator: ',' , delimiter: '.' )}"
+                          <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ +' , separator: ',' , delimiter: '.' )}"
                             %>
                         </td>
                         <td>
-                          <%= list_wallet.obs %>
+                          <%= cash_register_list.note %>
                         </td>
                       </tr>
                     <% end %>
@@ -122,16 +122,16 @@
                 </tr>
               </thead>
               <tbody>
-                <% @list_wallets.each do |list_wallet| %>
-                  <% if list_wallet.data===@wallet.data %>
-                    <% if list_wallet.tipo !=1 %>
+                <% @cash_register_lists.each do |cash_register_list| %>
+                  <% if cash_register_list.date===@cash_register.date %>
+                    <% if cash_register_list.cash_register_type !=1 %>
                       <tr>
                         <td style="color: red;">
-                          <%="#{number_to_currency(list_wallet.valor, unit: 'R$ -' , separator: ',' , delimiter: '.' )}"
+                          <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ -' , separator: ',' , delimiter: '.' )}"
                             %>
                         </td>
                         <td>
-                          <%= list_wallet.obs %>
+                          <%= cash_register_list.note %>
                         </td>
                       </tr>
                     <% end %>

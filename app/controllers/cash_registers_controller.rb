@@ -85,6 +85,9 @@ class CashRegistersController < ApplicationController
     redirect_to cash_registers_path
   end
 
+  def show_cash_registers
+    @cash_register = CashRegister.all
+  end
   private
 
   def cash_register_params

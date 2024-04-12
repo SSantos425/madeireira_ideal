@@ -20,6 +20,15 @@
                         </ul>
                     </li>
 
+                    <% if @cash_register_last.cash_register_status===0 %> <!--CAIXA EM ABERTO-->
+                        <li class="nav-item">
+                            <%= link_to sales_path, class: "nav-link" do %>
+                                <p>Vender</p>
+                            <% end %>
+                        </li>
+                
+                     <% end %>
+
                     <li class="nav-item dropdown">
                         <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false" class="nav-link dropdown-toggle">Produto</a>
@@ -38,21 +47,23 @@
                         </ul>
                     </li>
 
-
-                    <li class="nav-item dropdown">
-                        <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" class="nav-link dropdown-toggle">Compra</a>
-                        <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow"
-                            style="left: 0px; right: inherit;">
-                            <li>
-                                <%= link_to "Novo Compra" , new_purchase_path ,class:"dropdown-item" %>
-                            </li>
-                            <li class="dropdown-divider"></li>
-                            <li>
-                                <%= link_to "Lista de Compras" , purchases_path,class:"dropdown-item" %>
-                            </li>
-                        </ul>
-                    </li>
+                    <% if @cash_register_last.cash_register_status===0 %>
+                        <li class="nav-item dropdown">
+                            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false" class="nav-link dropdown-toggle">Compra</a>
+                            <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow"
+                                style="left: 0px; right: inherit;">
+                                <li>
+                                    <%= link_to "Novo Compra" , new_purchase_path ,class:"dropdown-item" %>
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li>
+                                    <%= link_to "Lista de Compras" , purchases_path,class:"dropdown-item" %>
+                                </li>
+                            </ul>
+                        </li>
+                    <% end %>
+                        
 
                     <li class="nav-item dropdown">
                         <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
@@ -82,8 +93,19 @@
                             <% end %>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    <li class="nav-item dropdown">
+                        <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Relatórios</a>
+                        <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow" style="left: 0px; right: inherit;">
+                            <li><%= link_to "Vendas", root_path ,class:"dropdown-item" %></li>
+                            <li class="dropdown-divider"></li>   
+                            <li><%= link_to "Clientes", clients_path,class:"dropdown-item" %></li>
+                            <li class="dropdown-divider"></li>   
+                            <li><%= link_to "Caixas", show_cash_registers_path,class:"dropdown-item" %></li>
+                            <li class="dropdown-divider"></li>   
+                            <li><%= link_to "Lista de Fornecedores", suppliers_path,class:"dropdown-item" %></li>
+                            <li class="dropdown-divider"></li>   
+                            <li><%= link_to "Lista de Compras", purchases_path,class:"dropdown-item" %></li>               
+                        </ul>
                     </li>
 
                     <li class="nav-item">
@@ -102,7 +124,11 @@
                             </ul>
                         </div>
                     </li>
+
+                   
                 </ul>
+
+                
 
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

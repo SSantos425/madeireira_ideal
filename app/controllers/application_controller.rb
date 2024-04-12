@@ -18,6 +18,6 @@ class ApplicationController < ActionController::Base
   end
 
   def set_cash_register_last
-    @cash_register_lastt = CashRegister.last
+    @cash_register_last = CashRegister.last
   end
 end

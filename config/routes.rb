@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :inventories
   resources :purchases
   resources :cash_registers
+  resources :sales
 
   resources :inventorylists #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
   resources :vendas #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
@@ -36,6 +37,7 @@ Rails.application.routes.draw do
   post 'cash_replenishment', to: 'cash_registers#cash_replenishment', as: 'cash_replenishment'
   post 'withdraw_cash_register', to: 'cash_registers#withdraw_cash_register', as: 'withdraw_cash_register'
   post 'close_cash_register', to: 'cash_registers#close_cash_register', as: 'close_cash_register'
+  get 'show_cash_registers', to: 'cash_registers#show_cash_registers', as: 'show_cash_registers'
 
 
 

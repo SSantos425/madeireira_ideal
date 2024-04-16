@@ -1,0 +1,92 @@
+<div class="card card-primary">
+
+  <div class="card-header">
+    <h1>Carrinho</h1>
+  </div>
+
+  <div class="card-body" >
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Nome do Produto</th>
+          <th>Preço Unitário</th>
+          <th>Editar</th>
+          <th>Total Parcial</th>
+        </tr>
+      </thead>
+      <tbody>
+          <% @orderables.each do |orderable| %>
+            <% if orderable.cart_id === @cart.id %>
+              <tr>
+                <td><%= orderable.product.name %></td>
+                <td><%= orderable.product.sale_price %></td>
+                <td>
+                  <div class="form-inline">
+                    <%= form_with(url: update_orderable_item_path) do |f| %>
+                      <%= f.hidden_field :cart_id, value:@cart.id %>
+                      <%= f.hidden_field :orderable_id, value: orderable.id %>
+                      <%= f.number_field :quantity, step:0.01, value: orderable.quantity, class: "form-control"%>
+                      <%= f.submit "Atualizar", class: "btn btn-success btn-sm mr-1" %>
+                    <% end %>
+        
+                    <%= form_with(url: remove_orderable_item_path) do |f| %>
+                      <%= f.hidden_field :cart_id, value: @cart.id %>
+                      <%= f.hidden_field :orderable_id, value: orderable.id %>
+                      <%= f.submit "Remover", class: "btn btn-danger btn-sm " %>
+                    <% end %>
+                  </div>
+                </td>
+
+                <td><%= number_to_currency(orderable.total, unit: 'R$', separator: ',', delimiter: '.')  %></td> 
+              </tr>
+            <% end %>
+          <% end %>
+      </tbody>
+    </table>
+    
+    <div class="card-header">
+      <%= "TOTAL :#{number_to_currency(@cart.total, unit: 'R$', separator: ',', delimiter: '.')}" %>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
+<div class="card mt-3">
+  <div class="card-body">
+    <h5 class="card-title">Lista de Produtos</h5>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Unidade</th>
+          <th>Preço</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr>
+            <td><%= product.name %></td>
+            <td><%= product.unity %></td>
+            <td><%= product.sale_price %></td>
+            <td>
+              <%= form_with(url: cart_orderable_path) do |form| %>
+                <%= form.hidden_field :cart_id, value: @cart.id %>
+                <%= form.hidden_field :client_id, value: @client.id %>
+                <%= form.hidden_field :product_id, value: product.id %>
+                <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade' %>
+                <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
+                  Incluir na compra
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

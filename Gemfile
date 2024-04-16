@@ -74,3 +74,7 @@ end
 gem 'devise'
 gem 'bootstrap'
 gem 'rubocop'
+
+gem 'correios-cep', '~> 0.8.0'
+gem 'prawn'
+gem 'prawn-table'

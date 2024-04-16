@@ -1,0 +1,39 @@
+<div style="display:flex;justify-content:space-between;margin: 0em 5em;">
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th>Nome do produto</th>
+        <th>Preço da unidade</th>
+        <th>quantidade</th>
+        <th>Total individual</th>
+        <th>Açoes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cartlist_orderables.each do |cartlist_orderable| %>
+        <tr>
+          <td>
+            <%= cartlist_orderable.produto.nome %>
+          </td>
+          <td>
+            <%= cartlist_orderable.produto.preco %>
+          </td>
+          <td>
+            <%= cartlist_orderable.quantity %>
+          </td>
+          <td>
+            <%= cartlist_orderable.total %>
+          </td>
+          <td><button>#</button></td>
+        </tr>
+        <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div style="display:flex;justify-content:space-between;margin: 0em 5em;">
+  <button>
+    <%= link_to "Dar baixa na venda: #{@cartlist.valor}" , dar_baixa_na_venda_path(@cartlist.id), data: { turbo_method:
+      :post } %>
+  </button>
+</div>

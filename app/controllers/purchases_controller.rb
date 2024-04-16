@@ -18,19 +18,14 @@ class PurchasesController < ApplicationController
     end
   end
 
-  # rever metodos
-  def compras_cliente
-    @cartlist_orderables = CartlistOrderable.where(cliente_id: params[:cliente_id])
-  end
 
-  # rever metodos
   def show
     @purchase = Purchase.find(params[:id])
     @products = Product.all
     @purchase_lists = PurchaseList.all
   end
 
-  # rever metodos
+
   def include_products
     purchase_id = params[:purchase_id].to_i
     product_id = params[:product_id].to_i
@@ -46,7 +41,7 @@ class PurchasesController < ApplicationController
                                                              locals: { purchase: @purchase })
   end
 
-  # rever metodos
+
   def buy_purchaselist_cart
     purchase_id = params[:purchase_id]
     total_value = params[:total_value].to_f
@@ -74,7 +69,7 @@ class PurchasesController < ApplicationController
                                                              locals: { purchase: @purchase })
   end
 
-  # rever metodos
+
   def update_item_purchaselist_cart
     purchase_list_id = params[:purchase_list]
     purchase_id = params[:purchase_id].to_i
@@ -91,7 +86,7 @@ class PurchasesController < ApplicationController
                                              partial: 'purchases/purchase_cart', locals: { purchaselist: @purchase_lists })
   end
 
-  # rever metodos
+
   def remove_item_purchaselist_cart
     purchase_list_id = params[:purchase_list]
     purchase_id = params[:purchase_id].to_i

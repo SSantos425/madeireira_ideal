@@ -1,0 +1,21 @@
+<div class="dropdown">
+    <% if @client.present? %>
+      <div style="font-weight: bold; color: blue; font-size:large">
+        <%= "Cliente: #{@client.name}"  %>
+      </div>
+    <% else %>
+
+      <button class="btn btn-info dropdown-toggle" type="button" id="clienteDropdown" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        Selecione o Cliente
+      </button>
+      <div class="dropdown-menu">
+        <% Client.all.each do |client| %>
+          <div class="dropdown-item">
+            <%= link_to "#{client.name}", sales_path(client_id: client.id), class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+</div>
+  

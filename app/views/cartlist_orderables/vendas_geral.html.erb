@@ -1,0 +1,58 @@
+<%= link_to download_pdf_path, class: "btn btn-primary mb-4" do %>
+  <i class="fas fa-file-pdf"></i>
+  Download PDF
+<% end %>
+
+<% @cartlists.each do |cartlist| %>
+  <div class="container">
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <strong>Cliente: <%= cartlist.cliente.nome %> | Data: <%= cartlist.data&.strftime('%d/%m/%Y') %></strong>
+      </div>
+      
+      <div class="card-body p-0">
+        <table class="table table-bordered table-hover mb-0">
+          <thead class="thead-light">
+            <tr>
+              <th>Produto</th>
+              <th>Quantidade</th>
+              <th>Unidade</th>        
+              <th>Valor Parcial</th>    
+            </tr>
+          </thead>
+
+          <tbody>
+            <% cartlist.cartlist_orderables.each do |cartlist_orderable| %>
+              <tr>
+                <td><%= cartlist_orderable.produto.nome %></td>
+                <td><%= cartlist_orderable.quantity %></td>
+                <td><%= cartlist_orderable.produto.unidade %></td>
+                <td><%= number_to_currency(cartlist_orderable.total, unit: 'R$', separator: ',', delimiter: '.') %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <div class="card-footer bg-light">
+          <strong>Total:</strong> <%= number_to_currency(cartlist.valor, unit: 'R$', separator: ',', delimiter: '.') %>
+        </div>
+
+        <% if cartlist.desconto != 0 %>
+          <div class="card-footer bg-light">        
+            <strong>Desconto:</strong> <%= number_to_currency(cartlist.desconto, unit: 'R$', separator: ',', delimiter: '.') %>
+          </div>
+        <% end %>
+
+        <% if cartlist.acrescimo != 0 %>
+          <div class="card-footer bg-light">        
+            <strong>Acréscimo:</strong> <%= number_to_currency(cartlist.acrescimo, unit: 'R$', separator: ',', delimiter: '.') %>
+          </div>
+        <% end %>
+
+        <div class="card-footer bg-light">
+          <strong>Forma de Pagamento:</strong> <%= cartlist.forma_de_pagamento === 1 ? "A VISTA" : "A PRAZO" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

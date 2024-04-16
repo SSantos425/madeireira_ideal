@@ -9,21 +9,10 @@ Rails.application.routes.draw do
   resources :purchases
   resources :cash_registers
   resources :sales
+  #resources :cartlist
+  #resources :cartlist_orderables
 
-  resources :inventorylists #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
-  resources :vendas #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
-  resources :vendalists #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
-  resources :cartlist #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
-  resources :cartlist_orderables #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
-  
-
-  resources :wallets #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
-  resources :compras #COLOCAR O ONLY AQUI PRA NAO FICAR UMAS ROTAS AVULSAS
-  resources :list_wallets
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-
+  resources :carts
 
   # PURCHASE
   post 'include_products', to: 'purchases#include_products', as: 'include_products'
@@ -42,7 +31,10 @@ Rails.application.routes.draw do
 
 
 
-
+ # CART
+ post 'cart_orderable', to: 'carts#cart_orderable', as: 'cart_orderable'
+ post 'update_orderable_item', to: 'carts#update_orderable_item', as: 'update_orderable_item'
+ post 'remove_orderable_item', to: 'carts#remove_orderable_item', as: 'remove_orderable_item'
 
 
 end

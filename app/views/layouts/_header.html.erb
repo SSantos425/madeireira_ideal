@@ -22,7 +22,7 @@
 
                     <% if @cash_register_last.cash_register_status===0 %> <!--CAIXA EM ABERTO-->
                         <li class="nav-item">
-                            <%= link_to sales_path, class: "nav-link" do %>
+                            <%= link_to carts_path, class: "nav-link" do %>
                                 <p>Vender</p>
                             <% end %>
                         </li>

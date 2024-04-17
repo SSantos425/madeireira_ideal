@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   #resources :cartlist
   #resources :cartlist_orderables
 
-  resources :carts
+  resources :carts, only: [:index]
 
   # PURCHASE
   post 'include_products', to: 'purchases#include_products', as: 'include_products'
@@ -35,6 +35,9 @@ Rails.application.routes.draw do
  post 'cart_orderable', to: 'carts#cart_orderable', as: 'cart_orderable'
  post 'update_orderable_item', to: 'carts#update_orderable_item', as: 'update_orderable_item'
  post 'remove_orderable_item', to: 'carts#remove_orderable_item', as: 'remove_orderable_item'
+ get 'show/:cart_id/:client_id', to: 'carts#show', as: 'show'
+ get 'sell_cart/:cart_balance', to: 'carts#sell_cart', as: 'sell_cart'
+ get 'new_cart', to: 'carts#new_cart', as: 'new_cart'
 
 
 end

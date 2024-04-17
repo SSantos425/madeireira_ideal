@@ -26,7 +26,7 @@
 
                     <div class="form-group">
                       <%= f.label :value, "Valor Reforço" %>
-                        <%= f.number_field :value, step:0.01, class: "form-control" , placeholder: "Valor"
+                        <%= f.number_field :value, step:0.01, class: "form-control" , placeholder: "R$"
                           %>
                     </div>
 
@@ -51,7 +51,7 @@
 
                     <div class="form-group">
                       <%= f.label :value, "Valor Retirada" %>
-                        <%= f.number_field :value, step:0.01, class: 'form-control' , placeholder: "Valor"%>
+                        <%= f.number_field :value, step:0.01, class: 'form-control' , placeholder: "R$"%>
 
                     </div>
 
@@ -72,6 +72,7 @@
         <thead>
           <tr>
             <th>Data</th>
+            <th>Hora</th>
             <th>Valor</th>
             <th>Justificativa</th>
             <!--
@@ -84,9 +85,9 @@
           <% @cash_register_lists.each do |cash_register_list| %>
             <% if cash_register_list.date===@cash_register_last.date %>
               <tr>
-                <td>
-                  <%= cash_register_list.date.strftime("%d/%m/%Y") %>
-                </td>
+                <td><%= cash_register_list.created_at.strftime("%d/%m/%Y") %></td> <!-- Mostra apenas a data -->
+                <td><%= cash_register_list.created_at.strftime("%H:%M:%S") %></td> <!-- Mostra apenas a hora -->
+
                 <% if cash_register_list.cash_register_type===1 %>
                   <td style="color: blue;">
                     <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ +' , separator: ',' , delimiter: '.'

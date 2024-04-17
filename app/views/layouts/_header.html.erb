@@ -1,4 +1,6 @@
+
 <nav class="main-header navbar navbar-expand-lg navbar-light">
+    
     <div class="container">
         <div class="collapse navbar-collapse order-3" id="navbarCollapse">
 
@@ -22,7 +24,7 @@
 
                     <% if @cash_register_last.cash_register_status===0 %> <!--CAIXA EM ABERTO-->
                         <li class="nav-item">
-                            <%= link_to carts_path, class: "nav-link" do %>
+                            <%= link_to new_cart_path, class: "nav-link" do %>
                                 <p>Vender</p>
                             <% end %>
                         </li>
@@ -130,11 +132,11 @@
 
                 
 
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                
             </div>
         </div>
     </div>
 </nav>
+
+
+  

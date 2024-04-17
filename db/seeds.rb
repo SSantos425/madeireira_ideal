@@ -19,7 +19,7 @@ User.destroy_all
 Supplier.destroy_all
 
 
-
+cart = Cart.create(date:Date.today)
 user = User.create(email:"aaraujoborges@uol.com.br", password:830325)
 cash_register = CashRegister.create(user_id:user.id, balance:0.0,date:Date.today, cash_replenishment:0.0,cash_register_status:0)
 

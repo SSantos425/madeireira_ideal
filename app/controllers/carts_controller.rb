@@ -1,13 +1,9 @@
 class CartsController < ApplicationController
   def index
-    @carts = Cart.all
+    @cart = Cart.last
   end
 
-  def new
-    @cart = Cart.new
-  end
-
-  def create
+  def new_cart
     @cart = Cart.new(balance: nil, discount: nil, addition: nil, date: Date.today)
 
     if @cart.save
@@ -18,30 +14,30 @@ class CartsController < ApplicationController
   end
 
   def show
-    @cart = Cart.find(params[:id])
+    @cart = Cart.find(params[:cart_id])
+    @client = Client.find(params[:client_id])
+
     @products = Product.all
     @orderables = Orderable.all
-    @client = Client.first
   end
 
   def cart_orderable
     product_id = params[:product_id]
-    cart_id = params[:cart_id]
-    @cart = Cart.find_by(id: cart_id)
-    client_id = params[:client_id]
     quantity = params[:quantity]
 
-    current_orderable = @cart.orderables.find_by(product_id: product_id)
+    @cart = Cart.last
+    @client = Client.find_by(id: params[:client_id])
 
-    if current_orderable.nil? 
-      Orderable.create(product_id:, cart_id:, client_id:, quantity:)
+    current_orderable = @cart.orderables.find_by(product_id:)
+
+    if current_orderable.nil?
+      Orderable.create(product_id:, cart_id: @cart.id, client_id: @client.id, quantity:)
     else
       current_orderable.update(quantity:)
     end
 
     @orderables = Orderable.all
     @products = Product.all
-    @client = Client.first
 
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
@@ -49,15 +45,13 @@ class CartsController < ApplicationController
 
   def remove_orderable_item
     orderable_id = params[:orderable_id]
-    
+
     Orderable.find_by(id: orderable_id).destroy
 
-
-    cart_id = params[:cart_id]
-    @cart = Cart.find_by(id: cart_id)
+    @cart = Cart.last
     @orderables = Orderable.all
     @products = Product.all
-    @client = Client.first
+    @client = Client.find_by(id: params[:client_id])
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
   end
@@ -69,13 +63,32 @@ class CartsController < ApplicationController
     orderable = Orderable.find_by(id: orderable_id)
     orderable.update(quantity:)
 
-
-    cart_id = params[:cart_id]
-    @cart = Cart.find_by(id: cart_id)
+    @cart = Cart.last
     @orderables = Orderable.all
     @products = Product.all
-    @client = Client.first
+    @client = Client.find_by(id: params[:client_id])
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
+  end
+
+  def sell_cart
+    cart_balance = params[:cart_balance]
+    cart_last = Cart.last
+    cart_last.update(balance: cart_balance)
+
+    cart_orderables = Orderable.where(cart_id: cart_last.id)
+    cart_orderables.each do |cart_orderable|
+      inventory = Inventory.find_by(product_id: cart_orderable.product.id)
+      inventory.update(quantity: inventory.quantity - cart_orderable.quantity)
+    end
+
+    # atualiza o valor do caixa
+    CashRegister.last.update(balance: CashRegister.last.balance + cart_last.balance)
+
+    # cria um registro no caixa
+    CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: cart_last.balance,
+                            note: 'Venda de Mercadoria(Madeira)', cash_register_type: 1)
+
+    redirect_to cash_registers_path
   end
 end

@@ -1,25 +1,37 @@
-<h1>Lista de Carrinhos</h1>
-
 <table class='table table-hover'>
   <thead>
     <tr>
       <th>Balance</th>
       <th>Discount</th>
-      <th>addition</th>
-      <th>data</th>
-      <th>ações</th>
+      <th>Addition</th>
+      <th>Data</th>
+      <th>Hora</th>
+
+      <th>Ações</th>
     </tr>
   </thead>
   <tbody>
-    <% @carts.each do |cart| %>
       <tr>
-        <td><%= cart.balance%></td>
-        <td><%= cart.discount%></td>
-        <td><%= cart.addition%></td>
-        <td><%= cart.date%></td>
-        <td><%= link_to "Incluir Produtos", cart_path(cart), class: "btn btn-primary btn-sm" %></td>
+        <td><%= @cart.balance %></td>
+        <td><%= @cart.discount %></td>
+        <td><%= @cart.addition %></td>
+        <td><%= @cart.created_at.strftime("%d/%m/%Y") %></td> <!-- Mostra apenas a data -->
+        <td><%= @cart.created_at.strftime("%H:%M:%S") %></td> <!-- Mostra apenas a hora -->
 
+        <td>
+          <div class="dropdown">
+            <button class="btn btn-info dropdown-toggle" type="button" id="clienteDropdown<%= @cart.id %>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Selecione o Cliente
+            </button>
+            <div class="dropdown-menu" aria-labelledby="clienteDropdown<%= @cart.id %>">
+              <% Client.all.each do |client| %>
+                <div class="dropdown-item">
+                  <%= link_to client.name, show_path(cart_id: @cart.id, client_id: client.id), class: "btn btn-primary btn-sm" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </td>
       </tr>
-    <% end %>
   </tbody>
 </table>

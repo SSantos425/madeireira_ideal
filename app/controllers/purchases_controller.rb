@@ -58,8 +58,8 @@ class PurchasesController < ApplicationController
     @purchase.update(purchase_type: 0)
 
     purchase_lists.each do |purchase_list|
-      purchase_list = Inventory.find_by(product_id: purchase_list.product_id)
-      purchase_list.update(quantity: purchase_list.quantity + purchase_list.quantity)
+      inventory = Inventory.find_by(product_id: purchase_list.product.id)
+      inventory.update(quantity: inventory.quantity + purchase_list.quantity)
     end
 
     cash_register.update(balance: cash_register.balance - total_value)

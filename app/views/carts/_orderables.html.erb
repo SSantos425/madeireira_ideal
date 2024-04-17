@@ -1,10 +1,12 @@
+<!-- Carrinho do Cliente -->
 <div class="card card-primary">
-
   <div class="card-header">
-    <h1>Carrinho</h1>
+    <div class="float-left">
+      <h5 class="mb-0">Cliente: <%= @client.name %></h5>
+      <p class="mb-0">Data: <%= @cart.date.strftime("%d/%m/%Y") %></p>
+    </div>
   </div>
-
-  <div class="card-body" >
+  <div class="card-body">
     <table class="table table-bordered table-hover">
       <thead>
         <tr>
@@ -15,49 +17,61 @@
         </tr>
       </thead>
       <tbody>
-          <% @orderables.each do |orderable| %>
-            <% if orderable.cart_id === @cart.id %>
-              <tr>
-                <td><%= orderable.product.name %></td>
-                <td><%= orderable.product.sale_price %></td>
-                <td>
-                  <div class="form-inline">
-                    <%= form_with(url: update_orderable_item_path) do |f| %>
-                      <%= f.hidden_field :cart_id, value:@cart.id %>
-                      <%= f.hidden_field :orderable_id, value: orderable.id %>
-                      <%= f.number_field :quantity, step:0.01, value: orderable.quantity, class: "form-control"%>
-                      <%= f.submit "Atualizar", class: "btn btn-success btn-sm mr-1" %>
-                    <% end %>
-        
-                    <%= form_with(url: remove_orderable_item_path) do |f| %>
-                      <%= f.hidden_field :cart_id, value: @cart.id %>
-                      <%= f.hidden_field :orderable_id, value: orderable.id %>
-                      <%= f.submit "Remover", class: "btn btn-danger btn-sm " %>
-                    <% end %>
-                  </div>
-                </td>
-
-                <td><%= number_to_currency(orderable.total, unit: 'R$', separator: ',', delimiter: '.')  %></td> 
-              </tr>
-            <% end %>
+        <% @orderables.each do |orderable| %>
+          <% if orderable.cart_id === @cart.id %>
+            <tr>
+              <td><%= orderable.product.name %></td>
+              <td><%= number_to_currency(orderable.product.sale_price, unit: 'R$', separator: ',', delimiter: '.') %></td>
+              <td>
+                <div class="form-inline">
+                  <%= form_with(url: update_orderable_item_path) do |f| %>
+                    <%= f.hidden_field :client_id, value: @client.id %>
+                    <%= f.hidden_field :orderable_id, value: orderable.id %>
+                    <%= f.number_field :quantity, step: 0.01, value: orderable.quantity, class: "form-control" %>
+                    <%= f.submit "Atualizar", class: "btn btn-success btn-sm mr-1" %>
+                  <% end %>
+                  <%= form_with(url: remove_orderable_item_path) do |f| %>
+                    <%= f.hidden_field :client_id, value: @client.id %>
+                    <%= f.hidden_field :orderable_id, value: orderable.id %>
+                    <%= f.submit "Remover", class: "btn btn-danger btn-sm" %>
+                  <% end %>
+                </div>
+              </td>
+              <td><%= number_to_currency(orderable.total, unit: 'R$', separator: ',', delimiter: '.') %></td> 
+            </tr>
           <% end %>
+        <% end %>
       </tbody>
     </table>
-    
-    <div class="card-header">
-      <%= "TOTAL :#{number_to_currency(@cart.total, unit: 'R$', separator: ',', delimiter: '.')}" %>
+
+    <div class="mt-3"> <!-- Espaçamento vertical -->
+      <div class="form-inline">
+        <%= form_with(url: update_orderable_item_path) do |f| %>
+          <%= f.number_field :amount, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
+          <%= f.submit "Aplicar Desconto", name: "discount", class: "btn btn-primary btn-sm mr-1" %>
+          <%= f.submit "Aplicar Acréscimo", name: "addition", class: "btn btn-warning btn-sm"  %>
+        <% end %>
+      </div>
     </div>
-
-
+    <div class="card-footer mt-3">
+      <strong>TOTAL:</strong> <%= number_to_currency(@cart.total, unit: 'R$', separator: ',', delimiter: '.') %>
+      <%= link_to sell_cart_path(cart_balance:@cart.total), class: "btn btn-primary ml-2" do %>
+        <i class="fas fa-cart-plus ml-1"></i> Vender 
+      <% end %>
+    </div>
   </div>
 </div>
 
-
-
-
-<div class="card mt-3">
+<!-- Lista de Produtos -->
+<div class="card">
+  <div class="card-header">
+    <h5>Lista de Produtos</h5>
+    <form class="d-flex">
+      <input class="form-control me-2" type="search" placeholder="Produto" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Procurar</button>
+    </form>
+  </div>
   <div class="card-body">
-    <h5 class="card-title">Lista de Produtos</h5>
     <table class="table table-bordered table-hover">
       <thead>
         <tr>
@@ -74,15 +88,18 @@
             <td><%= product.unity %></td>
             <td><%= product.sale_price %></td>
             <td>
-              <%= form_with(url: cart_orderable_path) do |form| %>
-                <%= form.hidden_field :cart_id, value: @cart.id %>
-                <%= form.hidden_field :client_id, value: @client.id %>
-                <%= form.hidden_field :product_id, value: product.id %>
-                <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade' %>
-                <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
-                  Incluir na compra
+              <div class="form-inline">
+                <%= form_with(url: cart_orderable_path) do |form| %>
+                  <%= form.hidden_field :client_id, value: @client.id %>
+                  <%= form.hidden_field :product_id, value: product.id %>
+                  <div class="d-flex align-items-center">
+                    <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade', class:"mr-1" %>
+                    <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
+                      <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
+                    <% end %>
+                  </div>
                 <% end %>
-              <% end %>
+              </div>
             </td>
           </tr>
         <% end %>

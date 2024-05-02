@@ -19,9 +19,10 @@ Rails.application.routes.draw do
   post 'buy_purchaselist_cart', to: 'purchases#buy_purchaselist_cart', as: 'buy_purchaselist_cart'
   post 'remove_item_purchaselist_cart', to: 'purchases#remove_item_purchaselist_cart', as: 'remove_item_purchaselist_cart'
   post 'update_item_purchaselist_cart', to: 'purchases#update_item_purchaselist_cart', as: 'update_item_purchaselist_cart'
-  get '/compras_cliente/:cliente_id', to: 'compras#compras_cliente', as: 'compras_cliente'
+  #get '/compras_cliente/:cliente_id', to: 'compras#compras_cliente', as: 'compras_cliente'
+  post 'purchase_discount_or_addition', to: 'carts#purchase_discount_or_addition', as: 'purchase_discount_or_addition'
 
-  
+
   # CASH_REGISTER
   post 'cash_replenishment', to: 'cash_registers#cash_replenishment', as: 'cash_replenishment'
   post 'withdraw_cash_register', to: 'cash_registers#withdraw_cash_register', as: 'withdraw_cash_register'
@@ -38,6 +39,7 @@ Rails.application.routes.draw do
  get 'show/:cart_id/:client_id', to: 'carts#show', as: 'show'
  get 'sell_cart/:cart_balance', to: 'carts#sell_cart', as: 'sell_cart'
  get 'new_cart', to: 'carts#new_cart', as: 'new_cart'
+ post 'orderable_discount_or_addition', to: 'carts#orderable_discount_or_addition', as: 'orderable_discount_or_addition'
 
 
 end

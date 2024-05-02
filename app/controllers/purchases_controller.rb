@@ -101,6 +101,26 @@ class PurchasesController < ApplicationController
                                                              locals: { purchase: @purchase })
   end
 
+  def purchase_discount_or_addition
+
+    quantity = params[:quantity].to_f
+    @cart = Cart.find(params[:cart_id])
+
+    @orderables = Orderable.all
+    @products = Product.all
+    @client = Client.find_by(id: params[:client_id])
+
+    if params[:discount]
+      @cart.update(discount: quantity)
+      render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
+                                                       locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
+    elsif params[:addition]
+      @cart.update(addition: quantity)
+      render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
+                                                       locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
+    end
+  end
+
   private
 
   def purchase_params

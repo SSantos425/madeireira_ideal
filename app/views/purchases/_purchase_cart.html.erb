@@ -78,6 +78,20 @@
           <% end %>
       </tbody>
     </table>
+
+    <!--REVER FORMULARIO
+    <div class="mt-3">
+      <div class="form-inline">
+        <%= form_with(url: purchase_discount_or_addition_path) do |f| %>
+          <%= f.hidden_field :purchase_list_id, value:""%>
+          <%= f.hidden_field :cart_id , value:""%>
+          <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
+          <%= f.submit "Aplicar Desconto", name: "discount", class: "btn btn-primary btn-sm mr-1" %>
+          <%= f.submit "Aplicar Acréscimo", name: "addition", class: "btn btn-warning btn-sm"  %>
+        <% end %>
+      </div>
+    </div>
+    -->
     
     <strong><%= "TOTAL: #{@purchase.total_compra(@purchase.id)}"  %></strong>
     <%= form_with(url: buy_purchaselist_cart_path) do |form| %>

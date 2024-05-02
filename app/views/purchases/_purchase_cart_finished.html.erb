@@ -61,6 +61,8 @@
               <% end %>
           </tbody>
       </table>
+
+      
     
       <strong><%= "TOTAL: #{number_to_currency(@purchase.total_compra(@purchase.id), unit: 'R$', separator: ',', delimiter: '.')}" %></strong>
   </div>

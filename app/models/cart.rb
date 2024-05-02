@@ -6,4 +6,12 @@ class Cart < ApplicationRecord
     def total
         orderables.to_a.sum { |orderable| orderable.total }
     end
+
+    def discounto(quantity)
+        total - quantity
+    end
+
+    def additiono(quantity)
+        total + quantity
+    end
 end

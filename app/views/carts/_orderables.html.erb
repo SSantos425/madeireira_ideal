@@ -61,7 +61,7 @@
       <div class="card-footer mt-3">
         <strong>TOTAL:</strong> <%= number_to_currency(@cart.total - @cart.discount, unit: 'R$', separator: ',', delimiter: '.') %>
         <%= link_to sell_cart_path(cart_balance:@cart.total - @cart.discount), class: "btn btn-success ml-2" do %>
-          <i class="fas fa-cart-plus ml-1"></i> Vender 
+          <i class="fas fa-cart-plus ml-1"></i> A VISTA 
         <% end %>
       </div>
     <%elsif @cart.addition.present? %>
@@ -69,15 +69,25 @@
       <div class="card-footer mt-3">
         <strong>TOTAL:</strong> <%= number_to_currency(@cart.total + @cart.addition, unit: 'R$', separator: ',', delimiter: '.') %>
         <%= link_to sell_cart_path(cart_balance:@cart.total + @cart.addition), class: "btn btn-success ml-2" do %>
-          <i class="fas fa-cart-plus ml-1"></i> Vender 
+          <i class="fas fa-cart-plus ml-1"></i> A VISTA 
         <% end %>
       </div>
     <% else %>
       <div class="card-footer mt-3">
         <strong>TOTAL:</strong> <%= number_to_currency(@cart.total, unit: 'R$', separator: ',', delimiter: '.') %>
         <%= link_to sell_cart_path(cart_balance:@cart.total), class: "btn btn-success ml-2" do %>
-          <i class="fas fa-cart-plus ml-1"></i> Vender 
+          <i class="fas fa-cart-plus ml-1"></i> A VISTA 
         <% end %>
+        
+        <div class="form-inline">
+          <%= form_with(url: foward_sell_cart_path) do |f| %>
+            <%= f.hidden_field :total_value, value:@cart.total %>
+            <%= f.hidden_field :cart_id, value:@cart.id  %>
+            <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
+            <%= f.submit "A Prazo", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+
       </div>
     <% end %>
 
@@ -86,7 +96,7 @@
   </div>
 </div>
 
-
+ <!-- Products-->
 <div class="card card-primary card-tabs">
   <div class="card-header p-0 pt-1">
     <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
@@ -113,7 +123,7 @@
     </ul>
   </div>
 
-
+ 
   <div class="card-body">
     <div class="tab-content" id="custom-tabs-one-tabContent">
 
@@ -156,6 +166,7 @@
       </div>
 
       <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+        
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
@@ -272,15 +283,22 @@
       </div>
 
       <div class="tab-pane fade" id="custom-tabs-one-products" role="tabpanel" aria-labelledby="custom-tabs-one-products-tab">
-        <div class="input-group">
-          <input type="search" class="form-control form-control-lg" placeholder="Type your keywords here">
-          <div class="input-group-append">
-            <button type="submit" class="btn btn-lg btn-default">
-              <i class="fa fa-search"></i>
-            </button>
+        
+        
+        <%= form_with url: search_product_path, method: :get, class: "form-inline justify-content-center" do |form| %>
+          <div class="input-group" style="width: 500px;">
+            <%= form.text_field :product_name, placeholder: "Em desenvolvimento...", class: "form-control", disabled: true %>
+            <%= button_tag(type: 'submit', class: 'btn btn-outline-info btn-sm', disabled: true) do %>
+              <i class="fa fa-search mr-1"></i>
+            <% end %>
           </div>
-        </div>
-        <table class="table table-bordered table-hover">
+        <% end %>
+
+
+
+
+
+        <table class="table table-bordered table-hover mt-3">
           <thead>
             <tr>
               <th>Nome</th>
@@ -290,7 +308,8 @@
             </tr>
           </thead>
           <tbody>
-            <% @products.each do |product| %>
+            <% if @products_name.present? %>
+              <% @products_name.each do |product| %>
               <tr>
                 <td><%= product.name %></td>
                 <td><%= product.unity %></td>
@@ -310,12 +329,38 @@
                   </div>
                 </td>
               </tr>
-            <% end %>
+              <% end %>
+            <% else %>
+
+              <% @products.each do |product| %>
+                <tr>
+                  <td><%= product.name %></td>
+                  <td><%= product.unity %></td>
+                  <td><%= product.sale_price %></td>
+                  <td>
+                    <div class="form-inline">
+                      <%= form_with(url: cart_orderable_path) do |form| %>
+                        <%= form.hidden_field :client_id, value: @client.id %>
+                        <%= form.hidden_field :product_id, value: product.id %>
+                        <div class="d-flex align-items-center">
+                          <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade', class:"mr-1" %>
+                          <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
+                            <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
+                          <% end %>
+                        </div>
+                      <% end %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+
+            <%end %>
+            
           </tbody>
         </table>
       </div>
 
     </div>
   </div>
-  <!-- /.card -->
+  
 </div>

@@ -65,6 +65,7 @@ class PurchasesController < ApplicationController
     cash_register.update(balance: cash_register.balance - total_value)
     CashRegisterList.create(cash_register_id: cash_register.id, date:data, balance: total_value,
                             note: 'Compra de Mercadorias para Revenda', cash_register_type: 0)
+                            
     render turbo_stream: turbo_stream.update('purchaselist', partial: 'purchases/purchase_cart_finished',
                                                              locals: { purchase: @purchase })
   end

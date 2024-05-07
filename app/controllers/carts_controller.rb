@@ -14,8 +14,11 @@ class CartsController < ApplicationController
   end
 
   def show
+   # products_name = params[:products_name]
     @cart = Cart.find(params[:cart_id])
     @client = Client.find(params[:client_id])
+
+    #@products_name = Product.where("name LIKE ?", "%#{products_name}%")
 
     @products = Product.all
     @orderables = Orderable.all
@@ -95,7 +98,7 @@ class CartsController < ApplicationController
   def discount_or_addition
     quantity = params[:quantity].to_f
     @cart = Cart.find(params[:cart_id])
-    
+
     @orderables = Orderable.all
     @products = Product.all
     @client = Client.find_by(id: params[:client_id])
@@ -110,4 +113,21 @@ class CartsController < ApplicationController
                                                        locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
     end
   end
+
+  def foward_sell_cart
+    cart_balance = params[:cart_balance]
+    cart_last = Cart.last
+    cart_last.update(balance: cart_balance)
+
+    total_value = params[:total_value]
+    cart_id = params[:cart_id]
+    quantity = params[:quantity]
+    #0 contas a pagar
+    #1 contas a receber
+
+    Bill.create(bill_type:1,quantity:quantity,total_value:cart_last.balance,cart_id:cart_last.id)
+  end
+
+
+
 end

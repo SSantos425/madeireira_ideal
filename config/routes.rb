@@ -9,17 +9,13 @@ Rails.application.routes.draw do
   resources :purchases
   resources :cash_registers
   resources :sales
-  #resources :cartlist
-  #resources :cartlist_orderables
-
   resources :carts, only: [:index]
 
   # PURCHASE
   post 'include_products', to: 'purchases#include_products', as: 'include_products'
-  post 'buy_purchaselist_cart', to: 'purchases#buy_purchaselist_cart', as: 'buy_purchaselist_cart'
+  get 'buy_purchaselist_cart', to: 'purchases#buy_purchaselist_cart', as: 'buy_purchaselist_cart'
   post 'remove_item_purchaselist_cart', to: 'purchases#remove_item_purchaselist_cart', as: 'remove_item_purchaselist_cart'
   post 'update_item_purchaselist_cart', to: 'purchases#update_item_purchaselist_cart', as: 'update_item_purchaselist_cart'
-  #get '/compras_cliente/:cliente_id', to: 'compras#compras_cliente', as: 'compras_cliente'
   post 'purchase_discount_or_addition', to: 'carts#purchase_discount_or_addition', as: 'purchase_discount_or_addition'
 
 
@@ -38,7 +34,9 @@ Rails.application.routes.draw do
  post 'remove_orderable_item', to: 'carts#remove_orderable_item', as: 'remove_orderable_item'
  get 'show/:cart_id/:client_id', to: 'carts#show', as: 'show'
  get 'sell_cart/:cart_balance', to: 'carts#sell_cart', as: 'sell_cart'
+ get 'foward_sell_cart', to: 'carts#foward_sell_cart', as: 'foward_sell_cart'
  get 'new_cart', to: 'carts#new_cart', as: 'new_cart'
+ get 'search_product', to: 'carts#search_product', as: 'search_product'
  post 'orderable_discount_or_addition', to: 'carts#orderable_discount_or_addition', as: 'orderable_discount_or_addition'
 
 

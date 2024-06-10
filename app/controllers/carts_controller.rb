@@ -118,14 +118,26 @@ class CartsController < ApplicationController
     cart_balance = params[:cart_balance]
     cart_last = Cart.last
     cart_last.update(balance: cart_balance)
-
-    total_value = params[:total_value]
-    cart_id = params[:cart_id]
     quantity = params[:quantity]
     #0 contas a pagar
     #1 contas a receber
 
     Bill.create(bill_type:1,quantity:quantity,total_value:cart_last.balance,cart_id:cart_last.id)
+
+    cart_orderables = Orderable.where(cart_id: cart_last.id)
+    cart_orderables.each do |cart_orderable|
+      inventory = Inventory.find_by(product_id: cart_orderable.product.id)
+      inventory.update(quantity: inventory.quantity - cart_orderable.quantity)
+    end
+
+    # atualiza o valor do caixa
+    CashRegister.last.update(balance: CashRegister.last.balance + cart_last.balance)
+
+    # cria um registro no caixa
+    CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: cart_last.balance,
+                            note: "Venda de Mercadoria(Madeira) a prazo, valor de entrada R$:#{quantity}", cash_register_type: 1)
+
+    redirect_to cash_registers_path
   end
 
 

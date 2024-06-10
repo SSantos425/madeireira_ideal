@@ -1,6 +1,14 @@
 class SalesController < ApplicationController
     def index
-        @client = Client.find_by(id: params[:client_id])
-        @products = Product.all
+        @orderables = Orderable.all
+        @cart = Cart.last
+    end
+
+    def sales_data
+        @carts = Cart.where(date: params[:date])
+    end
+
+    def show_sale
+        @cart = Cart.find_by(id:params[:cart_id])
     end
 end

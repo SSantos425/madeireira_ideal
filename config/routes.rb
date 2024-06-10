@@ -8,8 +8,14 @@ Rails.application.routes.draw do
   resources :inventories
   resources :purchases
   resources :cash_registers
-  resources :sales
+  resources :sales, only: [:index]
   resources :carts, only: [:index]
+  resources :bills, only: [:index]
+
+
+  #SALES
+  get "sales_data", to: "sales#sales_data", as: "sales_data"
+  get "show_sale", to: "sales#show_sale", as:"show_sale"
 
   # PURCHASE
   post 'include_products', to: 'purchases#include_products', as: 'include_products'
@@ -34,7 +40,7 @@ Rails.application.routes.draw do
  post 'remove_orderable_item', to: 'carts#remove_orderable_item', as: 'remove_orderable_item'
  get 'show/:cart_id/:client_id', to: 'carts#show', as: 'show'
  get 'sell_cart/:cart_balance', to: 'carts#sell_cart', as: 'sell_cart'
- get 'foward_sell_cart', to: 'carts#foward_sell_cart', as: 'foward_sell_cart'
+ post 'foward_sell_cart', to: 'carts#foward_sell_cart', as: 'foward_sell_cart'
  get 'new_cart', to: 'carts#new_cart', as: 'new_cart'
  get 'search_product', to: 'carts#search_product', as: 'search_product'
  post 'orderable_discount_or_addition', to: 'carts#orderable_discount_or_addition', as: 'orderable_discount_or_addition'

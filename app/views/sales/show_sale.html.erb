@@ -1,0 +1,32 @@
+<div class="card card-primary">
+    <div class="card-header">
+        <h1>Vendas</h1>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantiade</th>
+                    <th>Preço de venda</th>
+                    <th>Valor total Parcial</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @cart.orderables.each do |cart_orderable| %>
+                    <tr>
+                        <td><%= cart_orderable.product.name %></td>
+                        <td><%= cart_orderable.quantity %></td>
+                        <td><%= number_to_currency(cart_orderable.product.sale_price, unit: 'R$', separator: ',', delimiter: '.') %></td>
+                        <td><%= number_to_currency(cart_orderable.total, unit: 'R$', separator: ',', delimiter: '.') %></td>
+                    </tr>
+                    <% end %>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card-footer">
+       <strong>Total: </strong><%= number_to_currency(@cart.balance, unit: 'R$', separator: ',', delimiter: '.') %>
+    </div>
+</div>

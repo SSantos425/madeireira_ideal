@@ -1,47 +1,19 @@
-
-<div class="card">
-    <div class="card-header">
-      <div class="form-inline " style="justify-content: space-between;">
-        <h1 class="mr-3">Fazer uma venda</h1>
-        <%= render "sales/client" %>
-        <%= link_to "Nova Venda", sales_path, class: "btn btn-warning mr-3" %>
+<div style="display: flex; justify-content: center;">
+    <div class="card"> 
+      <div class="card-header">
+        <h1>Relatório de Vendas</h1>
       </div>
-      
-    </div>
-    <% if @client.present? %>
-      <div class="card-body">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Preço</th>
-              <th>Quantidade</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @products.each do |product| %>
-              <tr>
-                <td><%= product.name %></td>
-  
-                <td><%=number_to_currency(product.sale_price, unit: 'R$' , separator: ',' , delimiter: '.' ) %></td>
-  
-                <td>
-                  <%= form_with(url: add_path) do |f| %>
-                    <%= f.hidden_field :client_id , value: @client.id%>
-                    <%= f.hidden_field :id, value: product.id %>
-                    <%= f.number_field :quantity, step:0.01, value: 0, min: 1 %>
-                    <%= button_tag(type: 'submit' , class: 'btn btn-primary btn-sm' ) do %>
-                      <i class="fas fa-cart-plus fa-lg mr-2"> Adicionar</i>
-                    <% end %>
-                  <% end %>
-                </td>
-              </tr>
+    
+      <div class="dropdown card-footer" style="display: flex; justify-content: center;">
+            <%= form_with(url: sales_data_path, method: "get") do |f| %>
+          
+                <div class="form-inline">
+                    <%= f.date_field :date , class:"mr-1"%>
+                    <%= f.submit "Filtrar", class: "btn btn-primary btn-sm" %>
+                </div>
             <% end %>
-          </tbody>
-        </table>
       </div>
-    <% end%>
-  </div>
-  
-  
+    </div>
+    
+</div>
   

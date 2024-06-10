@@ -1,0 +1,40 @@
+<% if @carts.present? %>
+  <div class="card card-primary">
+    <div class="card-header">
+      <h1>Vendas</h1>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Valor da Venda</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @carts.each do |cart| %>
+              <% cart.orderables.each do |cart_orderable| %>
+                <tr>
+                  <td><%= cart_orderable.client.name %></td>
+                  <td><%= cart.date.strftime("%d/%m/%Y") %></td>
+                  <td><%= cart.created_at.strftime("%H:%M:%S") %></td>
+                  <td><%= number_to_currency(cart.balance, unit: 'R$', separator: ',', delimiter: '.') %></td>
+                  <td><%= link_to "Visualizar", show_sale_path(cart_id:cart.id), class:"btn btn-warning btn-sm" %></td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="alert alert-info" role="alert">
+    <p class="text-center">Não há vendas neste dia.</p>
+  </div>
+<% end %>

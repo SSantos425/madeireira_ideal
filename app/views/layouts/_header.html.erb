@@ -98,7 +98,7 @@
                     <li class="nav-item dropdown">
                         <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Relatórios</a>
                         <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow" style="left: 0px; right: inherit;">
-                            <li><%= link_to "Vendas", root_path ,class:"dropdown-item" %></li>
+                            <li><%= link_to "Vendas", sales_path ,class:"dropdown-item" %></li>
                             <li class="dropdown-divider"></li>   
                             <li><%= link_to "Clientes", clients_path,class:"dropdown-item" %></li>
                             <li class="dropdown-divider"></li>   
@@ -106,7 +106,9 @@
                             <li class="dropdown-divider"></li>   
                             <li><%= link_to "Lista de Fornecedores", suppliers_path,class:"dropdown-item" %></li>
                             <li class="dropdown-divider"></li>   
-                            <li><%= link_to "Lista de Compras", purchases_path,class:"dropdown-item" %></li>               
+                            <li><%= link_to "Lista de Compras", purchases_path,class:"dropdown-item" %></li>
+                            <li class="dropdown-divider"></li>   
+                            <li><%= link_to "Contas a Receber", bills_path,class:"dropdown-item" %></li>                              
                         </ul>
                     </li>
 

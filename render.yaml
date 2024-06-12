@@ -1,20 +1,18 @@
 databases:
   - name: madeireira_ideal
-    databaseName: madeireira_ideal
-    user: madeireira_ideal
-    plan: free
+  - ipAllowList: []
 
 services:
   - type: web
-    plan: free
-    name: madeireira_ideal
+    name: rails
     env: ruby
+    plan: free
     buildCommand: "./bin/render-build.sh"
-    startCommand: "bundle exec puma -C config/puma.rb"
+    startCommand: "bundle exec rails s"
     envVars:
+      - key: RAILS_MASTER_KEY
+        sync: false
       - key: DATABASE_URL
         fromDatabase:
           name: madeireira_ideal
           property: connectionString
-      - key: RAILS_MASTER_KEY
-        sync: false

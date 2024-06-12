@@ -1,7 +1,7 @@
 databases:
   - name: madeireira_ideal
     databaseName: madeireira_ideal
-    user: samuel
+    user: madeireira_ideal
     plan: free
 
 services:

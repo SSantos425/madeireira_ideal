@@ -139,6 +139,7 @@ GEM
       activesupport (>= 5.0.0)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
+    libv8-node (21.7.2.0-x86_64-linux)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -151,6 +152,8 @@ GEM
     matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
+    mini_racer (0.12.0)
+      libv8-node (~> 21.7.2.0)
     minitest (5.22.3)
     msgpack (1.7.2)
     net-imap (0.4.10)
@@ -305,6 +308,7 @@ DEPENDENCIES
   devise
   importmap-rails
   jbuilder
+  mini_racer
   pg (~> 1.1)
   prawn
   prawn-table

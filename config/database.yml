@@ -24,6 +24,7 @@ test:
 
 production:
   <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
   database: madeireira_ideal_production
   username: madeireira_ideal
   password: <%= ENV["MADEIREIRA_IDEAL_DATABASE_PASSWORD"] %>

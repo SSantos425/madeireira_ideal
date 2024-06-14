@@ -1,6 +1,8 @@
 databases:
   - name: madeireira_ideal
+    databaseName: mysite
   - ipAllowList: []
+    plan: free
 
 services:
   - type: web

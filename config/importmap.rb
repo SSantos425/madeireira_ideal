@@ -8,4 +8,4 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 
 pin "jquery", to: "https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"
 pin "bootstrap", to: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-pin "adminlte", to: "/assets/dist/js/adminlte.min.js"
+pin "adminlte", to: "https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"

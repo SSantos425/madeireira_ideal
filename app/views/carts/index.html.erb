@@ -6,19 +6,19 @@
       <strong>Hora:</strong> <%= @cart.created_at.strftime("%H:%M:%S") %> <!-- Mostra apenas a hora -->
     </div>
   
-    
     <div class="dropdown card-footer" style="display: flex; justify-content: center;">
-      <button class="btn btn-info dropdown-toggle" type="button" id="clienteDropdown<%= @cart.id %>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-info dropdown-toggle" type="button" id="clienteDropdown<%= @cart.id %>" data-bs-toggle="dropdown" aria-expanded="false">
         Selecione o Cliente
       </button>
-      <div class="dropdown-menu" aria-labelledby="clienteDropdown<%= @cart.id %>">
+      <ul class="dropdown-menu" aria-labelledby="clienteDropdown<%= @cart.id %>">
         <% Client.all.each do |client| %>
-          <div class="dropdown-item">
-            <%= link_to client.name, show_path(cart_id: @cart.id, client_id: client.id), class: "btn btn-primary btn-sm" %>
-          </div>
+          <li>
+            <%= link_to client.name, show_path(cart_id: @cart.id, client_id: client.id), class: "dropdown-item btn btn-primary btn-sm" %>
+          </li>
         <% end %>
-      </div>
+      </ul>
     </div>
+
   </div>
   
 </div>

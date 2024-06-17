@@ -108,28 +108,27 @@
     <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
 
       <li class="nav-item">
-        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home">RIPA</a>
+        <a class="nav-link active" id="custom-tabs-one-home-tab" data-bs-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">RIPA</a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile">CAIBRO</a>
+        <a class="nav-link" id="custom-tabs-one-profile-tab" data-bs-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">CAIBRO</a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages">FRECHAL</a>
+        <a class="nav-link" id="custom-tabs-one-messages-tab" data-bs-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">FRECHAL</a>
       </li>
       
       <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings">VIGA</a>
+        <a class="nav-link" id="custom-tabs-one-settings-tab" data-bs-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">VIGA</a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-products-tab" data-toggle="pill" href="#custom-tabs-one-products" role="tab" aria-controls="custom-tabs-one-products">Todos os Produtos</a>
+        <a class="nav-link" id="custom-tabs-one-products-tab" data-bs-toggle="pill" href="#custom-tabs-one-products" role="tab" aria-controls="custom-tabs-one-products" aria-selected="false">Todos os Produtos</a>
       </li>
     </ul>
   </div>
 
- 
   <div class="card-body">
     <div class="tab-content" id="custom-tabs-one-tabContent">
 
@@ -151,12 +150,12 @@
                   <td><%= product.unity %></td>
                   <td><%= product.sale_price %></td>
                   <td>
-                    <div class="form-inline">
+                    <div class="d-flex">
                       <%= form_with(url: cart_orderable_path) do |form| %>
                         <%= form.hidden_field :client_id, value: @client.id %>
                         <%= form.hidden_field :product_id, value: product.id %>
                         <div class="d-flex align-items-center">
-                          <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade', class:"mr-1" %>
+                          <%= form.number_field :quantity, step: 0.01, placeholder: 'Quantidade', class:"form-control mr-1" %>
                           <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
                             <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
                           <% end %>
@@ -172,7 +171,6 @@
       </div>
 
       <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-        
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
@@ -185,18 +183,17 @@
           <tbody>
             <% @products.each do |product| %>
               <% if product.name.start_with?("CAIBRO") %>
-
                 <tr>
                   <td><%= product.name %></td>
                   <td><%= product.unity %></td>
                   <td><%= product.sale_price %></td>
                   <td>
-                    <div class="form-inline">
+                    <div class="d-flex">
                       <%= form_with(url: cart_orderable_path) do |form| %>
                         <%= form.hidden_field :client_id, value: @client.id %>
                         <%= form.hidden_field :product_id, value: product.id %>
                         <div class="d-flex align-items-center">
-                          <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade', class:"mr-1" %>
+                          <%= form.number_field :quantity, step: 0.01, placeholder: 'Quantidade', class:"form-control mr-1" %>
                           <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
                             <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
                           <% end %>
@@ -224,18 +221,17 @@
           <tbody>
             <% @products.each do |product| %>
               <% if product.name.start_with?("FRECHAL") %>
-
                 <tr>
                   <td><%= product.name %></td>
                   <td><%= product.unity %></td>
                   <td><%= product.sale_price %></td>
                   <td>
-                    <div class="form-inline">
+                    <div class="d-flex">
                       <%= form_with(url: cart_orderable_path) do |form| %>
                         <%= form.hidden_field :client_id, value: @client.id %>
                         <%= form.hidden_field :product_id, value: product.id %>
                         <div class="d-flex align-items-center">
-                          <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade', class:"mr-1" %>
+                          <%= form.number_field :quantity, step: 0.01, placeholder: 'Quantidade', class:"form-control mr-1" %>
                           <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
                             <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
                           <% end %>
@@ -245,7 +241,7 @@
                   </td>
                 </tr>
               <% end %>
-            <%end %>
+            <% end %>
           </tbody>
         </table>
       </div>
@@ -262,18 +258,18 @@
           </thead>
           <tbody>
             <% @products.each do |product| %>
-              <% if product.name.start_with?("VIGA") %>     
+              <% if product.name.start_with?("VIGA") %>
                 <tr>
                   <td><%= product.name %></td>
                   <td><%= product.unity %></td>
                   <td><%= product.sale_price %></td>
                   <td>
-                    <div class="form-inline">
+                    <div class="d-flex">
                       <%= form_with(url: cart_orderable_path) do |form| %>
                         <%= form.hidden_field :client_id, value: @client.id %>
                         <%= form.hidden_field :product_id, value: product.id %>
                         <div class="d-flex align-items-center">
-                          <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade', class:"mr-1" %>
+                          <%= form.number_field :quantity, step: 0.01, placeholder: 'Quantidade', class:"form-control mr-1" %>
                           <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
                             <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
                           <% end %>
@@ -282,15 +278,13 @@
                     </div>
                   </td>
                 </tr>
-              <%end %>
+              <% end %>
             <% end %>
           </tbody>
         </table>
       </div>
 
       <div class="tab-pane fade" id="custom-tabs-one-products" role="tabpanel" aria-labelledby="custom-tabs-one-products-tab">
-        
-        
         <%= form_with url: search_product_path, method: :get, class: "form-inline justify-content-center" do |form| %>
           <div class="input-group" style="width: 500px;">
             <%= form.text_field :product_name, placeholder: "Em desenvolvimento...", class: "form-control", disabled: true %>
@@ -299,10 +293,6 @@
             <% end %>
           </div>
         <% end %>
-
-
-
-
 
         <table class="table table-bordered table-hover mt-3">
           <thead>
@@ -316,40 +306,17 @@
           <tbody>
             <% if @products_name.present? %>
               <% @products_name.each do |product| %>
-              <tr>
-                <td><%= product.name %></td>
-                <td><%= product.unity %></td>
-                <td><%= product.sale_price %></td>
-                <td>
-                  <div class="form-inline">
-                    <%= form_with(url: cart_orderable_path) do |form| %>
-                      <%= form.hidden_field :client_id, value: @client.id %>
-                      <%= form.hidden_field :product_id, value: product.id %>
-                      <div class="d-flex align-items-center">
-                        <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade', class:"mr-1" %>
-                        <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
-                          <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
-                        <% end %>
-                      </div>
-                    <% end %>
-                  </div>
-                </td>
-              </tr>
-              <% end %>
-            <% else %>
-
-              <% @products.each do |product| %>
                 <tr>
                   <td><%= product.name %></td>
                   <td><%= product.unity %></td>
                   <td><%= product.sale_price %></td>
                   <td>
-                    <div class="form-inline">
+                    <div class="d-flex">
                       <%= form_with(url: cart_orderable_path) do |form| %>
                         <%= form.hidden_field :client_id, value: @client.id %>
                         <%= form.hidden_field :product_id, value: product.id %>
                         <div class="d-flex align-items-center">
-                          <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade', class:"mr-1" %>
+                          <%= form.number_field :quantity, step: 0.01, placeholder: 'Quantidade', class:"form-control mr-1" %>
                           <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
                             <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
                           <% end %>
@@ -359,18 +326,36 @@
                   </td>
                 </tr>
               <% end %>
-
-            <%end %>
-            
+            <% else %>
+              <% @products.each do |product| %>
+                <tr>
+                  <td><%= product.name %></td>
+                  <td><%= product.unity %></td>
+                  <td><%= product.sale_price %></td>
+                  <td>
+                    <div class="d-flex">
+                      <%= form_with(url: cart_orderable_path) do |form| %>
+                        <%= form.hidden_field :client_id, value: @client.id %>
+                        <%= form.hidden_field :product_id, value: product.id %>
+                        <div class="d-flex align-items-center">
+                          <%= form.number_field :quantity, step: 0.01, placeholder: 'Quantidade', class:"form-control mr-1" %>
+                          <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
+                            <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
+                          <% end %>
+                        </div>
+                      <% end %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
           </tbody>
         </table>
       </div>
 
     </div>
   </div>
-  
 </div>
-
 
 
 

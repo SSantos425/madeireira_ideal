@@ -6,6 +6,7 @@ class SalesController < ApplicationController
 
     def sales_data
         @carts = Cart.where(date: params[:date])
+        
     end
 
     def show_sale

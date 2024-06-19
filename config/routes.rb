@@ -46,4 +46,8 @@ Rails.application.routes.draw do
  post 'orderable_discount_or_addition', to: 'carts#orderable_discount_or_addition', as: 'orderable_discount_or_addition'
 
 
+ #bills
+ 
+ post 'receive_bills', to: 'bills#receive_bills', as: 'receive_bills'
+
 end

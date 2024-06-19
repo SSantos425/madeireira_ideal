@@ -86,12 +86,12 @@
             <div class="form-inline">
               <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
                 <%= f.hidden_field :cart_balance, value:@cart.total  %>
-                <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+                <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+                <%= f.text_area :obs, class: "form-control mr-1", placeholder: "Cliente" %>
                 <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
               <% end %>
             </div>
           </div>
-          
         </div>
 
       </div>

@@ -17,12 +17,14 @@ Rails.application.routes.draw do
   get "sales_data", to: "sales#sales_data", as: "sales_data"
   get "show_sale", to: "sales#show_sale", as:"show_sale"
 
+
   # PURCHASE
   post 'include_products', to: 'purchases#include_products', as: 'include_products'
-  get 'buy_purchaselist_cart', to: 'purchases#buy_purchaselist_cart', as: 'buy_purchaselist_cart'
+  post 'buy_purchaselist_cart', to: 'purchases#buy_purchaselist_cart', as: 'buy_purchaselist_cart'
   post 'remove_item_purchaselist_cart', to: 'purchases#remove_item_purchaselist_cart', as: 'remove_item_purchaselist_cart'
   post 'update_item_purchaselist_cart', to: 'purchases#update_item_purchaselist_cart', as: 'update_item_purchaselist_cart'
   post 'purchase_discount_or_addition', to: 'carts#purchase_discount_or_addition', as: 'purchase_discount_or_addition'
+  post 'foward_purchase', to: 'purchases#foward_purchase', as: 'foward_purchase'
 
 
   # CASH_REGISTER
@@ -46,8 +48,12 @@ Rails.application.routes.draw do
  post 'orderable_discount_or_addition', to: 'carts#orderable_discount_or_addition', as: 'orderable_discount_or_addition'
 
 
+
+
  #bills
  
  post 'receive_bills', to: 'bills#receive_bills', as: 'receive_bills'
+
+
 
 end

@@ -122,6 +122,28 @@ class PurchasesController < ApplicationController
     end
   end
 
+  def foward_purchase
+    purchase_id = params[:purchase_id]
+    total_value = params[:total_value].to_f
+    data = params[:data]
+    down_payment = params[:down_payment]
+
+    bill_payment = BillsPayment.create(down_payment:, total_value: , purchase_id: purchase_id)
+    bill_payment.update(remaining_payment:bill.total_value - bill.down_payment)
+
+    purchase_lists.each do |purchase_list|
+      inventory = Inventory.find_by(product_id: purchase_list.product.id)
+      inventory.update(quantity: inventory.quantity + purchase_list.quantity)
+    end
+
+    cash_register.update(balance: cash_register.balance - total_value)
+   # cria um registro no caixa
+   CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: down_payment,
+   note: "Compra de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{total_value}", cash_register_type: 1)
+                            
+    redirect_to cash_register_path
+  end
+
   private
 
   def purchase_params

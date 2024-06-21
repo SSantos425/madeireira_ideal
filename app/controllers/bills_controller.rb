@@ -2,6 +2,7 @@ class BillsController < ApplicationController
   def index
     @bills = Bill.all
     @bills_received = Bill.where(total_value: 0)
+    @bills_payment = BillsPayment.all
   end
 
   def receive_bills

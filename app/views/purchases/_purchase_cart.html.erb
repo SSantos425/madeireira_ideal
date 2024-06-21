@@ -95,26 +95,27 @@
   </div>
 
   <div class="card-footer mt-3">
-    <strong>TOTAL:</strong> <%= number_to_currency(@purchase.total_compra(@purchase.id), unit: 'R$', separator: ',', delimiter: '.') %>
-    <%= link_to buy_purchaselist_cart_path(data:@purchase.receipt_date,purchase_id:@purchase.id,total_value:@purchase.total_compra(@purchase.id)), class: "btn btn-success ml-2" do %>
-      <i class="fas fa-cart-plus ml-1"></i> Comprar
-    <% end %>
-  </div>
-
-  <div class="card-footer mt-3">
-    <div style="display: flex;">
-      <div>
-        <%= "Total: #{@purchase.total_compra(@purchase.id)}"  %>
-      </div>
-    
+    <div style="display: flex; justify-content:space-between;">
       <div class="form-inline">
+        <strong>TOTAL:</strong> <%="#{@purchase.total_compra(@purchase.id)}"  %>
         <%= form_with(url: buy_purchaselist_cart_path) do |form| %>
           <%= form.hidden_field :data, value:@purchase.receipt_date%>
           <%= form.hidden_field :purchase_id, value: @purchase.id %>
           <%= form.hidden_field :total_value, value: @purchase.total_compra(@purchase.id) %>
           <%= button_tag(type: 'submit', class: 'btn btn-success ml-2') do %>
-            Comprar
+          <i class="fas fa-cart-plus ml-1"></i> Comprar
           <% end %>
+        <% end %>
+      </div>
+
+
+      <div class="form-inline">
+        <%= form_with url: foward_purchase_path, method: :post do |f|%>
+          <%= f.hidden_field :data, value:@purchase.receipt_date%>
+          <%= f.hidden_field :purchase_id, value: @purchase.id %>
+          <%= f.hidden_field :total_value, value: @purchase.total_compra(@purchase.id) %>
+          <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+          <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
         <% end %>
       </div>
       

@@ -99,7 +99,6 @@
       <div class="form-inline">
         <strong>TOTAL:</strong> <%="#{@purchase.total_compra(@purchase.id)}"  %>
         <%= form_with(url: buy_purchaselist_cart_path) do |form| %>
-          <%= form.hidden_field :data, value:@purchase.receipt_date%>
           <%= form.hidden_field :purchase_id, value: @purchase.id %>
           <%= form.hidden_field :total_value, value: @purchase.total_compra(@purchase.id) %>
           <%= button_tag(type: 'submit', class: 'btn btn-success ml-2') do %>
@@ -110,8 +109,7 @@
 
 
       <div class="form-inline">
-        <%= form_with url: foward_purchase_path, method: :post do |f|%>
-          <%= f.hidden_field :data, value:@purchase.receipt_date%>
+        <%= form_with url: foward_purchase_path, method: :post, data: { turbo: false } do |f|%>
           <%= f.hidden_field :purchase_id, value: @purchase.id %>
           <%= f.hidden_field :total_value, value: @purchase.total_compra(@purchase.id) %>
           <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
@@ -130,23 +128,23 @@
     <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
 
       <li class="nav-item">
-        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">RIPA</a>
+        <a class="nav-link active" id="custom-tabs-one-home-tab" data-bs-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-selected="custom-tabs-one-home" aria-selected="true">RIPA</a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">CAIBRO</a>
+        <a class="nav-link" id="custom-tabs-one-profile-tab" data-bs-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-selected="custom-tabs-one-profile" aria-selected="false">CAIBRO</a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">FRECHAL</a>
+        <a class="nav-link" id="custom-tabs-one-messages-tab" data-bs-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-selected="custom-tabs-one-messages" aria-selected="false">FRECHAL</a>
       </li>
       
       <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">VIGA</a>
+        <a class="nav-link" id="custom-tabs-one-settings-tab" data-bs-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-selected="custom-tabs-one-settings" aria-selected="false">VIGA</a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-products-tab" data-toggle="pill" href="#custom-tabs-one-products" role="tab" aria-controls="custom-tabs-one-products" aria-selected="false">Todos os Produtos</a>
+        <a class="nav-link" id="custom-tabs-one-products-tab" data-bs-toggle="pill" href="#custom-tabs-one-products" role="tab" aria-selected="custom-tabs-one-products" aria-selected="false">Todos os Produtos</a>
       </li>
     </ul>
   </div>

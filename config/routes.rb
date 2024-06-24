@@ -53,6 +53,9 @@ Rails.application.routes.draw do
  #bills
  
  post 'receive_bills', to: 'bills#receive_bills', as: 'receive_bills'
+ post 'payment_bills', to: 'bills#payment_bills', as: 'payment_bills'
+
+ get 'bills_payment_index', to: 'bills#bills_payment_index', as: 'bills_payment_index'
 
 
 

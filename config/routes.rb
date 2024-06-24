@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   #SALES
   get "sales_data", to: "sales#sales_data", as: "sales_data"
   get "show_sale", to: "sales#show_sale", as:"show_sale"
+  get 'download', to: 'sales#download_pdf', as: 'download_sales_pdf'
+  get 'preview', to: 'sales#preview_pdf', as: 'preview_sales_pdf'
 
   # PURCHASE
   post 'include_products', to: 'purchases#include_products', as: 'include_products'

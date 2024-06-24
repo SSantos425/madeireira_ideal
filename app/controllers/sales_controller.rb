@@ -8,7 +8,7 @@ class SalesController < ApplicationController
         @carts = Cart.where(date: params[:date])
     end
 
-    def preview_pdf
+    def download_pdf
       total_total = 0
       carts = Cart.where(date: params[:date])
       pdf = Prawn::Document.new do |pdf|
@@ -66,30 +66,9 @@ class SalesController < ApplicationController
         pdf.stroke_horizontal_rule
 
       end
-      send_data pdf.render, filename: 'carts_report.pdf', type: 'application/pdf', disposition: 'inline'
-    end
-
-    def download_pdf
-        @orderables = Orderable.all
-        @carts = Cart.where(date: params[:date])
-        pdf = Prawn::Document.new
-        table_data = [['Cliente', 'Produto', 'Quantidade', 'Valor do Produto', 'Valor Total']]
-        pdf.text 'RELATÓRIO GERAL DE VENDAS', size: 30, style: :bold
-
-          pdf.text "Cliente: #{sales.client.name} | Produto: #{sales.product.name} | Quantidade: #{sales.quantity} | Valor: #{sales.total_value}" , style: :bold
-
-          sales.each do |sales|
-            [
-              sales.client.name,
-              sales.product.name,
-              sales.quantity,
-              sales.total_value
-            ]
-          end
-
-        send_data(pdf.render,
-                  filename: 'vendas_geral.pdf',
-                  type: 'application/pdf')
+      send_data(pdf.render,
+              filename: "Relatório Vendas #{carts.first.date&.strftime('%d/%m/%Y')}.pdf",
+              type: 'application/pdf')
     end
 
     def show_sale

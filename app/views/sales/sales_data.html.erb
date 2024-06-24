@@ -4,8 +4,7 @@
       <div class="row">
         <div class="col align-self-center"><h1>Vendas</h1></div>
         <div class="col d-flex justify-content-end">
-          <span class="d-flex justify-content-end"><div class="m-1"><%= link_to "Exportar", download_sales_pdf_path, class:"btn btn-warning" %></div></span>
-          <span class="d-flex justify-content-end"><div class="m-1"><%= link_to "Visualizar", preview_sales_pdf_path(date: @carts.first.date), class:"btn btn-warning" %></div></span>
+          <span class="d-flex justify-content-end"><div class="m-1"><%= link_to "Exportar", download_sales_pdf_path(date: @carts.first.date), class:"btn btn-warning" %></div></span>
         </div>
       </div>
     </div>

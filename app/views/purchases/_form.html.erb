@@ -72,7 +72,7 @@
 
           <div class="form-group">
             <%= form.label :discount, "Desconto" %>
-            <%= form.number_field :discount, step:0.01, class: 'form-control', placeholder: "Desconto" %>
+            <%= form.number_field :discount, value:0, class: 'form-control'%>
             <% @purchase.errors.full_messages_for(:discount).each do |message| %>
               <div style="color: red;"><%= message %></div>
             <% end %>
@@ -80,8 +80,8 @@
 
           <div class="form-group">
             <%= form.label :addition, "Acréscimos" %>
-            <%= form.number_field :addition, step:0.01, class: 'form-control', placeholder: "Acréscimos" %>
-            <% @purchase.errors.full_messages_for(:addition).each do |message| %>
+            <%= form.number_field :additon, value:0, class: 'form-control'%>
+            <% @purchase.errors.full_messages_for(:additon).each do |message| %>
               <div style="color: red;"><%= message %></div>
             <% end %>
           </div>

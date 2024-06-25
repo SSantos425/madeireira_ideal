@@ -5,6 +5,7 @@ class PurchasesController < ApplicationController
 
   def new
     @purchase = Purchase.new
+    @show_form = false
   end
 
   def create
@@ -99,20 +100,18 @@ class PurchasesController < ApplicationController
 
   def purchase_discount_or_addition
     quantity = params[:quantity].to_f
-    @cart = Cart.find(params[:cart_id])
+    @purchase = Purchase.find_by(id: params[:purchase_id])
 
     @orderables = Orderable.all
     @products = Product.all
-    @client = Client.find_by(id: params[:client_id])
+    @purchase_lists = PurchaseList.all
 
     if params[:discount]
-      @cart.update(discount: quantity)
-      render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
-                                                       locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
+      @purchase.update(discount: quantity)
+      render turbo_stream: turbo_stream.update('purchaselist',partial: 'purchases/purchase_cart', locals: { purchaselist: @purchase_lists })
     elsif params[:addition]
-      @cart.update(addition: quantity)
-      render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
-                                                       locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
+      @purchase.update(additon: quantity)
+      render turbo_stream: turbo_stream.update('purchaselist',partial: 'purchases/purchase_cart', locals: { purchaselist: @purchase_lists })
     end
   end
 
@@ -121,7 +120,6 @@ class PurchasesController < ApplicationController
     total_value = params[:total_value].to_f
     down_payment = params[:down_payment].to_f
 
-    
     bill_payment = BillsPayment.create(down_payment:, total_value:, purchase_id:)
     bill_payment.update(remaining_payment: bill_payment.total_value - bill_payment.down_payment)
 
@@ -133,7 +131,8 @@ class PurchasesController < ApplicationController
     cash_register = CashRegister.last
     cash_register.update(balance: cash_register.balance - down_payment)
     # cria um registro no caixa
-    CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: down_payment,note: "Compra de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{total_value}", cash_register_type: 2)
+    CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: down_payment,
+                            note: "Compra de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{total_value}", cash_register_type: 2)
 
     purchase = Purchase.find_by(id: purchase_id)
     purchase.update(purchase_type: 0)

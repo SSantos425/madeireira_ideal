@@ -124,7 +124,7 @@ class CartsController < ApplicationController
     # 0 contas a pagar
     # 1 contas a receber
 
-    bill = Bill.create(bill_type: 1, down_payment:, total_value: cart_last.balance, cart_id: cart_last.id, obs:obs)
+    bill = BillsReceive.create(down_payment:, total_value: cart_last.balance, cart_id: cart_last.id, obs:obs)
     bill.update(remaining_payment:bill.total_value - bill.down_payment)
     cart_orderables = Orderable.where(cart_id: cart_last.id)
     cart_orderables.each do |cart_orderable|

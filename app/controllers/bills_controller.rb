@@ -1,14 +1,14 @@
 class BillsController < ApplicationController
   def index
-    @bills = Bill.all
-    @bills_received = Bill.where(total_value: 0)
+    @bills = BillsReceive.all
+    @bills_received = BillsReceive.where(total_value: 0)
   end
 
   def receive_bills
     bill_id = params[:bill_id]
     quantity = params[:quantity].to_f
 
-    bill = Bill.find_by(id: bill_id)
+    bill = BillsReceive.find_by(id: bill_id)
     bill.update(remaining_payment: bill.remaining_payment - quantity)
 
     # atualiza o valor do caixa

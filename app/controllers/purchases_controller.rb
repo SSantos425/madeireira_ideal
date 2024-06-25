@@ -18,13 +18,11 @@ class PurchasesController < ApplicationController
     end
   end
 
-
   def show
     @purchase = Purchase.find(params[:id])
     @products = Product.all
     @purchase_lists = PurchaseList.all
   end
-
 
   def include_products
     purchase_id = params[:purchase_id].to_i
@@ -40,7 +38,6 @@ class PurchasesController < ApplicationController
     render turbo_stream: turbo_stream.update('purchaselist', partial: 'purchases/purchase_cart',
                                                              locals: { purchase: @purchase })
   end
-
 
   def buy_purchaselist_cart
     purchase_id = params[:purchase_id]
@@ -63,13 +60,12 @@ class PurchasesController < ApplicationController
     end
 
     cash_register.update(balance: cash_register.balance - total_value)
-    CashRegisterList.create(cash_register_id: cash_register.id, date:data, balance: total_value,
+    CashRegisterList.create(cash_register_id: cash_register.id, date: data, balance: total_value,
                             note: 'Compra de Mercadorias para Revenda', cash_register_type: 0)
-                            
+
     render turbo_stream: turbo_stream.update('purchaselist', partial: 'purchases/purchase_cart_finished',
                                                              locals: { purchase: @purchase })
   end
-
 
   def update_item_purchaselist_cart
     purchase_list_id = params[:purchase_list]
@@ -87,7 +83,6 @@ class PurchasesController < ApplicationController
                                              partial: 'purchases/purchase_cart', locals: { purchaselist: @purchase_lists })
   end
 
-
   def remove_item_purchaselist_cart
     purchase_list_id = params[:purchase_list]
     purchase_id = params[:purchase_id].to_i
@@ -103,7 +98,6 @@ class PurchasesController < ApplicationController
   end
 
   def purchase_discount_or_addition
-
     quantity = params[:quantity].to_f
     @cart = Cart.find(params[:cart_id])
 
@@ -120,6 +114,31 @@ class PurchasesController < ApplicationController
       render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                        locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
     end
+  end
+
+  def foward_purchase
+    purchase_id = params[:purchase_id]
+    total_value = params[:total_value].to_f
+    down_payment = params[:down_payment].to_f
+
+    
+    bill_payment = BillsPayment.create(down_payment:, total_value:, purchase_id:)
+    bill_payment.update(remaining_payment: bill_payment.total_value - bill_payment.down_payment)
+
+    purchase_lists = PurchaseList.where(purchase_id:)
+    purchase_lists.each do |purchase_list|
+      inventory = Inventory.find_by(product_id: purchase_list.product.id)
+      inventory.update(quantity: inventory.quantity + purchase_list.quantity)
+    end
+    cash_register = CashRegister.last
+    cash_register.update(balance: cash_register.balance - down_payment)
+    # cria um registro no caixa
+    CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: down_payment,note: "Compra de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{total_value}", cash_register_type: 2)
+
+    purchase = Purchase.find_by(id: purchase_id)
+    purchase.update(purchase_type: 0)
+
+    redirect_to cash_registers_path
   end
 
   private

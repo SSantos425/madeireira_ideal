@@ -62,8 +62,12 @@
           </tbody>
       </table>
 
-      
-    
-      <strong><%= "TOTAL: #{number_to_currency(@purchase.total_compra(@purchase.id), unit: 'R$', separator: ',', delimiter: '.')}" %></strong>
-  </div>
+        <% if @purchase.discount > 0 %>
+            <strong><%= "TOTAL: #{number_to_currency(@purchase.total_compra(@purchase.id) - @purchase.discount, unit: 'R$', separator: ',', delimiter: '.')}" %></strong>
+        <% elsif @purchase.additon > 0 %>
+            <strong><%= "TOTAL: #{number_to_currency(@purchase.total_compra(@purchase.id) - @purchase.additon, unit: 'R$', separator: ',', delimiter: '.')}" %></strong>
+        <% else %>
+            <strong><%= "TOTAL: #{number_to_currency(@purchase.total_compra(@purchase.id), unit: 'R$', separator: ',', delimiter: '.')}" %></strong>
+        <% end %> 
+    </div>
 </div>

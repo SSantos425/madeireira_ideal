@@ -56,21 +56,53 @@
       </div>
     </div>
 
-    <% if @cart.discount.present? %>
+    <% if @cart.discount > 0 %>
       <%= "Desconto#{@cart.discount} " %>
       <div class="card-footer mt-3">
-        <strong>TOTAL:</strong> <%= number_to_currency(@cart.total - @cart.discount, unit: 'R$', separator: ',', delimiter: '.') %>
+        <div style="display: flex; justify-content:space-between;">
+          <div class="mt-2">
+            <strong>TOTAL:</strong> <%= number_to_currency(@cart.total - @cart.discount, unit: 'R$', separator: ',', delimiter: '.') %>
         <%= link_to sell_cart_path(cart_balance:@cart.total - @cart.discount), class: "btn btn-success btn-sm" do %>
           <i class="fas fa-cart-plus ml-1"></i> A VISTA 
         <% end %>
+          </div>
+          
+          <div class="mt-1">
+            <div class="form-inline">
+              <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
+                <%= f.hidden_field :cart_balance, value:@cart.total  %>
+                <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+                <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
+                <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
       </div>
-    <%elsif @cart.addition.present? %>
+    <%elsif @cart.addition > 0 %>
       <%= "Acrescimo#{@cart.addition}" %>
       <div class="card-footer mt-3">
-        <strong>TOTAL:</strong> <%= number_to_currency(@cart.total + @cart.addition, unit: 'R$', separator: ',', delimiter: '.') %>
+        <div style="display: flex; justify-content:space-between;">
+          <div class="mt-2">
+            <strong>TOTAL:</strong> <%= number_to_currency(@cart.total + @cart.addition, unit: 'R$', separator: ',', delimiter: '.') %>
         <%= link_to sell_cart_path(cart_balance:@cart.total + @cart.addition), class: "btn btn-success btn-sm" do %>
           <i class="fas fa-cart-plus ml-1"></i> A VISTA 
         <% end %>
+          </div>
+          
+          <div class="mt-1">
+            <div class="form-inline">
+              <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
+                <%= f.hidden_field :cart_balance, value:@cart.total  %>
+                <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+                <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
+                <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
       </div>
     <% else %>
       <div class="card-footer mt-3">
@@ -87,7 +119,7 @@
               <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
                 <%= f.hidden_field :cart_balance, value:@cart.total  %>
                 <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
-                <%= f.text_area :obs, class: "form-control mr-1", placeholder: "Cliente" %>
+                <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
                 <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
               <% end %>
             </div>

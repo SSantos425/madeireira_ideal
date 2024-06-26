@@ -4,7 +4,7 @@ class CartsController < ApplicationController
   end
 
   def new_cart
-    @cart = Cart.new(balance: nil, discount: nil, addition: nil, date: Date.today)
+    @cart = Cart.new(balance: nil, discount: 0, addition: 0, date: Date.today)
 
     if @cart.save
       redirect_to carts_path
@@ -95,7 +95,7 @@ class CartsController < ApplicationController
     redirect_to cash_registers_path
   end
 
-  def discount_or_addition
+  def orderable_discount_or_addition
     quantity = params[:quantity].to_f
     @cart = Cart.find(params[:cart_id])
 

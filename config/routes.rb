@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   post 'buy_purchaselist_cart', to: 'purchases#buy_purchaselist_cart', as: 'buy_purchaselist_cart'
   post 'remove_item_purchaselist_cart', to: 'purchases#remove_item_purchaselist_cart', as: 'remove_item_purchaselist_cart'
   post 'update_item_purchaselist_cart', to: 'purchases#update_item_purchaselist_cart', as: 'update_item_purchaselist_cart'
-  post 'purchase_discount_or_addition', to: 'carts#purchase_discount_or_addition', as: 'purchase_discount_or_addition'
+  post 'purchase_discount_or_addition', to: 'purchases#purchase_discount_or_addition', as: 'purchase_discount_or_addition'
   post 'foward_purchase', to: 'purchases#foward_purchase', as: 'foward_purchase'
 
 

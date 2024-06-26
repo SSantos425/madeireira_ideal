@@ -33,18 +33,36 @@
       </div>
     
       <div class="dropdown card-footer" style="display: flex; justify-content: center;">
-        <div class="d-flex align-items-center">
-          <%= form_with(url: sales_path, method: "get") do |f| %>
+        
+        <% if @start_date.present? && @end_date.present? %>
+          <span class="d-flex justify-content-end">
+            <div class="m-1">
+              <%= link_to "Todas as Vendas", period_sales_download_pdf_path(start_date: @start_date, end_date: @end_date), class: "btn btn-warning" %>
+            </div>
+          </span>
+          <div class="d-flex align-items-center">
+            <%= form_with(url: sales_path, method: "get") do |f| %>
               <div class="form-inline">
-                  <%= f.date_field :start_date , class:"mr-1"%>
-                  <%= f.date_field :end_date , class:"mr-1"%>
-                  <%= f.submit "Filtrar", class: "btn btn-primary btn-sm" %>
+                <div style="display: none;">
+                  <%= f.date_field :start_date, value: nil %>
+                  <%= f.date_field :end_date, value: nil %>
+                </div>
+                <%= f.submit "Novo PDF", class: "btn btn-primary btn-sm" %>
               </div>
-          <% end %>
-        </div>
-        <% if @start_date.present? & @end_date.present? %>
-          <span class="d-flex justify-content-end"><div class="m-1"><%= link_to "Todas as Vendas", period_sales_download_pdf_path(start_date: @start_date, end_date: @end_date), class:"btn btn-warning" %></div></span>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="d-flex align-items-center">
+            <%= form_with(url: sales_path, method: "get") do |f| %>
+              <div class="form-inline">
+                <%= f.date_field :start_date, class: "mr-1" %>
+                <%= f.date_field :end_date, class: "mr-1" %>
+                <%= f.submit "Filtrar", class: "btn btn-primary btn-sm" %>
+              </div>
+            <% end %>
+          </div>
         <% end %>
+
       </div>
     </div>
     

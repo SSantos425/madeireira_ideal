@@ -215,4 +215,5 @@ class SalesController < ApplicationController
     delimiter = options[:delimiter] || "."
     format("%s %0.2f", unit, number).gsub(".", separator).gsub(/(\d)(?=(\d{3})+(?!\d))/, "\\1#{delimiter}")
   end
+
 end

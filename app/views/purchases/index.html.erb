@@ -9,46 +9,35 @@
           <th>Data Recebimento</th>
           <th>Fornecedor</th>
           <th>Nota</th>
-          <th>Serie</th>
+          <th>Série</th>
           <th>Total da Nota</th>
           <th>Total Produtos</th>
           <th>Desconto</th>
-          <th>Acrescimos</th>
-          <th>Frete</th>
+          <th>Acréscimos</th>
           <th>Ações</th>
         </tr>
       </thead>
       <tbody>
         <% @purchases.each do |purchase| %>
-          <% if purchase.purchase_type === 1 %>
-            <tr>
-              <td><%= purchase.receipt_date%></td>
-              <td><%= purchase.supplier.name %></td>
-              <td><%= purchase.nota_number %></td>
-              <td><%= purchase.serie %></td>
-              <td><%= purchase.total_nota %></td>
-              <td><%= purchase.total_products %></td>
-              <td><%= purchase.discount %></td>
-              <td><%= purchase.shipping %></td>
-              <td><%= link_to "Incluir Produtos", purchase_path(purchase), class: "btn btn-primary btn-sm" %></td>
-            </tr>
-          <% else %>
-            <tr>
-              <td><%= purchase.receipt_date %></td>
-              <td><%= purchase.supplier.name %></td>
-              <td><%= purchase.nota_number %></td>
-              <td><%= purchase.serie %></td>
-              <td><%= purchase.total_nota %></td>
-              <td><%= purchase.total_products %></td>
-              <td><%= purchase.discount %></td>
-              <td><%= purchase.shipping %></td>
-              <td><%= link_to "Detalhes", purchase_path(purchase), class: "btn btn-warning btn-sm" %></td>
-            </tr>
-          <% end %>
+          <tr>
+            <td><%= purchase.receipt_date %></td>
+            <td><%= purchase.supplier.name %></td>
+            <td><%= purchase.nota_number %></td>
+            <td><%= purchase.serie %></td>
+            <td><%= purchase.total_nota %></td>
+            <td><%= purchase.total_products %></td>
+            <td><%= purchase.discount %></td>
+            <td><%= purchase.additon %></td>
+            <td>
+              <% if purchase.purchase_type == 1 %>
+                <%= link_to "Incluir Produtos", purchase_path(purchase), class: "btn btn-primary btn-sm" %>
+              <% else %>
+                <%= link_to "Detalhes", purchase_path(purchase), class: "btn btn-warning btn-sm" %>
+              <% end %>
+            </td>
+          </tr>
         <% end %>
       </tbody>
     </table>
   </div>
 </div>
-
-

@@ -1,44 +1,91 @@
 <div class="card card-primary">
-    <div class="card-header">
-        <h1>Contas a Pagar</h1>
-    </div>
-
-    <div class="card-body">
- 
-        <table class="table table-hover">
-            <thead>
+  <div class="card-header">
+    <h1>Contas a Receber</h1>
+  </div>
+  <div class="card-body">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Cliente</th>
+          <th>Entrada</th>
+          <th>Valor Total da Venda</th>
+          <th>Falta Pagar</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @bills.each do |bill| %>
+          <% if bill.remaining_payment > 0 %>
             <tr>
-                <th>Tipo de Fatura</th>
-                <th>Entrada</th>
-                <th>Valor Total da Venda</th>
-                <th>Falta Pagar</th>
-                <th>Ações</th>
+              <td><%= bill.cart.date %></td>
+                <td>
+                    <%if bill.obs.nil? %>
+                        <%= bill.find_name(bill.cart) %>
+                    <% else %>
+                        <%= bill.obs %>
+                    <% end %>
+                </td>
+              <td><%= number_to_currency(bill.down_payment, unit: 'R$', separator: ',', delimiter: '.') %></td>
+              <td><%= number_to_currency(bill.total_value, unit: 'R$', separator: ',', delimiter: '.') %></td>
+              <td><%= number_to_currency(bill.remaining_payment, unit: 'R$', separator: ',', delimiter: '.') %></td>
+              <td>
+                <div class="form-inline">
+                  <%= form_with(url: receive_bills_path, local: true) do |f| %>
+                    <%= f.hidden_field :bill_id, value: bill.id %>
+                    <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
+                    <%= f.submit "Pagar", class: "btn btn-primary btn-sm mr-1" %>
+                  <% end %>
+                  <%= link_to "Visualizar", show_sale_path(cart_id: bill.cart_id), class: "btn btn-warning btn-sm" %>
+                </div>
+              </td>
             </tr>
-            </thead>
-            <tbody>
-            <% @bills.each do |bill| %>
-                <tr>
-                    <td><%= bill.id %></td>
-                    <td><%= number_to_currency(bill.quantity, unit: 'R$', separator: ',', delimiter: '.') %></td>
-                    <td><%= number_to_currency(bill.total_value, unit: 'R$', separator: ',', delimiter: '.') %></td>
-                    <td><%= number_to_currency(bill.falta_pagar(bill.total_value, bill.quantity), unit: 'R$', separator: ',', delimiter: '.') %></td>
-                    <td>
-                        <div class="form-inline">
-                            <%= form_with(url: orderable_discount_or_addition_path) do |f| %>
-                                <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
-                                <%= f.submit "Pagar",class: "btn btn-primary btn-sm mr-1" %>
-                            <% end %>
-                            <%= link_to "Ver venda",root_path,class:"btn btn-warning btn-sm "%>
-                        </div>
-                    </td>
-
-
-                </tr>
-            <% end %>
-            </tbody>
-        </table>
-
-          
-    </div>
-
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
+
+<div class="card card-primary">
+  <div class="card-header">
+    <h1>Contas Recebidas</h1>
+  </div>
+  <div class="card-body">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Cliente</th>
+          <th>Entrada</th>
+          <th>Valor Total da Venda</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @bills.each do |bill| %>
+          <% if bill.remaining_payment === 0 %>
+           <tr>
+              <td><%= bill.cart.date %></td>
+                <td>
+                    <%if bill.obs.nil? %>
+                        <%= bill.find_name(bill.cart) %>
+                    <% else %>
+                        <%= bill.obs %>
+                    <% end %>
+                </td>
+              <td><%= number_to_currency(bill.down_payment, unit: 'R$', separator: ',', delimiter: '.') %></td>
+              <td><%= number_to_currency(bill.total_value, unit: 'R$', separator: ',', delimiter: '.') %></td>
+              <td>
+                <div class="form-inline">
+                  <%= link_to "Visualizar", show_sale_path(cart_id: bill.cart_id), class: "btn btn-warning btn-sm" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+

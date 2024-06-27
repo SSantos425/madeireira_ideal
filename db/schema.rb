@@ -10,18 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_06_194029) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_20_210927) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "bills", force: :cascade do |t|
     t.integer "bill_type"
-    t.float "quantity"
+    t.float "down_payment"
+    t.float "remaining_payment"
     t.float "total_value"
+    t.string "obs"
     t.bigint "cart_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cart_id"], name: "index_bills_on_cart_id"
+  end
+
+  create_table "bills_payments", force: :cascade do |t|
+    t.float "down_payment"
+    t.float "total_value"
+    t.float "remaining_payment"
+    t.bigint "purchase_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["purchase_id"], name: "index_bills_payments_on_purchase_id"
+  end
+
+  create_table "bills_receives", force: :cascade do |t|
+    t.float "down_payment"
+    t.float "total_value"
+    t.float "remaining_payment"
+    t.string "obs"
+    t.bigint "cart_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cart_id"], name: "index_bills_receives_on_cart_id"
   end
 
   create_table "cart_list_orderables", force: :cascade do |t|
@@ -197,6 +220,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_06_194029) do
   end
 
   add_foreign_key "bills", "carts"
+  add_foreign_key "bills_payments", "purchases"
+  add_foreign_key "bills_receives", "carts"
   add_foreign_key "cart_list_orderables", "cart_lists"
   add_foreign_key "cart_list_orderables", "clients"
   add_foreign_key "cart_list_orderables", "products"

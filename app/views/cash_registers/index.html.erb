@@ -8,11 +8,11 @@
         </h1>
         <%= form_with(url: close_cash_register_path) do |f| %>
           <%= f.hidden_field :cash_register_id, value: @cash_register_last.id %>
-            <%= f.hidden_field :date, value: @cash_register_last.date %>
+          <%= f.hidden_field :date, value: @cash_register_last.date %>
 
-              <%= f.submit "Fechar o Caixa" , class: "btn btn-warning" , date: {
-                turbo_confirm: "Tem certeza que deseja fechar o caixa?" } %>
-                <% end %>
+          <%= f.submit "Fechar o Caixa", class: "btn btn-warning", data: { turbo_confirm: "Tem certeza que deseja fechar o caixa?" } %>
+        <% end %>
+
       </div>
     </div>
     <div class="card-body">

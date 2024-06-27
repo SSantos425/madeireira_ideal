@@ -29,6 +29,8 @@
     </div>
 
     <div class="card-footer">
-       <strong>Total: </strong><%= number_to_currency(@cart.balance, unit: 'R$', separator: ',', delimiter: '.') %>
+        <div class="m-1"><strong>Descontos:</strong> <%= number_to_currency(@cart.discount, unit: 'R$', separator: ',', delimiter: '.') %></div>
+        <div class="m-1"><strong>Adicionais:</strong> <%= number_to_currency(@cart.addition, unit: 'R$', separator: ',', delimiter: '.') %></div>
+        <div class="m-1"><strong>Total: </strong><%= number_to_currency(@cart.balance, unit: 'R$', separator: ',', delimiter: '.') %></div>
     </div>
 </div>

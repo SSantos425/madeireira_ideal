@@ -4,9 +4,10 @@ class CartsController < ApplicationController
   end
 
   def new_cart
-    @cart = Cart.new(balance: nil, discount: 0, addition: 0, date: Date.today)
+    @cart = Cart.new(balance: 0, discount: 0, addition: 0, date: Date.today)
 
     if @cart.save
+      
       redirect_to carts_path
     else
       render :new, status: :unprocessable_entity
@@ -92,6 +93,8 @@ class CartsController < ApplicationController
     CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: cart_last.balance,
                             note: 'Venda de Mercadoria(Madeira)', cash_register_type: 1)
 
+    check_cart = Cart.where(balance: 0)
+    check_cart.destroy_all
     redirect_to cash_registers_path
   end
 
@@ -139,6 +142,8 @@ class CartsController < ApplicationController
     CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: down_payment,
                             note: "Venda de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{cart_last.balance}", cash_register_type: 1)
 
+    check_cart = Cart.where(balance: 0)
+    check_cart.destroy_all
     redirect_to cash_registers_path
   end
 end

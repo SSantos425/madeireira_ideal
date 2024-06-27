@@ -1,5 +1,4 @@
 class SalesController < ApplicationController
-<<<<<<< HEAD
     def index
         @orderables = Orderable.all
         @cart = Cart.last
@@ -216,21 +215,4 @@ class SalesController < ApplicationController
     delimiter = options[:delimiter] || "."
     format("%s %0.2f", unit, number).gsub(".", separator).gsub(/(\d)(?=(\d{3})+(?!\d))/, "\\1#{delimiter}")
   end
-=======
-  def index
-    @orderables = Orderable.all
-    @cart = Cart.last
-  end
-
-  def sales_data
-    @carts = Cart.where(date: params[:date])
-  end
-
-  def show_sale
-    @cart = Cart.find_by(id: params[:cart_id])
-  end
-
- 
-
->>>>>>> 32dd7470b3f945f39e53ecfc26aad080f0c7936d
 end

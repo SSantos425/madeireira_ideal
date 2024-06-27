@@ -16,10 +16,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_20_210927) do
 
   create_table "bills", force: :cascade do |t|
     t.integer "bill_type"
-    t.float "down_payment"
-    t.float "remaining_payment"
+    t.float "quantity"
     t.float "total_value"
-    t.string "obs"
     t.bigint "cart_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

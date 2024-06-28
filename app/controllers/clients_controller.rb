@@ -10,6 +10,7 @@ class ClientsController < ApplicationController
   def create
     @client = Client.new(client_params)
     if @client.save
+      flash[:notice] = "Cliente adicionado com sucesso !!"
       redirect_to clients_path
     else
       render :new, status: :unprocessable_entity
@@ -28,6 +29,7 @@ class ClientsController < ApplicationController
     @client = Client.find(params[:id])
 
     if @client.update(client_params)
+      flash[:notice] = "Cliente atualizado com sucesso !!"
       redirect_to clients_path
     else
       render :edit, status: :unprocessable_entity
@@ -37,7 +39,7 @@ class ClientsController < ApplicationController
   def destroy
     @client = Client.find(params[:id])
     @client.destroy
-
+    flash[:notice] = "Cliente excluído com sucesso !!"
     redirect_to clients_path
   end
 

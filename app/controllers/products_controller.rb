@@ -12,7 +12,8 @@ class ProductsController < ApplicationController
 
     if @product.save
       Inventory.create(product_id: @product.id, quantity: 0.0)
-      redirect_to products_path, notice: 'Produto adicionado com sucesso !!'
+      flash[:notice] = "Produto adicionado com sucesso !!"
+      redirect_to products_path
     else
       render :new, status: :unprocessable_entity
     end
@@ -26,6 +27,7 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
 
     if @product.update(product_params)
+      flash[:notice] =  "Produto atualizado com sucesso !!"
       redirect_to products_path
     else
       render :edit, status: :unprocessable_entity
@@ -35,7 +37,7 @@ class ProductsController < ApplicationController
   def destroy
     @product = Product.find(params[:id])
     @product.destroy
-
+    flash[:notice] = "Produto excluído com sucesso !!"
     redirect_to products_path
   end
 

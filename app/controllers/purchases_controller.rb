@@ -136,7 +136,6 @@ class PurchasesController < ApplicationController
 
     purchase = Purchase.find_by(id: purchase_id)
     purchase.update(purchase_type: 0)
-
     redirect_to cash_registers_path
   end
 

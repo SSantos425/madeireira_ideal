@@ -27,6 +27,7 @@ class CashRegistersController < ApplicationController
     end
 
     if @cash_register.save
+      flash[:notice] = "Compra concluída com sucesso !!"
       redirect_to cash_registers_path
     else
       render :new, status: :unprocessable_entity
@@ -37,6 +38,7 @@ class CashRegistersController < ApplicationController
 
   def update
     if @cash_register.update(cash_register_params)
+      flash[:notice] = "Compra alterada com sucesso !!"
       redirect_to cash_registers_path
     else
       render :edit, status: :unprocessable_entity
@@ -45,6 +47,7 @@ class CashRegistersController < ApplicationController
 
   def destroy
     @cash_register.destroy
+    flash[:notice] = "Compra excluída com sucesso !!"
     redirect_to cash_registers_path
   end
 

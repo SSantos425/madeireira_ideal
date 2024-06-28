@@ -11,6 +11,9 @@
   </head>
 
   <body class="hold-transition layout-top-nav">
+    <% flash.each do |name, msg| %>
+      <%= content_tag :div, msg, class: name %>
+    <% end %>
     <div class="wrapper">
       <%= render "layouts/header" %>
       <div class="content-wrapper"> 

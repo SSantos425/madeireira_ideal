@@ -11,6 +11,7 @@ class InventoriesController < ApplicationController
     @inventory = Inventory.find(params[:id])
 
     if @inventory.update(inventory_params)
+      flash[:notice] = "Estoque alterado com sucesso !!"
       redirect_to inventories_path
     else
       render :edit, status: :unprocessable_entity
@@ -34,8 +35,7 @@ class InventoriesController < ApplicationController
 
     else
       inventory_list.update(quantity: inventory_list.quantity + quantity)
-      flash[:notice] = 'Produto ATUALIZADO com sucesso!'
-
+      flash[:notice] = "Estoque atualizado com sucesso !!"
       redirect_to root_path
     end
   end

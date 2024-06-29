@@ -48,33 +48,29 @@ class CashRegistersController < ApplicationController
     redirect_to cash_registers_path
   end
 
-  def cash_replenishment
+  def replenishment_or_withdrawl_cash_register
     cash_register_id = params[:cash_register_id]
     date = params[:date]
     value = params[:value].to_f
     note = params[:notes]
 
-    @cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance:value, note:, cash_register_type: 1)
-    @cash_resgister_list.save
+      if params[:withdraw]
+        @cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance:value, note:, cash_register_type: 0)
+        @cash_resgister_list.save
 
-    cash_resgister = CashRegister.last
-    cash_resgister.update(balance: cash_resgister.balance + value)
+        cash_resgister = CashRegister.last
+        cash_resgister.update(balance: cash_resgister.balance - value)
+        redirect_to cash_registers_path
+      elsif params[:replenishment]
+        @cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance:value, note:, cash_register_type: 1)
+        @cash_resgister_list.save
 
-    redirect_to cash_registers_path
-  end
+        cash_resgister = CashRegister.last
+        cash_resgister.update(balance: cash_resgister.balance + value)
 
-  def withdraw_cash_register
-    cash_register_id = params[:cash_register_id]
-    date = params[:date]
-    value = params[:value].to_f
-    note = params[:notes]
+        redirect_to cash_registers_path
+      end
 
-    @cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance:value, note:, cash_register_type: 0)
-    @cash_resgister_list.save
-
-    cash_resgister = CashRegister.last
-    cash_resgister.update(balance: cash_resgister.balance - value)
-    redirect_to cash_registers_path
   end
 
   def close_cash_register

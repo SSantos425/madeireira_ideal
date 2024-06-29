@@ -37,8 +37,7 @@ Rails.application.routes.draw do
 
 
   # CASH_REGISTER
-  post 'cash_replenishment', to: 'cash_registers#cash_replenishment', as: 'cash_replenishment'
-  post 'withdraw_cash_register', to: 'cash_registers#withdraw_cash_register', as: 'withdraw_cash_register'
+  post 'replenishment_or_withdrawl_cash_register', to: 'cash_registers#replenishment_or_withdrawl_cash_register', as: 'replenishment_or_withdrawl_cash_register'
   post 'close_cash_register', to: 'cash_registers#close_cash_register', as: 'close_cash_register'
   get 'show_cash_registers', to: 'cash_registers#show_cash_registers', as: 'show_cash_registers'
 
@@ -60,7 +59,7 @@ Rails.application.routes.draw do
 
 
  #bills
- 
+
  post 'receive_bills', to: 'bills#receive_bills', as: 'receive_bills'
  post 'payment_bills', to: 'bills#payment_bills', as: 'payment_bills'
 

@@ -11,10 +11,10 @@ development:
   database: madeireira_ideal_development
 
   
-  username: samuel
+  username: iarhel
 
   # The password associated with the postgres role (username).
-  password: samuel
+  password: iarhel
 
 
 test:

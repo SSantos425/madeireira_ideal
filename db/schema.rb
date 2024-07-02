@@ -10,9 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_20_210927) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_01_201634) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "account_plans", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "bills", force: :cascade do |t|
     t.integer "bill_type"
@@ -125,6 +131,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_20_210927) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "expenses", force: :cascade do |t|
+    t.string "name"
+    t.decimal "amount"
+    t.bigint "account_plan_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_plan_id"], name: "index_expenses_on_account_plan_id"
+  end
+
   create_table "inventories", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.float "quantity"
@@ -228,6 +243,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_20_210927) do
   add_foreign_key "cart_lists", "clients"
   add_foreign_key "cash_register_lists", "cash_registers"
   add_foreign_key "cash_registers", "users"
+  add_foreign_key "expenses", "account_plans"
   add_foreign_key "inventories", "products"
   add_foreign_key "orderables", "carts"
   add_foreign_key "orderables", "clients"

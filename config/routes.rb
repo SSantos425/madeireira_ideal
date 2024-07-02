@@ -12,6 +12,10 @@ Rails.application.routes.draw do
   resources :carts, only: [:index]
   resources :bills, only: [:index]
 
+  resources :account_plans do
+    resources :expenses
+  end
+
   #PRODUCTS
   patch "adjust_all_sale_prices", to: "products#adjust_all_sale_prices", as: "adjust_all_sale_prices"
   patch "adjust_all_purchase_prices", to: "products#adjust_all_purchase_prices", as:"adjust_all_purchase_prices"

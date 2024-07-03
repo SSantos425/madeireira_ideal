@@ -2,9 +2,8 @@
 
 import "@hotwired/turbo-rails"
 import "controllers"
-import "jquery";
-import "popper";
-import "bootstrap";
-import "adminlte";
+import "./adminlte/plugins/jquery/jquery.min.js"
+import "./adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"
+import "./adminlte/dist/js/adminlte.min.js"
 
 

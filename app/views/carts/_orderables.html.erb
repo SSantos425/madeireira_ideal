@@ -62,7 +62,7 @@
         <div style="display: flex; justify-content:space-between;">
           <div class="mt-2">
             <strong>TOTAL:</strong> <%= number_to_currency(@cart.total - @cart.discount, unit: 'R$', separator: ',', delimiter: '.') %>
-        <%= link_to sell_cart_path(cart_balance:@cart.total - @cart.discount), class: "btn btn-success btn-sm" do %>
+        <%= link_to sell_cart_path(cart_balance:@cart.total - @cart.discount), class: "btn btn-success btn-sm", data: { turbo: false } do %>
           <i class="fas fa-cart-plus ml-1"></i> A VISTA 
         <% end %>
           </div>
@@ -86,7 +86,7 @@
         <div style="display: flex; justify-content:space-between;">
           <div class="mt-2">
             <strong>TOTAL:</strong> <%= number_to_currency(@cart.total + @cart.addition, unit: 'R$', separator: ',', delimiter: '.') %>
-        <%= link_to sell_cart_path(cart_balance:@cart.total + @cart.addition), class: "btn btn-success btn-sm" do %>
+        <%= link_to sell_cart_path(cart_balance:@cart.total + @cart.addition), class: "btn btn-success btn-sm", data: { turbo: false } do %>
           <i class="fas fa-cart-plus ml-1"></i> A VISTA 
         <% end %>
           </div>
@@ -111,7 +111,7 @@
             <strong>TOTAL:</strong> <%= number_to_currency(@cart.total, unit: 'R$', separator: ',', delimiter: '.') %>
           
             
-            <%= link_to "A vista", sell_cart_path(cart_balance:@cart.total), class:"btn btn-success btn-sm mr-1"%>
+            <%= link_to "A vista", sell_cart_path(cart_balance:@cart.total), class:"btn btn-success btn-sm mr-1", data: { turbo: false }%>
           </div>
           
           <div class="mt-1">

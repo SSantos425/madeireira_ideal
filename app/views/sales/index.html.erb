@@ -22,7 +22,7 @@
     
       <div class="dropdown card-footer" style="display: flex; justify-content: center;">
           <div>
-            <span class="d-flex justify-content-end"><div class="m-1"><%= link_to "Todas as Vendas", all_sales_download_pdf_path, class:"btn btn-warning" %></div></span>
+            <span class="d-flex justify-content-end"><div class="m-1"><%= link_to "Todas as Vendas", all_sales_download_pdf_path, class:"btn btn-warning", data: { turbo: false } %></div></span>
           </div>
       </div>
     </div>
@@ -37,7 +37,7 @@
         <% if @start_date.present? && @end_date.present? %>
           <span class="d-flex justify-content-end">
             <div class="m-1">
-              <%= link_to "Todas as Vendas", period_sales_download_pdf_path(start_date: @start_date, end_date: @end_date), class: "btn btn-warning" %>
+              <%= link_to "Todas as Vendas", period_sales_download_pdf_path(start_date: @start_date, end_date: @end_date), class: "btn btn-warning", data: { turbo: false } %>
             </div>
           </span>
           <div class="d-flex align-items-center">

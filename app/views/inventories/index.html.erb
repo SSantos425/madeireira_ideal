@@ -17,7 +17,7 @@
           <tr>
             <td><%= inventory.product.name %></td>      
             <td><%= inventory.quantity %></td>    
-            <td><%= link_to "Editar" , edit_inventory_path(inventory), class:"btn btn-warning btn-sm"%></td>  
+            <td><%= link_to "Editar" , edit_inventory_path(inventory), class:"btn btn-warning btn-sm", data: { turbo: false }%></td>  
           </tr>
         <% end %>
       </tbody>

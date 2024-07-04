@@ -33,7 +33,7 @@
                     <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
                     <%= f.submit "Pagar", class: "btn btn-primary btn-sm mr-1" %>
                   <% end %>
-                  <td><%= link_to "Detalhes", purchase_path(bill_payment.purchase), class: "btn btn-warning btn-sm" %></td>
+                  <td><%= link_to "Detalhes", purchase_path(bill_payment.purchase), class: "btn btn-warning btn-sm", data: { turbo: false } %></td>
                 </div>
               </td>
             </tr>
@@ -72,7 +72,7 @@
             <td><%= number_to_currency(bill.total_value, unit: 'R$', separator: ',', delimiter: '.') %></td>
             <td>
               <div class="form-inline">
-                <td><%= link_to "Detalhes", purchase_path(bill.purchase), class: "btn btn-warning btn-sm" %></td>
+                <td><%= link_to "Detalhes", purchase_path(bill.purchase), class: "btn btn-warning btn-sm", data: { turbo: false } %></td>
               </div>
             </td>
           </tr>

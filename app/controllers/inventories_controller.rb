@@ -1,6 +1,6 @@
 class InventoriesController < ApplicationController
   def index
-    @inventories = Inventory.all
+    @inventories = Inventory.order(created_at: :asc)  # Ordena pela data de criação em ordem crescente
   end
 
   def edit

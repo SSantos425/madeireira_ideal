@@ -21,8 +21,8 @@ class CartsController < ApplicationController
 
     # @products_name = Product.where("name LIKE ?", "%#{products_name}%")
 
-    @products = Product.all
-    @orderables = Orderable.all
+    @products = Product.order(created_at: :asc)
+    @orderables = Orderable.order(created_at: :asc)
   end
 
   def cart_orderable
@@ -40,8 +40,8 @@ class CartsController < ApplicationController
       current_orderable.update(quantity:)
     end
 
-    @orderables = Orderable.all
-    @products = Product.all
+    @orderables = Orderable.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
 
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
@@ -53,8 +53,8 @@ class CartsController < ApplicationController
     Orderable.find_by(id: orderable_id).destroy
 
     @cart = Cart.last
-    @orderables = Orderable.all
-    @products = Product.all
+    @orderables = Orderable.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
     @client = Client.find_by(id: params[:client_id])
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
@@ -68,8 +68,8 @@ class CartsController < ApplicationController
     orderable.update(quantity:)
 
     @cart = Cart.last
-    @orderables = Orderable.all
-    @products = Product.all
+    @orderables = Orderable.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
     @client = Client.find_by(id: params[:client_id])
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
@@ -102,8 +102,8 @@ class CartsController < ApplicationController
     quantity = params[:quantity].to_f
     @cart = Cart.find(params[:cart_id])
 
-    @orderables = Orderable.all
-    @products = Product.all
+    @orderables = Orderable.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
     @client = Client.find_by(id: params[:client_id])
 
     if params[:discount]

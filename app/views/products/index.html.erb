@@ -38,7 +38,7 @@
             <td><%= number_to_currency(product.purchase_price, unit: "R$", separator: ",", delimiter: ".") %></td>
             <td><%= number_to_currency(product.sale_price, unit: "R$", separator: ",", delimiter: ".") %></td>
             <td>
-              <%= link_to "Editar", edit_product_path(product), class: "btn btn-warning btn-sm" %>
+              <%= link_to "Editar", edit_product_path(product), class: "btn btn-warning btn-sm", data: { turbo: false } %>
               <%= link_to "Excluir", product_path(product), method: :delete, data: { confirm: "Você tem certeza?" }, class: "btn btn-danger btn-sm" %>
             </td>
           </tr>

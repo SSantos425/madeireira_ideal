@@ -1,0 +1,13 @@
+<%= form_with(model: [account_plan, account_plan.expenses.build]) do |form| %>
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+  <div>
+    <%= form.label :amount %>
+    <%= form.number_field :amount %>
+  </div>
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

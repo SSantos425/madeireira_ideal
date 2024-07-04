@@ -1,0 +1,11 @@
+<h1>Plano de Contas</h1>
+
+<ul>
+  <% @account_plans.each do |account_plan| %>
+    <li>
+      <%= link_to account_plan.name, account_plan_path(account_plan) %>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to 'Novo Plano de Contas', new_account_plan_path %>

@@ -1,0 +1,9 @@
+<h1><%= @account_plan.name %></h1>
+<h2>Expenses</h2>
+<ul>
+  <% @account_plan.expenses.each do |expense| %>
+    <li><%= expense.name %>: <%= expense.amount %></li>
+  <% end %>
+</ul>
+<%= render 'expenses/form', account_plan: @account_plan %>
+<%= link_to 'Back', account_plans_path %>

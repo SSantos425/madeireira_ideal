@@ -7,7 +7,7 @@ class CartsController < ApplicationController
     @cart = Cart.new(balance: 0, discount: 0, addition: 0, date: Date.today)
 
     if @cart.save
-      
+
       redirect_to carts_path
     else
       render :new, status: :unprocessable_entity
@@ -28,23 +28,40 @@ class CartsController < ApplicationController
   def cart_orderable
     product_id = params[:product_id]
     quantity = params[:quantity]
-
+  
     @cart = Cart.last
     @client = Client.find_by(id: params[:client_id])
-
-    current_orderable = @cart.orderables.find_by(product_id:)
-
+  
+    current_orderable = @cart.orderables.find_by(product_id: product_id)
+  
     if current_orderable.nil?
-      Orderable.create(product_id:, cart_id: @cart.id, client_id: @client.id, quantity:)
+      Orderable.create(product_id: product_id, cart_id: @cart.id, client_id: @client.id, quantity: quantity)
     else
-      current_orderable.update(quantity:)
+      current_orderable.update(quantity: quantity)
     end
-
+  
+    # Lógica para filtrar produtos baseados no nome
+    if product_id.present?
+      product = Product.find(product_id)
+      case
+      when product.name.start_with?('VIGA')
+        @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
+      when product.name.start_with?('CAIBRO')
+        @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
+      when product.name.start_with?('FRECHAL')
+        @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
+      when product.name.start_with?('RIPA')
+        @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
+      else
+        @products = Product.all.order(created_at: :asc)
+      end
+    else
+      @products = Product.all.order(created_at: :asc)
+    end
+  
     @orderables = Orderable.order(created_at: :asc)
-    @products = Product.order(created_at: :asc)
-
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
-                                                     locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
+                                                     locals: { orderables: @orderables, cart: @cart, products: @products, client: @client })
   end
 
   def remove_orderable_item
@@ -127,8 +144,8 @@ class CartsController < ApplicationController
     # 0 contas a pagar
     # 1 contas a receber
 
-    bill = BillsReceive.create(down_payment:, total_value: cart_last.balance, cart_id: cart_last.id, obs:obs)
-    bill.update(remaining_payment:bill.total_value - bill.down_payment)
+    bill = BillsReceive.create(down_payment:, total_value: cart_last.balance, cart_id: cart_last.id, obs:)
+    bill.update(remaining_payment: bill.total_value - bill.down_payment)
     cart_orderables = Orderable.where(cart_id: cart_last.id)
     cart_orderables.each do |cart_orderable|
       inventory = Inventory.find_by(product_id: cart_orderable.product.id)
@@ -145,5 +162,33 @@ class CartsController < ApplicationController
     check_cart = Cart.where(balance: 0)
     check_cart.destroy_all
     redirect_to cash_registers_path
+  end
+
+  def filter
+    product_name=params[:product_name]
+    @client = Client.find_by(id: params[:client_id])
+
+    # Lógica para filtrar produtos baseados no nome
+    if product_name.present?
+      case
+      when product_name.start_with?('VIGA')
+        @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
+      when product_name.start_with?('CAIBRO')
+        @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
+      when product_name.start_with?('FRECHAL')
+        @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
+      when product_name.start_with?('RIPA')
+        @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
+      else
+        @products = Product.all.order(created_at: :asc)
+      end
+    else
+      @products = Product.all.order(created_at: :asc)
+    end
+    
+    @cart = Cart.last
+    @orderables = Orderable.order(created_at: :asc)
+    render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
+                                                     locals: { orderables: @orderables, cart: @cart, products: @products, client: @client })
   end
 end

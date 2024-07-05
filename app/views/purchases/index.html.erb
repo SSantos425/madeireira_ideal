@@ -30,9 +30,9 @@
             <td><%= purchase.additon %></td>
             <td>
               <% if purchase.purchase_type == 1 %>
-                <%= link_to "Incluir Produtos", purchase_path(purchase), class: "btn btn-primary btn-sm" %>
+                <%= link_to "Incluir Produtos", purchase_path(purchase), class: "btn btn-primary btn-sm", data: { turbo: false } %>
               <% else %>
-                <%= link_to "Detalhes", purchase_path(purchase), class: "btn btn-warning btn-sm" %>
+                <%= link_to "Detalhes", purchase_path(purchase), class: "btn btn-warning btn-sm", data: { turbo: false } %>
               <% end %>
             </td>
           </tr>

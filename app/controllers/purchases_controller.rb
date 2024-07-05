@@ -32,12 +32,27 @@ class PurchasesController < ApplicationController
 
     purchase_list = PurchaseList.new(purchase_id:, product_id:, quantity:)
     purchase_list.save
-
+    product = Product.find_by(id:product_id)
     @purchase_lists = PurchaseList.order(created_at: :asc)
-    @products = Product.order(created_at: :asc)
+    if product.name.present?
+      case
+      when product.name.start_with?('VIGA')
+        @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
+      when product.name.start_with?('CAIBRO')
+        @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
+      when product.name.start_with?('FRECHAL')
+        @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
+      when product.name.start_with?('RIPA')
+        @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
+      else
+        @products = Product.all.order(created_at: :asc)
+      end
+    else
+      @products = Product.all.order(created_at: :asc)
+    end
     @purchase = Purchase.find_by(id: purchase_id)
     render turbo_stream: turbo_stream.update('purchaselist', partial: 'purchases/purchase_cart',
-                                                             locals: { purchase: @purchase })
+                                                             locals: { purchase: @purchase, products:@products })
   end
 
   def buy_purchaselist_cart
@@ -138,6 +153,31 @@ class PurchasesController < ApplicationController
     purchase.update(purchase_type: 0)
 
     redirect_to cash_registers_path
+  end
+
+  def filter_purchase
+    product_name=params[:product_name]
+    @purchase = Purchase.find_by(id: params[:purchase_id])
+
+    # Lógica para filtrar produtos baseados no nome
+    if product_name.present?
+      case
+      when product_name.start_with?('VIGA')
+        @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
+      when product_name.start_with?('CAIBRO')
+        @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
+      when product_name.start_with?('FRECHAL')
+        @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
+      when product_name.start_with?('RIPA')
+        @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
+      else
+        @products = Product.all.order(created_at: :asc)
+      end
+    else
+      @products = Product.all.order(created_at: :asc)
+    end
+    @purchase_lists = PurchaseList.order(created_at: :asc)
+    render turbo_stream: turbo_stream.update('purchaselist',partial: 'purchases/purchase_cart', locals: { purchaselist: @purchase_lists, products:@products })
   end
 
   private

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   post 'update_item_purchaselist_cart', to: 'purchases#update_item_purchaselist_cart', as: 'update_item_purchaselist_cart'
   post 'purchase_discount_or_addition', to: 'purchases#purchase_discount_or_addition', as: 'purchase_discount_or_addition'
   post 'foward_purchase', to: 'purchases#foward_purchase', as: 'foward_purchase'
+  post 'filter_purchase', to: 'purchases#filter_purchase', as: 'filter_purchase'
 
 
   # CASH_REGISTER
@@ -53,6 +54,7 @@ Rails.application.routes.draw do
  post 'foward_sell_cart', to: 'carts#foward_sell_cart', as: 'foward_sell_cart'
  get 'new_cart', to: 'carts#new_cart', as: 'new_cart'
  get 'search_product', to: 'carts#search_product', as: 'search_product'
+ post 'filter', to: 'carts#filter', as: 'filter'
  post 'orderable_discount_or_addition', to: 'carts#orderable_discount_or_addition', as: 'orderable_discount_or_addition'
 
 

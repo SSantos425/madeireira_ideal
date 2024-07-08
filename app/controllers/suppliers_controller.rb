@@ -30,6 +30,7 @@ class SuppliersController < ApplicationController
   end
 
   def show
+    @suppliers = Supplier.find(params[:id])
   end
 
   def destroy

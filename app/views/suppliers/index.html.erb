@@ -1,38 +1,33 @@
 <div class="card card-primary">
   <div class="card-header">
-     <strong>Lista de fornecedores</strong>
+    <h1><strong>Lista de fornecedores</strong></h1>
   </div>
   <div class="card-body">
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered">
       <thead>
         <tr>
           <th>Nome</th>
-          <th>Endereço</th>
-          <th>Número</th>
-          <th>Complemento</th>
-          <th>Bairro</th>
           <th>Cidade</th>
           <th>Estado</th>
           <th>Telefone</th>
           <th>CNPJ</th>
           <th>Inscrição Estadual</th>
-          <th>Razão Social</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
         <% @suppliers.each do |supplier| %>
           <tr>
             <td><%= supplier.name %></td>      
-            <td><%= supplier.address %></td>  
-            <td><%= supplier.number %></td>
-            <td><%= supplier.complement %></td>
-            <td><%= supplier.district %></td>
             <td><%= supplier.city %></td>
             <td><%= supplier.state %></td>
             <td><%= supplier.phone %></td>
             <td><%= supplier.cnpj %></td>     
             <td><%= supplier.state_registration %></td>
-            <td><%= supplier.corporate_name %></td>         
+            <td>
+              <%= link_to "Detalhes", supplier_path(supplier), class: "btn btn-primary", data: { turbo: false } %>
+              <%= link_to "Editar", edit_supplier_path(supplier), class: "btn btn-warning", data: { turbo: false } %>
+            </td>        
           </tr>
         <% end %>
       </tbody>

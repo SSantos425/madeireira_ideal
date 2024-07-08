@@ -34,6 +34,13 @@
                       <%= f.label :notes, "Justificativa" %>
                         <%= f.text_area :notes, class: "form-control" , placeholder: "Justificativa" %>
                     </div>
+
+                    <div class="form-group">
+                      <%= f.label :account_plan_id, "Plano de Conta" %>
+                      <%= f.collection_select :account_plan_id, Expense.all, :id, :name, { prompt: "Selecione um Plano de Conta" }, class: "form-control" %>
+                    </div>
+                    
+
                     <div class="row">
                       <div class="col">
                         <%= f.submit "Reforço", name: "replenishment", class: "btn btn-block btn-primary" %>

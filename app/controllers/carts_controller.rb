@@ -91,7 +91,7 @@ class CartsController < ApplicationController
 
     # cria um registro no caixa
     CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: cart_last.balance,
-                            note: 'Venda de Mercadoria(Madeira)', cash_register_type: 1)
+                            note: 'Venda de Mercadoria(Madeira)', cash_register_type: 1,account_plan_type: 1)
 
     check_cart = Cart.where(balance: 0)
     check_cart.destroy_all

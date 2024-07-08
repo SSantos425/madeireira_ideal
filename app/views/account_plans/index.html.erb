@@ -1,11 +1,26 @@
-<h1>Plano de Contas</h1>
 
-<ul>
-  <% @account_plans.each do |account_plan| %>
-    <li>
-      <%= link_to account_plan.name, account_plan_path(account_plan) %>
-    </li>
-  <% end %>
-</ul>
 
-<%= link_to 'Novo Plano de Contas', new_account_plan_path %>
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h1 class="mb-0">Centro de Custo</h1>
+    <%= link_to 'Novo Centro de Custo', new_account_plan_path, class: 'btn btn-primary' %>
+  </div>
+  <div class="card-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @account_plans.each do |account_plan| %>
+          <tr>
+            <td><%= account_plan.name %></td>
+            <td><%= link_to 'Ver Detalhes', account_plan_path(account_plan), class: 'btn btn-info btn-sm' %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

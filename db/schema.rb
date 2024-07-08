@@ -80,6 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_04_130224) do
     t.float "balance"
     t.string "note"
     t.integer "cash_register_type"
+    t.integer "account_plan_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cash_register_id"], name: "index_cash_register_lists_on_cash_register_id"
@@ -121,7 +122,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_04_130224) do
 
   create_table "expenses", force: :cascade do |t|
     t.string "name"
-    t.decimal "amount"
     t.bigint "account_plan_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

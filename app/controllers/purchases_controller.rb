@@ -1,6 +1,6 @@
 class PurchasesController < ApplicationController
   def index
-    @purchases = Purchase.all
+    @purchases = Purchase.order(created_at: :asc)
   end
 
   def new
@@ -21,8 +21,8 @@ class PurchasesController < ApplicationController
 
   def show
     @purchase = Purchase.find(params[:id])
-    @products = Product.all
-    @purchase_lists = PurchaseList.all
+    @products = Product.order(created_at: :asc)
+    @purchase_lists = PurchaseList.order(created_at: :asc)
   end
 
   def include_products
@@ -33,8 +33,8 @@ class PurchasesController < ApplicationController
     purchase_list = PurchaseList.new(purchase_id:, product_id:, quantity:)
     purchase_list.save
 
-    @purchase_lists = PurchaseList.all
-    @products = Product.all
+    @purchase_lists = PurchaseList.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
     @purchase = Purchase.find_by(id: purchase_id)
     render turbo_stream: turbo_stream.update('purchaselist', partial: 'purchases/purchase_cart',
                                                              locals: { purchase: @purchase })
@@ -49,8 +49,8 @@ class PurchasesController < ApplicationController
 
     cash_register = CashRegister.last
 
-    @purchase_lists = PurchaseList.all
-    @products = Product.all
+    @purchase_lists = PurchaseList.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
 
     @purchase = Purchase.find_by(id: purchase_id)
     @purchase.update(purchase_type: 0)
@@ -74,8 +74,8 @@ class PurchasesController < ApplicationController
     quantity = params[:quantity].to_f
 
     @purchase = Purchase.find_by(id: purchase_id)
-    @purchase_lists = PurchaseList.all
-    @products = Product.all
+    @purchase_lists = PurchaseList.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
 
     current_purchaselist = PurchaseList.find_by(id: purchase_list_id)
     current_purchaselist.update(quantity:)
@@ -92,8 +92,8 @@ class PurchasesController < ApplicationController
 
     PurchaseList.find_by(id: purchase_list_id).destroy
 
-    @purchase_lists = PurchaseList.all
-    @products = Product.all
+    @purchase_lists = PurchaseList.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
     render turbo_stream: turbo_stream.update('purchaselist', partial: 'purchases/purchase_cart',
                                                              locals: { purchase: @purchase })
   end
@@ -102,9 +102,9 @@ class PurchasesController < ApplicationController
     quantity = params[:quantity].to_f
     @purchase = Purchase.find_by(id: params[:purchase_id])
 
-    @orderables = Orderable.all
-    @products = Product.all
-    @purchase_lists = PurchaseList.all
+    @orderables = Orderable.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
+    @purchase_lists = PurchaseList.order(created_at: :asc)
 
     if params[:discount]
       @purchase.update(discount: quantity)

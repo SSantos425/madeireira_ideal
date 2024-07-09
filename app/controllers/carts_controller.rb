@@ -4,9 +4,10 @@ class CartsController < ApplicationController
   end
 
   def new_cart
-    @cart = Cart.new(balance: nil, discount: 0, addition: 0, date: Date.today)
+    @cart = Cart.new(balance: 0, discount: 0, addition: 0, date: Date.today)
 
     if @cart.save
+      
       redirect_to carts_path
     else
       render :new, status: :unprocessable_entity
@@ -20,8 +21,8 @@ class CartsController < ApplicationController
 
     # @products_name = Product.where("name LIKE ?", "%#{products_name}%")
 
-    @products = Product.all
-    @orderables = Orderable.all
+    @products = Product.order(created_at: :asc)
+    @orderables = Orderable.order(created_at: :asc)
   end
 
   def cart_orderable
@@ -39,8 +40,8 @@ class CartsController < ApplicationController
       current_orderable.update(quantity:)
     end
 
-    @orderables = Orderable.all
-    @products = Product.all
+    @orderables = Orderable.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
 
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
@@ -52,8 +53,8 @@ class CartsController < ApplicationController
     Orderable.find_by(id: orderable_id).destroy
 
     @cart = Cart.last
-    @orderables = Orderable.all
-    @products = Product.all
+    @orderables = Orderable.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
     @client = Client.find_by(id: params[:client_id])
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
@@ -67,8 +68,8 @@ class CartsController < ApplicationController
     orderable.update(quantity:)
 
     @cart = Cart.last
-    @orderables = Orderable.all
-    @products = Product.all
+    @orderables = Orderable.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
     @client = Client.find_by(id: params[:client_id])
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
@@ -92,6 +93,8 @@ class CartsController < ApplicationController
     CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: cart_last.balance,
                             note: 'Venda de Mercadoria(Madeira)', cash_register_type: 1)
 
+    check_cart = Cart.where(balance: 0)
+    check_cart.destroy_all
     redirect_to cash_registers_path
   end
 
@@ -99,8 +102,8 @@ class CartsController < ApplicationController
     quantity = params[:quantity].to_f
     @cart = Cart.find(params[:cart_id])
 
-    @orderables = Orderable.all
-    @products = Product.all
+    @orderables = Orderable.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
     @client = Client.find_by(id: params[:client_id])
 
     if params[:discount]
@@ -139,6 +142,8 @@ class CartsController < ApplicationController
     CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: down_payment,
                             note: "Venda de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{cart_last.balance}", cash_register_type: 1)
 
+    check_cart = Cart.where(balance: 0)
+    check_cart.destroy_all
     redirect_to cash_registers_path
   end
 end

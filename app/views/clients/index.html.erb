@@ -17,8 +17,8 @@
         <tr>
           <td><%= cliente.name %></td>        
           <td>
-            <%= link_to "Detalhes", client_path(cliente), class: "btn btn-primary btn-sm" %>
-            <%= link_to "Editar", edit_client_path(cliente), class: "btn btn-warning btn-sm" %>
+            <%= link_to "Detalhes", client_path(cliente), class: "btn btn-primary btn-sm", data: { turbo: false } %>
+            <%= link_to "Editar", edit_client_path(cliente), class: "btn btn-warning btn-sm", data: { turbo: false } %>
 
           </td>
         </tr>
@@ -49,8 +49,8 @@
         <tr>
           <td><%= cliente.name %></td>       
           <td>
-            <%= link_to "Detalhes", client_path(cliente), class: "btn btn-primary btn-sm" %>
-            <%= link_to "Editar", edit_client_path(cliente), class: "btn btn-warning btn-sm" %>
+            <%= link_to "Detalhes", client_path(cliente), class: "btn btn-primary btn-sm", data: { turbo: false } %>
+            <%= link_to "Editar", edit_client_path(cliente), class: "btn btn-warning btn-sm", data: { turbo: false } %>
 
           </td>
         </tr>

@@ -1,218 +1,239 @@
 class SalesController < ApplicationController
-    def index
-        @orderables = Orderable.all
-        @cart = Cart.last
-        @start_date = params[:start_date]
-        @end_date = params[:end_date]
-    end
+  def index
+    @orderables = Orderable.all
+    @cart = Cart.last
+    check_cart = Cart.where(balance: 0)
+    check_cart.destroy_all
+    @start_date = params[:start_date]
+    @end_date = params[:end_date]
+  end
 
-    def sales_data
-        @carts = Cart.where(date: params[:date])
-    end
+  def sales_data
+    @carts = Cart.where(date: params[:date])
+  end
 
-    def download_pdf
-      total_total = 0
-      carts = Cart.where(date: params[:date])
-      pdf = Prawn::Document.new do |pdf|
-        # Título do relatório
-        pdf.text "Relatório de Vendas #{carts.first.date&.strftime('%d/%m/%Y')}", size: 20, style: :bold, align: :center
-        pdf.move_down 20
+  def download_pdf
+    check_cart = Cart.where(balance: 0)
+    check_cart.destroy_all
+    total_total = 0
+    carts = Cart.where(date: params[:date])
+    pdf = Prawn::Document.new do |pdf|
+      # Título do relatório
+      pdf.text "Relatório de Vendas #{carts.first.date&.strftime('%d/%m/%Y')}", size: 20, style: :bold, align: :center
+      pdf.move_down 20
 
-        # Cabeçalho da tabela
-        header = [['Cliente', 'Produto', 'Quantidade', 'Valor do Produto', 'Valor Total']]
+      # Cabeçalho da tabela
+      header = [['Cliente', 'Produto', 'Quantidade', 'Valor do Produto', 'Valor Total']]
 
-        # Desenha o cabeçalho da tabela
-        pdf.table(header, header: true, column_widths: [175, 130, 85, 75, 75], position: :center, cell_style: { font_style: :bold, background_color: 'CCCCCC', border_width: 0.5 }) do
+      # Desenha o cabeçalho da tabela
+      pdf.table(header, header: true, column_widths: [175, 130, 85, 75, 75], position: :center,
+                        cell_style: { font_style: :bold, background_color: 'CCCCCC', border_width: 0.5 }) do
+        columns(0..4).align = :center
+        cells.borders = []
+      end
+
+      pdf.move_down 10
+
+      carts.each_with_index do |cart, index|
+        # Adiciona uma linha separadora antes de cada novo cliente, exceto o primeiro
+        if index >= 0
+          pdf.stroke_horizontal_rule
+          pdf.move_down 10
+        end
+
+        # Dados da tabela para o cliente atual
+        table_data = [[cart.orderables.first.client.name, '', '', '', '']]
+
+        cart_items = cart.orderables.map do |cart_orderable|
+          total_total += cart_orderable.total
+          table_data << ['',
+                         cart_orderable.product.name,
+                         cart_orderable.quantity,
+                         number_to_currency(cart_orderable.product.sale_price, unit: 'R$', separator: ',',
+                                                                               delimiter: '.'),
+                         number_to_currency(cart_orderable.total, unit: 'R$', separator: ',', delimiter: '.')]
+        end
+
+        # Desenha a tabela para o cliente atual
+        pdf.table(table_data, column_widths: [175, 140, 75, 75, 75], position: :center,
+                              cell_style: { height: 19, size: 10 }) do
+          row(0).background_color = 'CCCCCC'
           columns(0..4).align = :center
           cells.borders = []
         end
-
         pdf.move_down 10
-
-        carts.each_with_index do |cart, index|
-          # Adiciona uma linha separadora antes de cada novo cliente, exceto o primeiro
-          if index >= 0
-            pdf.stroke_horizontal_rule
-            pdf.move_down 10
-          end
-
-          # Dados da tabela para o cliente atual
-          table_data = [[cart.orderables.first.client.name, '', '', '', '']]
-
-            cart_items = cart.orderables.map do |cart_orderable|
-              total_total += cart_orderable.total
-              table_data << ['',
-                              cart_orderable.product.name,
-                              cart_orderable.quantity,
-                              number_to_currency(cart_orderable.product.sale_price, unit: "R$", separator: ",", delimiter: "."),
-                              number_to_currency(cart_orderable.total, unit: "R$", separator: ",", delimiter: ".")
-                            ]
-            end
-
-            # Desenha a tabela para o cliente atual
-            pdf.table(table_data, column_widths: [175, 140, 75, 75, 75], position: :center, cell_style: { height: 19, size: 10 }) do
-              row(0).background_color = 'CCCCCC'
-              columns(0..4).align = :center
-              cells.borders = []
-            end
-            pdf.move_down 10
-            # Linha com o total do carrinho do cliente
-            pdf.text "VALOR TOTAL DO PEDIDO: #{number_to_currency(cart.total, unit: "R$", separator: ",", delimiter: ".")}", style: :bold, align: :right
-            pdf.move_down 10
-            pdf.stroke_horizontal_rule
-        end
-
-        pdf.move_down 10
-        pdf.text "Total: #{number_to_currency(total_total, unit: "R$", separator: ",", delimiter: ".")}",size: 16, style: :bold, align: :right
+        # Linha com o total do carrinho do cliente
+        pdf.text "VALOR TOTAL DO PEDIDO: #{number_to_currency(cart.total, unit: 'R$', separator: ',', delimiter: '.')}",
+                 style: :bold, align: :right
         pdf.move_down 10
         pdf.stroke_horizontal_rule
-
       end
-      send_data(pdf.render,
+
+      pdf.move_down 10
+      pdf.text "Total: #{number_to_currency(total_total, unit: 'R$', separator: ',', delimiter: '.')}", size: 16,
+                                                                                                        style: :bold, align: :right
+      pdf.move_down 10
+      pdf.stroke_horizontal_rule
+    end
+    send_data(pdf.render,
               filename: "Relatório Vendas #{carts.first.date&.strftime('%d/%m/%Y')}.pdf",
               type: 'application/pdf')
-    end
+  end
 
-    def all_sales_download_pdf
-      total_total = 0
-      carts = Cart.all
-      pdf = Prawn::Document.new do |pdf|
-        # Título do relatório
-        pdf.text "Relatório de Vendas Gerais", size: 20, style: :bold, align: :center
-        pdf.move_down 20
+  def all_sales_download_pdf
+    check_cart = Cart.where(balance: 0)
+    check_cart.destroy_all
+    total_total = 0
+    carts = Cart.all
+    pdf = Prawn::Document.new do |pdf|
+      # Título do relatório
+      pdf.text 'Relatório de Vendas Gerais', size: 20, style: :bold, align: :center
+      pdf.move_down 20
 
-        # Cabeçalho da tabela
-        header = [['Cliente', 'Produto', 'Quantidade', 'Valor do Produto', 'Valor Total']]
+      # Cabeçalho da tabela
+      header = [['Cliente', 'Produto', 'Quantidade', 'Valor do Produto', 'Valor Total']]
 
-        # Desenha o cabeçalho da tabela
-        pdf.table(header, header: true, column_widths: [175, 130, 85, 75, 75], position: :center, cell_style: { font_style: :bold, background_color: 'CCCCCC', border_width: 0.5 }) do
-          columns(0..4).align = :center
-          cells.borders = []
-        end
-
-        pdf.move_down 10
-
-        carts.each_with_index do |cart, index|
-          # Adiciona uma linha separadora antes de cada novo cliente, exceto o primeiro
-          if index >= 0
-            pdf.stroke_horizontal_rule
-            pdf.move_down 10
-          end
-
-          # Dados da tabela para o cliente atual
-          table_data = [[cart.orderables.first.client.name, '', '', '', '']]
-
-            cart_items = cart.orderables.map do |cart_orderable|
-              total_total += cart_orderable.total
-              table_data << ['',
-                              cart_orderable.product.name,
-                              cart_orderable.quantity,
-                              number_to_currency(cart_orderable.product.sale_price, unit: "R$", separator: ",", delimiter: "."),
-                              number_to_currency(cart_orderable.total, unit: "R$", separator: ",", delimiter: ".")
-                            ]
-            end
-
-            # Desenha a tabela para o cliente atual
-            pdf.table(table_data, column_widths: [175, 140, 75, 75, 75], position: :center, cell_style: { height: 19, size: 10 }) do
-              row(0).background_color = 'CCCCCC'
-              columns(0..4).align = :center
-              cells.borders = []
-            end
-            pdf.move_down 10
-            # Linha com o total do carrinho do cliente
-            pdf.text "VALOR TOTAL DO PEDIDO: #{number_to_currency(cart.total, unit: "R$", separator: ",", delimiter: ".")}", style: :bold, align: :right
-            pdf.move_down 10
-            pdf.stroke_horizontal_rule
-        end
-
-        pdf.move_down 10
-        pdf.text "Total: #{number_to_currency(total_total, unit: "R$", separator: ",", delimiter: ".")}",size: 16, style: :bold, align: :right
-        pdf.move_down 10
-        pdf.stroke_horizontal_rule
-
+      # Desenha o cabeçalho da tabela
+      pdf.table(header, header: true, column_widths: [175, 130, 85, 75, 75], position: :center,
+                        cell_style: { font_style: :bold, background_color: 'CCCCCC', border_width: 0.5 }) do
+        columns(0..4).align = :center
+        cells.borders = []
       end
-      send_data(pdf.render,
-              filename: "Relatório Vendas Gerais.pdf",
-              type: 'application/pdf')
-    end
 
-    def period_sales_download_pdf
-      total_total = 0
-      start_date = params[:start_date].to_date
-      end_date = params[:end_date].to_date.end_of_day
-      carts = Cart.where(date: start_date..end_date)
+      pdf.move_down 10
 
-      pdf = Prawn::Document.new do |pdf|
-        # Título do relatório
-        pdf.text "Relatório de Vendas de #{start_date&.strftime('%d/%m/%Y')} a #{end_date&.strftime('%d/%m/%Y')}", size: 20, style: :bold, align: :center
-        pdf.move_down 20
-
-        # Cabeçalho da tabela
-        header = [['Cliente', 'Produto', 'Quantidade', 'Valor do Produto', 'Valor Total']]
-
-        # Desenha o cabeçalho da tabela
-        pdf.table(header, header: true, column_widths: [175, 130, 85, 75, 75], position: :center, cell_style: { font_style: :bold, background_color: 'CCCCCC', border_width: 0.5 }) do
-          columns(0..4).align = :center
-          cells.borders = []
-        end
-
-        pdf.move_down 10
-
-        carts.each_with_index do |cart, index|
-          # Adiciona uma linha separadora antes de cada novo cliente, exceto o primeiro
-          if index > 0
-            pdf.stroke_horizontal_rule
-            pdf.move_down 10
-          end
-
-          # Dados da tabela para o cliente atual
-          table_data = [[cart.orderables.first.client.name, '', '', '', '']]
-
-          cart.orderables.each do |cart_orderable|
-            total_total += cart_orderable.total
-            table_data << ['',
-                            cart_orderable.product.name,
-                            cart_orderable.quantity,
-                            number_to_currency(cart_orderable.product.sale_price, unit: "R$", separator: ",", delimiter: "."),
-                            number_to_currency(cart_orderable.total, unit: "R$", separator: ",", delimiter: ".")
-                          ]
-          end
-
-          # Desenha a tabela para o cliente atual
-          pdf.table(table_data, column_widths: [175, 140, 75, 75, 75], position: :center, cell_style: { height: 19, size: 10 }) do
-            row(0).background_color = 'CCCCCC'
-            columns(0..4).align = :center
-            cells.borders = []
-          end
-          pdf.move_down 10
-          # Linha com o total do carrinho do cliente
-          pdf.text "VALOR TOTAL DO PEDIDO: #{number_to_currency(cart.total, unit: "R$", separator: ",", delimiter: ".")}", style: :bold, align: :right
-          pdf.move_down 10
+      carts.each_with_index do |cart, index|
+        # Adiciona uma linha separadora antes de cada novo cliente, exceto o primeiro
+        if index >= 0
           pdf.stroke_horizontal_rule
+          pdf.move_down 10
         end
 
+        # Dados da tabela para o cliente atual
+        table_data = [[cart.orderables.first.client.name, '', '', '', '']]
+
+        cart_items = cart.orderables.map do |cart_orderable|
+          total_total += cart_orderable.total
+          table_data << ['',
+                         cart_orderable.product.name,
+                         cart_orderable.quantity,
+                         number_to_currency(cart_orderable.product.sale_price, unit: 'R$', separator: ',',
+                                                                               delimiter: '.'),
+                         number_to_currency(cart_orderable.total, unit: 'R$', separator: ',', delimiter: '.')]
+        end
+
+        # Desenha a tabela para o cliente atual
+        pdf.table(table_data, column_widths: [175, 140, 75, 75, 75], position: :center,
+                              cell_style: { height: 19, size: 10 }) do
+          row(0).background_color = 'CCCCCC'
+          columns(0..4).align = :center
+          cells.borders = []
+        end
         pdf.move_down 10
-        pdf.text "Total: #{number_to_currency(total_total, unit: "R$", separator: ",", delimiter: ".")}", size: 16, style: :bold, align: :right
+        # Linha com o total do carrinho do cliente
+        pdf.text "VALOR TOTAL DO PEDIDO: #{number_to_currency(cart.total, unit: 'R$', separator: ',', delimiter: '.')}",
+                 style: :bold, align: :right
         pdf.move_down 10
         pdf.stroke_horizontal_rule
       end
 
-      send_data(pdf.render,
-                filename: "Relatório Vendas #{start_date&.strftime('%d/%m/%Y')} - #{end_date&.strftime('%d/%m/%Y')}.pdf",
-                type: 'application/pdf')
+      pdf.move_down 10
+      pdf.text "Total: #{number_to_currency(total_total, unit: 'R$', separator: ',', delimiter: '.')}", size: 16,
+                                                                                                        style: :bold, align: :right
+      pdf.move_down 10
+      pdf.stroke_horizontal_rule
+    end
+    send_data(pdf.render,
+              filename: 'Relatório Vendas Gerais.pdf',
+              type: 'application/pdf')
+  end
+
+  def period_sales_download_pdf
+    check_cart = Cart.where(balance: 0)
+    check_cart.destroy_all
+    total_total = 0
+    start_date = params[:start_date].to_date
+    end_date = params[:end_date].to_date.end_of_day
+    carts = Cart.where(date: start_date..end_date)
+
+    pdf = Prawn::Document.new do |pdf|
+      # Título do relatório
+      pdf.text "Relatório de Vendas de #{start_date&.strftime('%d/%m/%Y')} a #{end_date&.strftime('%d/%m/%Y')}",
+               size: 20, style: :bold, align: :center
+      pdf.move_down 20
+
+      # Cabeçalho da tabela
+      header = [['Cliente', 'Produto', 'Quantidade', 'Valor do Produto', 'Valor Total']]
+
+      # Desenha o cabeçalho da tabela
+      pdf.table(header, header: true, column_widths: [175, 130, 85, 75, 75], position: :center,
+                        cell_style: { font_style: :bold, background_color: 'CCCCCC', border_width: 0.5 }) do
+        columns(0..4).align = :center
+        cells.borders = []
+      end
+
+      pdf.move_down 10
+
+      carts.each_with_index do |cart, index|
+        # Adiciona uma linha separadora antes de cada novo cliente, exceto o primeiro
+        if index > 0
+          pdf.stroke_horizontal_rule
+          pdf.move_down 10
+        end
+
+        # Dados da tabela para o cliente atual
+        table_data = [[cart.orderables.first.client.name, '', '', '', '']]
+
+        cart.orderables.each do |cart_orderable|
+          total_total += cart_orderable.total
+          table_data << ['',
+                         cart_orderable.product.name,
+                         cart_orderable.quantity,
+                         number_to_currency(cart_orderable.product.sale_price, unit: 'R$', separator: ',',
+                                                                               delimiter: '.'),
+                         number_to_currency(cart_orderable.total, unit: 'R$', separator: ',', delimiter: '.')]
+        end
+
+        # Desenha a tabela para o cliente atual
+        pdf.table(table_data, column_widths: [175, 140, 75, 75, 75], position: :center,
+                              cell_style: { height: 19, size: 10 }) do
+          row(0).background_color = 'CCCCCC'
+          columns(0..4).align = :center
+          cells.borders = []
+        end
+        pdf.move_down 10
+        # Linha com o total do carrinho do cliente
+        pdf.text "VALOR TOTAL DO PEDIDO: #{number_to_currency(cart.total, unit: 'R$', separator: ',', delimiter: '.')}",
+                 style: :bold, align: :right
+        pdf.move_down 10
+        pdf.stroke_horizontal_rule
+      end
+
+      pdf.move_down 10
+      pdf.text "Total: #{number_to_currency(total_total, unit: 'R$', separator: ',', delimiter: '.')}", size: 16,
+                                                                                                        style: :bold, align: :right
+      pdf.move_down 10
+      pdf.stroke_horizontal_rule
     end
 
-    def show_sale
-        @cart = Cart.find_by(id:params[:cart_id])
-    end
+    send_data(pdf.render,
+              filename: "Relatório Vendas #{start_date&.strftime('%d/%m/%Y')} - #{end_date&.strftime('%d/%m/%Y')}.pdf",
+              type: 'application/pdf')
+  end
 
-    private
+  def show_sale
+    check_cart = Cart.where(balance: 0)
+    check_cart.destroy_all
+    @cart = Cart.find_by(id: params[:cart_id])
+  end
+
+  private
 
   # Helper method to format numbers as currency
   def number_to_currency(number, options = {})
-    unit      = options[:unit]      || "R$"
-    separator = options[:separator] || ","
-    delimiter = options[:delimiter] || "."
-    format("%s %0.2f", unit, number).gsub(".", separator).gsub(/(\d)(?=(\d{3})+(?!\d))/, "\\1#{delimiter}")
+    unit      = options[:unit]      || 'R$'
+    separator = options[:separator] || ','
+    delimiter = options[:delimiter] || '.'
+    format('%s %0.2f', unit, number).gsub('.', separator).gsub(/(\d)(?=(\d{3})+(?!\d))/, "\\1#{delimiter}")
   end
 end

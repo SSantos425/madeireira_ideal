@@ -1,97 +1,101 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
   <div class="container">
-    <%= link_to cash_registers_path, class: "navbar-brand" do %>
+    <%= link_to cash_registers_path, class: "navbar-brand", data: { turbo: false } do %>
       <i class="fas fa-home"></i>
     <% end %>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
       aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown">
-          <a id="dropdownSubMenu1" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+          <a id="dropdownSubMenu1" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false" class="nav-link dropdown-toggle">Caixa</a>
           <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-            <li><%= link_to "Abrir o Caixa", new_cash_register_path, class: "dropdown-item" %></li>
-            <li><%= link_to "Ver Caixa", cash_registers_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Abrir o Caixa", new_cash_register_path, class: "dropdown-item", data: { turbo: false } %></li>
+            <li><%= link_to "Ver Caixa", cash_registers_path, class: "dropdown-item", data: { turbo: false } %></li>
           </ul>
         </li>
 
-        <% if @cash_register_last.cash_register_status === 0 %> <!-- CAIXA EM ABERTO -->
+        <% if @cash_register_last.cash_register_status === 0 %>
           <li class="nav-item">
-            <%= link_to new_cart_path, class: "nav-link" do %>
-              <span>Vender</span>
-            <% end %>
+            <%= link_to "Vender", new_cart_path, class: "nav-link", data: { turbo: false } %>
           </li>
         <% end %>
 
         <li class="nav-item dropdown">
-          <a id="dropdownSubMenu2" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+          <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false" class="nav-link dropdown-toggle">Produto</a>
           <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-            <li><%= link_to "Novo Produto", new_product_path, class: "dropdown-item" %></li>
-            <li><%= link_to "Lista de Produtos", products_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Novo Produto", new_product_path, class: "dropdown-item", data: { turbo: false } %></li>
+            <li><%= link_to "Lista de Produtos", products_path, class: "dropdown-item", data: { turbo: false } %></li>
           </ul>
         </li>
 
         <% if @cash_register_last.cash_register_status === 0 %>
           <li class="nav-item dropdown">
-            <a id="dropdownSubMenu3" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+            <a id="dropdownSubMenu3" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
               aria-expanded="false" class="nav-link dropdown-toggle">Compra</a>
             <ul aria-labelledby="dropdownSubMenu3" class="dropdown-menu border-0 shadow">
-              <li><%= link_to "Novo Compra", new_purchase_path, class: "dropdown-item" %></li>
-              <li><%= link_to "Lista de Compras", purchases_path, class: "dropdown-item" %></li>
+              <li><%= link_to "Novo Compra", new_purchase_path, class: "dropdown-item", data: { turbo: false } %></li>
+              <li><%= link_to "Lista de Compras", purchases_path, class: "dropdown-item", data: { turbo: false } %></li>
             </ul>
           </li>
         <% end %>
 
         <li class="nav-item dropdown">
-          <a id="dropdownSubMenu4" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+          <a id="dropdownSubMenu4" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false" class="nav-link dropdown-toggle">Cliente</a>
           <ul aria-labelledby="dropdownSubMenu4" class="dropdown-menu border-0 shadow">
-            <li><%= link_to "Novo cliente", new_client_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Novo cliente", new_client_path, class: "dropdown-item", data: { turbo: false } %></li>
           </ul>
         </li>
 
         <li class="nav-item dropdown">
-          <a id="dropdownSubMenu5" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+          <a id="dropdownSubMenu5" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false" class="nav-link dropdown-toggle">Fornecedor</a>
           <ul aria-labelledby="dropdownSubMenu5" class="dropdown-menu border-0 shadow">
-            <li><%= link_to "Novo Fornecedor", new_supplier_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Novo Fornecedor", new_supplier_path, class: "dropdown-item", data: { turbo: false } %></li>
           </ul>
         </li>
 
         <li class="nav-item">
-          <%= link_to inventories_path, class: "nav-link" do %>
+          <%= link_to inventories_path, class: "nav-link", data: { turbo: false } do %>
             <span>Estoque</span>
           <% end %>
         </li>
 
         <li class="nav-item dropdown">
-          <a id="dropdownSubMenu6" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+          <a id="dropdownSubMenu6" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false" class="nav-link dropdown-toggle">Relatórios</a>
           <ul aria-labelledby="dropdownSubMenu6" class="dropdown-menu border-0 shadow">
-            <li><%= link_to "Vendas", sales_path, class: "dropdown-item" %></li>
-            <li><%= link_to "Clientes", clients_path, class: "dropdown-item" %></li>
-            <li><%= link_to "Caixas", show_cash_registers_path, class: "dropdown-item" %></li>
-            <li><%= link_to "Lista de Fornecedores", suppliers_path, class: "dropdown-item" %></li>
-            <li><%= link_to "Lista de Compras", purchases_path, class: "dropdown-item" %></li>
-            <li><%= link_to "Contas a Receber", bills_path, class: "dropdown-item" %></li>
-            <li><%= link_to "Contas a Pagar", bills_payment_index_path, class: "dropdown-item" %></li>
-          </ul>
-        </li>
-
-        <li class="nav-item dropdown">
-          <a id="dropdownSubMenu7" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false" class="nav-link dropdown-toggle"><i class="fa fa-user"></i> <%= current_user.username %></a>
-          <ul aria-labelledby="dropdownSubMenu7" class="dropdown-menu border-0 shadow">
-            <li><%= button_to "Sair", destroy_user_session_path, method: :delete, class: "dropdown-item" %></li>
+            <li><%= link_to "Vendas", sales_path, class: "dropdown-item", data: { turbo: false } %></li>
+            <li><%= link_to "Clientes", clients_path, class: "dropdown-item", data: { turbo: false } %></li>
+            <li><%= link_to "Caixas", show_cash_registers_path, class: "dropdown-item", data: { turbo: false } %></li>
+            <li><%= link_to "Lista de Fornecedores", suppliers_path, class: "dropdown-item", data: { turbo: false } %></li>
+            <li><%= link_to "Lista de Compras", purchases_path, class: "dropdown-item", data: { turbo: false } %></li>
+            <li><%= link_to "Contas a Receber", bills_path, class: "dropdown-item", data: { turbo: false } %></li>
+            <li><%= link_to "Contas a Pagar", bills_payment_index_path, class: "dropdown-item", data: { turbo: false } %></li>
           </ul>
         </li>
       </ul>
+
+       <!--  START Right navbar links -->
+      <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+        <li class="nav-item dropdown">
+          <div id="dropdownSubMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
+            <i class="fa fa-user"></i><%= current_user.username %>
+          </div>
+          
+          <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+            <li><%= button_to "Sair", destroy_user_session_path, method: :delete, class: "dropdown-item", data: { turbo: false } %></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- END Right navbar links -->
     </div>
   </div>
 </nav>

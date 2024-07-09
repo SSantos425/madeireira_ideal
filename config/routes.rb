@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root 'cash_registers#new'
   devise_for :users
 
-  resources :products, only: [:index, :edit, :new, :create, :destroy]
+  resources :products
   resources :clients
   resources :suppliers
   resources :inventories
@@ -11,6 +11,12 @@ Rails.application.routes.draw do
   resources :sales, only: [:index]
   resources :carts, only: [:index]
   resources :bills, only: [:index]
+
+  #PRODUCTS
+  patch "adjust_all_sale_purchase_prices", to: "products#adjust_all_sale_purchase_prices", as: "adjust_all_sale_purchase_prices"
+  patch "adjust_all_purchase_prices", to: "products#adjust_all_purchase_prices", as:"adjust_all_purchase_prices"
+  patch "adjust_purchase_prices", to: "products#adjust_purchase_prices", as:"adjust_purchase_prices"
+  patch "adjust_sale_prices", to: "products#adjust_sale_prices", as:"adjust_sale_prices"
 
 
   #SALES
@@ -31,8 +37,7 @@ Rails.application.routes.draw do
 
 
   # CASH_REGISTER
-  post 'cash_replenishment', to: 'cash_registers#cash_replenishment', as: 'cash_replenishment'
-  post 'withdraw_cash_register', to: 'cash_registers#withdraw_cash_register', as: 'withdraw_cash_register'
+  post 'replenishment_or_withdrawl_cash_register', to: 'cash_registers#replenishment_or_withdrawl_cash_register', as: 'replenishment_or_withdrawl_cash_register'
   post 'close_cash_register', to: 'cash_registers#close_cash_register', as: 'close_cash_register'
   get 'show_cash_registers', to: 'cash_registers#show_cash_registers', as: 'show_cash_registers'
 
@@ -54,7 +59,7 @@ Rails.application.routes.draw do
 
 
  #bills
- 
+
  post 'receive_bills', to: 'bills#receive_bills', as: 'receive_bills'
  post 'payment_bills', to: 'bills#payment_bills', as: 'payment_bills'
 

@@ -39,17 +39,27 @@ class ProductsController < ApplicationController
     redirect_to products_path
   end
 
-  def adjust_all_sale_prices
-    sale_percentage = params[:sale_percentage].to_f
+  def adjust_all_sale_purchase_prices
+    value = params[:sale_percentage].to_f
 
     if params[:increase_sale_percentage]
       Product.all.each do |product|
-        product.increase_sale_price_by_percentage(sale_percentage)
+        product.increase_sale_price_by_percentage(value)
         product.save
       end
     elsif params[:decrease_sale_percentage]
       Product.all.each do |product|
-        product.decrease_sale_price_by_percentage(sale_percentage)
+        product.decrease_sale_price_by_percentage(value)
+        product.save
+      end
+    elsif params[:increase_purchase_percentage]
+      Product.all.each do |product|
+        product.increase_purchase_price_by_percentage(value)
+        product.save
+      end
+    elsif params[:decrease_purchase_percentage]
+      Product.all.each do |product|
+        product.decrease_purchase_price_by_percentage(value)
         product.save
       end
     end

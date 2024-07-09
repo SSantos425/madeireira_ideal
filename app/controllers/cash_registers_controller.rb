@@ -57,7 +57,7 @@ class CashRegistersController < ApplicationController
 
     if params[:withdraw]
       cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance: value, note:,
-                                                  cash_register_type: 0, account_plan_type:account_plan_id)
+                                                  cash_register_type: 0, expense_id:account_plan_id)
       cash_resgister_list.save
 
       cash_resgister = CashRegister.last
@@ -65,7 +65,7 @@ class CashRegistersController < ApplicationController
       redirect_to cash_registers_path
     elsif params[:replenishment]
       cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance: value, note:,
-                                                  cash_register_type: 1, account_plan_type: account_plan_id)
+                                                  cash_register_type: 1, expense_id: account_plan_id)
       cash_resgister_list.save
 
       cash_resgister = CashRegister.last

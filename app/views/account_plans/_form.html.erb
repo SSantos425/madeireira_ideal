@@ -1,17 +1,5 @@
 
-<%= form_with(model: account_plan, local: true) do |form| %>
-  <% if account_plan.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(account_plan.errors.count, "error") %> prohibited this account_plan from being saved:</h2>
-
-      <ul>
-        <% account_plan.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+<%= form_with(model: @account_plan, local: true) do |form| %>
   <div>
     <%= form.label :name %>
     <%= form.text_field :name %>

@@ -12,9 +12,12 @@ Rails.application.routes.draw do
   resources :carts, only: [:index]
   resources :bills, only: [:index]
 
-  resources :account_plans do
-    resources :expenses
-  end
+  resources :account_plans
+  resources :expenses
+
+  #EXPENSE
+  post 'create_expense', to: 'expenses#create_expense', as: 'create_expense'
+
 
   #PRODUCTS
   patch "adjust_all_sale_prices", to: "products#adjust_all_sale_prices", as: "adjust_all_sale_prices"

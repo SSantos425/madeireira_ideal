@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_04_130224) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_20_210927) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -80,10 +80,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_04_130224) do
     t.float "balance"
     t.string "note"
     t.integer "cash_register_type"
-    t.integer "account_plan_type"
+    t.bigint "expense_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cash_register_id"], name: "index_cash_register_lists_on_cash_register_id"
+    t.index ["expense_id"], name: "index_cash_register_lists_on_expense_id"
   end
 
   create_table "cash_registers", force: :cascade do |t|
@@ -229,6 +230,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_04_130224) do
   add_foreign_key "cart_list_orderables", "products"
   add_foreign_key "cart_lists", "clients"
   add_foreign_key "cash_register_lists", "cash_registers"
+  add_foreign_key "cash_register_lists", "expenses"
   add_foreign_key "cash_registers", "users"
   add_foreign_key "expenses", "account_plans"
   add_foreign_key "inventories", "products"

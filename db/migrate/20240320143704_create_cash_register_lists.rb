@@ -6,7 +6,7 @@ class CreateCashRegisterLists < ActiveRecord::Migration[7.0]
       t.float :balance
       t.string :note
       t.integer :cash_register_type
-      t.integer :account_plan_type
+      t.references :expense, null: false, foreign_key: true
 
       t.timestamps
     end

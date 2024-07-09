@@ -1,9 +1,18 @@
-<%= form_with(model: [account_plan, account_plan.expenses.build]) do |form| %>
-  <div>
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+<div class="dropdown card-footer" style="display: flex; justify-content: center;">
+  <%= form_with model: @expense do |form| %>
+    <div>
+      <%= form.hidden_field :account_plan_id %>
+    </div>
+    <div>
+      <%= form.label :name %>
+      <%= form.text_field :name %>
+    </div>
+    <div>
+      <%= form.submit %>
+      <%= link_to 'Back' , account_plans_path %>
+    </div>
+    <% end %>
+
+   
+
+</div>

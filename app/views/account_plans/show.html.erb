@@ -1,0 +1,25 @@
+<div class="card mb-3">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h1 class="mb-0"><%= @account_plan.name %></h1>
+    <%= link_to 'Back', account_plans_path, class: 'btn btn-secondary' %>
+  </div>
+  <div class="card-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Despesa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @account_plan.expenses.each do |expense| %>
+          <tr>
+            <td><%= expense.name %></td>
+            <td><%= link_to 'Edit', edit_account_plan__path(@account_plan, ) %></td>
+            <td><%= link_to 'Destroy', account_plan__path(@account_plan, expense), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= render 'expenses/form', account_plan: @account_plan %>
+  </div>
+</div>

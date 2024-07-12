@@ -17,10 +17,6 @@ development:
   password: madeireira_ideal
 
 
-test:
-  <<: *default
-  database: madeireira_ideal_test
-
 
 production:
   <<: *default

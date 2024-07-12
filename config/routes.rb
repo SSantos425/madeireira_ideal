@@ -15,8 +15,7 @@ Rails.application.routes.draw do
   #PRODUCTS
   patch "adjust_all_sale_purchase_prices", to: "products#adjust_all_sale_purchase_prices", as: "adjust_all_sale_purchase_prices"
   patch "adjust_all_purchase_prices", to: "products#adjust_all_purchase_prices", as:"adjust_all_purchase_prices"
-  patch "adjust_purchase_prices", to: "products#adjust_purchase_prices", as:"adjust_purchase_prices"
-  patch "adjust_sale_prices", to: "products#adjust_sale_prices", as:"adjust_sale_prices"
+  patch "single_item_price_adjust", to: "products#single_item_price_adjust", as:"single_item_price_adjust"
 
 
   #SALES

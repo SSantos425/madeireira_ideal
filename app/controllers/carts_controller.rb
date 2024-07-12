@@ -143,7 +143,7 @@ class CartsController < ApplicationController
     down_payment = params[:down_payment].to_f
     obs = params[:obs].to_s
 
-    expense = Expense.find_by(name:"VENDA DE MERCADORIAS")
+    expense = Expense.find_by(name:"VENDAS DE MERCADORIAS")
 
     # 0 contas a pagar
     # 1 contas a receber

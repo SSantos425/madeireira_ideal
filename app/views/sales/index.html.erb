@@ -21,9 +21,9 @@
       </div>
     
       <div class="dropdown card-footer" style="display: flex; justify-content: center;">
-          <div>
-            <span class="d-flex justify-content-end"><div class="m-1"><%= link_to "Todas as Vendas", all_sales_download_pdf_path, class:"btn btn-warning", data: { turbo: false } %></div></span>
-          </div>
+        <div class="d-flex justify-content-end m-1">
+          <%= link_to "Todas as Vendas", all_sales_download_pdf_path, class:"btn btn-warning", data: { turbo: false } %>
+        </div>
       </div>
     </div>
 
@@ -35,11 +35,9 @@
       <div class="dropdown card-footer" style="display: flex; justify-content: center;">
         
         <% if @start_date.present? && @end_date.present? %>
-          <span class="d-flex justify-content-end">
-            <div class="m-1">
-              <%= link_to "Todas as Vendas", period_sales_download_pdf_path(start_date: @start_date, end_date: @end_date), class: "btn btn-warning", data: { turbo: false } %>
-            </div>
-          </span>
+          <div class="d-flex justify-content-end m-1">
+            <%= link_to "Todas as Vendas", period_sales_download_pdf_path(start_date: @start_date, end_date: @end_date), class: "btn btn-warning", data: { turbo: false } %>
+          </div>
           <div class="d-flex align-items-center">
             <%= form_with(url: sales_path, method: "get") do |f| %>
               <div class="form-inline">
@@ -65,6 +63,45 @@
 
       </div>
     </div>
+
+
+    
+    <div class="card" style="width: 50%;"> 
+      <div class="card-header">
+        <h1>Relatório de Plano de Contas</h1>
+      </div>
+    
+      <div class="dropdown card-footer" style="display: flex; justify-content: center;">
+        <% if @expense_id.present? %>
+          <div class="d-flex justify-content-end m-1">
+            <%= link_to "Gerar Relatório", expense_report_path(expense_id: @expense_id), class:"btn btn-warning", data: { turbo: false } %>
+          </div>
+          <div class="d-flex align-items-center">
+            <%= form_with(url: sales_path, method: "get") do |f| %>
+              <div class="form-inline">
+                <div style="display: none;">
+                  <<%= f.number_field :expense_id, value: nil %>
+                </div>
+                <%= f.submit "Novo PDF", class: "btn btn-primary btn-sm" %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="d-flex align-items-center">
+            <%= form_with(url: sales_path, method: "get", local: true) do |f| %>
+              <div class="form-inline">
+                <%= f.collection_select :expense_id, Expense.all, :id, :name,
+                { include_blank: false, prompt: "Selecione o Plano de Contas" },
+                class: 'form-control' %>
+                <%= f.submit "Filtrar", class: "btn btn-primary btn-sm ml-2" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  
     
 </div>
   

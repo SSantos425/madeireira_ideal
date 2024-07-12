@@ -6,6 +6,9 @@ class SalesController < ApplicationController
     check_cart.destroy_all
     @start_date = params[:start_date]
     @end_date = params[:end_date]
+    @expense_id = params[:expense_id]
+
+    @cash_register_lists = CashRegisterList.all
   end
 
   def sales_data
@@ -225,6 +228,37 @@ class SalesController < ApplicationController
     check_cart = Cart.where(balance: 0)
     check_cart.destroy_all
     @cart = Cart.find_by(id: params[:cart_id])
+  end
+
+  def expense_report
+    expense_id = params[:expense_id].to_i
+    expense = Expense.find_by(id: expense_id)
+    total_total = 0
+    @cash_register_lists = CashRegisterList.where(expense_id:expense_id) # Ajuste isso conforme a sua lógica de negócio
+
+    pdf = Prawn::Document.new
+
+    pdf.text "Relatório Plano de Contas", size: 15, style: :bold
+
+    header = %w[Data Nome Saldo]
+    content = @cash_register_lists.map do |cash_register_list|
+      total_total += cash_register_list.balance
+      [cash_register_list.date, cash_register_list.expense.name, number_to_currency(cash_register_list.balance, unit: 'R$', separator: ',', delimiter: '.')]
+    end
+    pdf.move_down 10
+    pdf.text "#{expense.name}", size: 18, style: :bold
+    pdf.move_down 10
+    pdf.table([header] + content, header: true)
+
+    pdf.move_down 10
+    pdf.text "Total: #{number_to_currency(total_total, unit: 'R$', separator: ',', delimiter: '.')}", size: 16,
+                                                                                                      style: :bold, align: :right
+    pdf.move_down 10
+
+    send_data pdf.render,
+              filename: "relatorio_plano_de_contas_#{expense.name}.pdf",
+              type: 'application/pdf',
+              disposition: 'attachment' # Use "attachment" para forçar o download
   end
 
   private

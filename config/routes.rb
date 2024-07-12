@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   post 'create_expense', to: 'expenses#create_expense', as: 'create_expense'
 
 
+
   #PRODUCTS
   patch "adjust_all_sale_purchase_prices", to: "products#adjust_all_sale_purchase_prices", as: "adjust_all_sale_purchase_prices"
   patch "adjust_all_purchase_prices", to: "products#adjust_all_purchase_prices", as:"adjust_all_purchase_prices"
@@ -32,6 +33,8 @@ Rails.application.routes.draw do
   get 'download', to: 'sales#download_pdf', as: 'download_sales_pdf'
   get 'all_sales', to: 'sales#all_sales_download_pdf', as: 'all_sales_download_pdf'
   get 'period_sales', to: 'sales#period_sales_download_pdf', as: 'period_sales_download_pdf'
+  get 'expense_report', to: 'sales#expense_report', as: 'expense_report'
+
 
 
   # PURCHASE

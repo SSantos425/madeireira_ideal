@@ -28,18 +28,18 @@ class CartsController < ApplicationController
   def cart_orderable
     product_id = params[:product_id]
     quantity = params[:quantity]
-  
+
     @cart = Cart.last
     @client = Client.find_by(id: params[:client_id])
-  
+
     current_orderable = @cart.orderables.find_by(product_id: product_id)
-  
+
     if current_orderable.nil?
       Orderable.create(product_id: product_id, cart_id: @cart.id, client_id: @client.id, quantity: quantity)
     else
       current_orderable.update(quantity: quantity)
     end
-  
+
     # Lógica para filtrar produtos baseados no nome
     if product_id.present?
       product = Product.find(product_id)
@@ -58,7 +58,7 @@ class CartsController < ApplicationController
     else
       @products = Product.all.order(created_at: :asc)
     end
-  
+
     @orderables = Orderable.order(created_at: :asc)
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderables: @orderables, cart: @cart, products: @products, client: @client })
@@ -97,6 +97,8 @@ class CartsController < ApplicationController
     cart_last = Cart.last
     cart_last.update(balance: cart_balance)
 
+    expense = Expense.find_by(name:"VENDAS DE MERCADORIAS")
+
     cart_orderables = Orderable.where(cart_id: cart_last.id)
     cart_orderables.each do |cart_orderable|
       inventory = Inventory.find_by(product_id: cart_orderable.product.id)
@@ -108,7 +110,7 @@ class CartsController < ApplicationController
 
     # cria um registro no caixa
     CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: cart_last.balance,
-                            note: 'Venda de Mercadoria(Madeira)', cash_register_type: 1,account_plan_type: 1)
+                            note: 'Venda de Mercadoria(Madeira)', cash_register_type: 1,expense_id: expense.id)
 
     check_cart = Cart.where(balance: 0)
     check_cart.destroy_all
@@ -141,6 +143,8 @@ class CartsController < ApplicationController
     down_payment = params[:down_payment].to_f
     obs = params[:obs].to_s
 
+    expense = Expense.find_by(name:"VENDA DE MERCADORIAS")
+
     # 0 contas a pagar
     # 1 contas a receber
 
@@ -157,7 +161,7 @@ class CartsController < ApplicationController
 
     # cria um registro no caixa
     CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: down_payment,
-                            note: "Venda de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{cart_last.balance}", cash_register_type: 1)
+                            note: "Venda de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{cart_last.balance}", cash_register_type: 1, expense_id:expense.id)
 
     check_cart = Cart.where(balance: 0)
     check_cart.destroy_all
@@ -185,7 +189,7 @@ class CartsController < ApplicationController
     else
       @products = Product.all.order(created_at: :asc)
     end
-    
+
     @cart = Cart.last
     @orderables = Orderable.order(created_at: :asc)
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   get 'all_sales', to: 'sales#all_sales_download_pdf', as: 'all_sales_download_pdf'
   get 'period_sales', to: 'sales#period_sales_download_pdf', as: 'period_sales_download_pdf'
   get 'expense_report', to: 'sales#expense_report', as: 'expense_report'
+  get 'expense_report_data', to: 'sales#expense_report_data', as: 'expense_report_data'
 
 
 

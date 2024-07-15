@@ -6,7 +6,10 @@ class SalesController < ApplicationController
     check_cart.destroy_all
     @start_date = params[:start_date]
     @end_date = params[:end_date]
+    @start_date_expense = params[:start_date_expense]
+    @end_date_expense = params[:end_date_expense]
     @expense_id = params[:expense_id]
+    @expense_id_date = params[:expense_id_date]
 
     @cash_register_lists = CashRegisterList.all
   end
@@ -234,32 +237,114 @@ class SalesController < ApplicationController
     expense_id = params[:expense_id].to_i
     expense = Expense.find_by(id: expense_id)
     total_total = 0
-    @cash_register_lists = CashRegisterList.where(expense_id:expense_id) # Ajuste isso conforme a sua lógica de negócio
+    @cash_register_lists = CashRegisterList.where(expense_id: expense_id) # Ajuste isso conforme a sua lógica de negócio
 
-    pdf = Prawn::Document.new
+    pdf = Prawn::Document.new do |pdf|
+      # Título do relatório
+      pdf.text 'Relatório Plano de Contas', size: 20, style: :bold, align: :center
+      pdf.move_down 20
 
-    pdf.text "Relatório Plano de Contas", size: 15, style: :bold
+      # Nome da despesa
+      pdf.text "#{expense.name}", size: 18, style: :bold, align: :center
+      pdf.move_down 20
 
-    header = %w[Data Nome Saldo]
-    content = @cash_register_lists.map do |cash_register_list|
-      total_total += cash_register_list.balance
-      [cash_register_list.date, cash_register_list.expense.name, number_to_currency(cash_register_list.balance, unit: 'R$', separator: ',', delimiter: '.')]
+      # Cabeçalho da tabela
+      header = [['Data', 'Saldo']]
+
+      # Dados da tabela
+      content = @cash_register_lists.map do |cash_register_list|
+        total_total += cash_register_list.balance
+        [
+          cash_register_list.date.strftime('%d/%m/%Y'), # Formatando a data
+          number_to_currency(cash_register_list.balance, unit: 'R$', separator: ',', delimiter: '.')
+        ]
+      end
+
+      # Combina o cabeçalho com o conteúdo
+      table_data = header + content
+
+      # Desenha a tabela
+      pdf.table(table_data, header: true, column_widths: [175, 140, 100], position: :center, cell_style: { font_style: :bold} ) do
+        row(0).background_color = 'CCCCCC' # Fundo cinza para o cabeçalho
+        row(-1).background_color = 'FFFFFF' # Fundo branco para o corpo da tabela
+        columns(0..2).align = :center
+        cells.borders = []
+      end
+
+      pdf.move_down 10
+
+      # Linha com o total do relatório
+      total_data = [["", "Total", number_to_currency(total_total, unit: 'R$', separator: ',', delimiter: '.')]]
+      pdf.table(total_data, column_widths: [175, 140, 100], position: :center, cell_style: { font_style: :bold, background_color: 'CCCCCC', border_width: 0.5 }) do
+        columns(0..2).align = :center
+        cells.borders = []
+      end
+      pdf.move_down 10
     end
-    pdf.move_down 10
-    pdf.text "#{expense.name}", size: 18, style: :bold
-    pdf.move_down 10
-    pdf.table([header] + content, header: true)
-
-    pdf.move_down 10
-    pdf.text "Total: #{number_to_currency(total_total, unit: 'R$', separator: ',', delimiter: '.')}", size: 16,
-                                                                                                      style: :bold, align: :right
-    pdf.move_down 10
 
     send_data pdf.render,
               filename: "relatorio_plano_de_contas_#{expense.name}.pdf",
               type: 'application/pdf',
               disposition: 'attachment' # Use "attachment" para forçar o download
   end
+
+  def expense_report_data
+    expense_id_date = params[:expense_id_date].to_i
+    expense = Expense.find_by(id: expense_id_date)
+    total_total = 0
+    start_date_expense =  params[:start_date_expense].to_date
+    end_date_expense = params[:end_date_expense].to_date
+    @cash_register_lists = CashRegisterList.where(expense_id: expense_id_date, date:start_date_expense..end_date_expense) # Ajuste isso conforme a sua lógica de negócio
+
+    pdf = Prawn::Document.new do |pdf|
+      # Título do relatório
+      pdf.text "Relatório de Plano de Contas de #{start_date_expense&.strftime('%d/%m/%Y')} a #{end_date_expense&.strftime('%d/%m/%Y')}",size: 20, style: :bold, align: :center
+      pdf.move_down 20
+
+      # Nome da despesa
+      pdf.text "#{expense.name}", size: 18, style: :bold, align: :center
+      pdf.move_down 20
+
+      # Cabeçalho da tabela
+      header = [['Data', 'Saldo']]
+
+      # Dados da tabela
+      content = @cash_register_lists.map do |cash_register_list|
+        total_total += cash_register_list.balance
+        [
+          cash_register_list.date.strftime('%d/%m/%Y'), # Formatando a data
+          number_to_currency(cash_register_list.balance, unit: 'R$', separator: ',', delimiter: '.')
+        ]
+      end
+
+      # Combina o cabeçalho com o conteúdo
+      table_data = header + content
+
+      # Desenha a tabela
+      pdf.table(table_data, header: true, column_widths: [175, 140, 100], position: :center, cell_style: { font_style: :bold} ) do
+        row(0).background_color = 'CCCCCC' # Fundo cinza para o cabeçalho
+        row(-1).background_color = 'FFFFFF' # Fundo branco para o corpo da tabela
+        columns(0..2).align = :center
+        cells.borders = []
+      end
+
+      pdf.move_down 10
+
+      # Linha com o total do relatório
+      total_data = [["", "Total", number_to_currency(total_total, unit: 'R$', separator: ',', delimiter: '.')]]
+      pdf.table(total_data, column_widths: [175, 140, 100], position: :center, cell_style: { font_style: :bold, background_color: 'CCCCCC', border_width: 0.5 }) do
+        columns(0..2).align = :center
+        cells.borders = []
+      end
+      pdf.move_down 10
+    end
+
+    send_data pdf.render,
+              filename: "relatorio_plano_de_contas_#{expense.name}.pdf",
+              type: 'application/pdf',
+              disposition: 'attachment' # Use "attachment" para forçar o download
+  end
+
 
   private
 

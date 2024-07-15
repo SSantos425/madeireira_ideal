@@ -17,6 +17,8 @@ CashRegisterList.destroy_all
 CashRegister.destroy_all
 User.destroy_all
 Supplier.destroy_all
+Expense.destroy_all
+AccountPlan.destroy_all
 
 # cart = Cart.create(date:Date.today)
 user = User.create(email: 'admin@admin.com', password: 123_456)
@@ -55,6 +57,34 @@ Supplier.create(
   state_registration: '15.257.811-0',
   corporate_name: 'NOVA ERA INDUSTRIA COMERCIO EXPORTAÇÃO DE MADEIRAS LIMITADA me'
 )
+
+# CENTRO DE CUSTO
+
+accountplan_1=AccountPlan.create(name:"Receitas Operacionais")
+accountplan_2=AccountPlan.create(name:"Despesas Funcionais")
+accountplan_3=AccountPlan.create(name:"Despesas Tributárias")
+accountplan_4=AccountPlan.create(name:"Despesas Bancárias")
+accountplan_5=AccountPlan.create(name:"Compra de Mercadorias")
+accountplan_6=AccountPlan.create(name:"Despesas não operacionais")
+accountplan_7=AccountPlan.create(name:"Obrigações Sociais")
+accountplan_8=AccountPlan.create(name:"Receitas Finaceiras")
+accountplan_9=AccountPlan.create(name:"Despesas com Funcionários")
+accountplan_10=AccountPlan.create(name:"Despesas Administrativas")
+accountplan_11=AccountPlan.create(name:"Despesas com Investimentos")
+accountplan_12=AccountPlan.create(name:"Despesas para imobilizado")
+accountplan_13=AccountPlan.create(name:"Despesas com Vendas")
+
+# PLANO DE CUSTO
+
+Expense.create(account_plan_id:accountplan_1.id, name:"VENDAS DE MERCADORIAS")
+Expense.create(account_plan_id:accountplan_5.id, name:"COMPRA DE PRODUTOS PARA REVENDA")
+Expense.create(account_plan_id:accountplan_2.id, name:"AGUA")
+Expense.create(account_plan_id:accountplan_2.id, name:"TELEFONE")
+Expense.create(account_plan_id:accountplan_2.id, name:"ALUGUEL")
+Expense.create(account_plan_id:accountplan_4.id, name:"EMPRESTIMOS")
+Expense.create(account_plan_id:accountplan_13.id, name:"FRETES NA ENTREGA")
+Expense.create(account_plan_id:accountplan_2.id, name:"ESTIVAS")
+
 
 # VIGAS
 produto1 = Product.create(name: 'VIGA 8X18', unity: 'M', sale_price: 65, purchase_price: 27.46)

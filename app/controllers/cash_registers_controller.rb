@@ -49,28 +49,30 @@ class CashRegistersController < ApplicationController
   end
 
   def replenishment_or_withdrawl_cash_register
+    account_plan_id = params[:account_plan_id]
     cash_register_id = params[:cash_register_id]
     date = params[:date]
     value = params[:value].to_f
     note = params[:notes]
 
-      if params[:withdraw]
-        @cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance:value, note:, cash_register_type: 0)
-        @cash_resgister_list.save
+    if params[:withdraw]
+      cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance: value, note:,
+                                                  cash_register_type: 0, expense_id:account_plan_id)
+      cash_resgister_list.save
 
-        cash_resgister = CashRegister.last
-        cash_resgister.update(balance: cash_resgister.balance - value)
-        redirect_to cash_registers_path
-      elsif params[:replenishment]
-        @cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance:value, note:, cash_register_type: 1)
-        @cash_resgister_list.save
+      cash_resgister = CashRegister.last
+      cash_resgister.update(balance: cash_resgister.balance - value)
+      redirect_to cash_registers_path
+    elsif params[:replenishment]
+      cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance: value, note:,
+                                                  cash_register_type: 1, expense_id: account_plan_id)
+      cash_resgister_list.save
 
-        cash_resgister = CashRegister.last
-        cash_resgister.update(balance: cash_resgister.balance + value)
+      cash_resgister = CashRegister.last
+      cash_resgister.update(balance: cash_resgister.balance + value)
 
-        redirect_to cash_registers_path
-      end
-
+      redirect_to cash_registers_path
+    end
   end
 
   def close_cash_register
@@ -84,6 +86,7 @@ class CashRegistersController < ApplicationController
   def show_cash_registers
     @cash_register = CashRegister.all
   end
+
   private
 
   def cash_register_params

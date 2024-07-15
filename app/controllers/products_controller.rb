@@ -85,6 +85,34 @@ class ProductsController < ApplicationController
     redirect_to products_path, notice: 'Preços ajustados com sucesso.'
   end
 
+  def single_item_price_adjust
+    adjust_percentage_value = params[:adjust_percentage_value].to_f
+    discount_or_addition = params[:discount_or_addition].to_s
+    purchase_or_sell = params[:purchase_or_sell].to_s
+    return unless adjust_percentage_value.present?
+  
+    Product.all.each do |product|
+      case purchase_or_sell
+      when 'Compra'
+        case discount_or_addition
+        when 'Acréscimo'
+          adjust_purchase_price(product, adjust_percentage_value, :increase_purchase_price_by_percentage)
+        when 'Desconto'
+          adjust_purchase_price(product, adjust_percentage_value, :decrease_purchase_price_by_percentage)
+        end
+      when 'Venda'
+        case discount_or_addition
+        when 'Acréscimo'
+          adjust_purchase_price(product, adjust_percentage_value, :increase_sale_price_by_percentage)
+        when 'Desconto'
+          adjust_purchase_price(product, adjust_percentage_value, :decrease_sale_price_by_percentage)
+        end
+      end
+      product.save if product.changed?
+    end
+    redirect_to products_path, notice: 'Preços ajustados com sucesso.'
+  end
+
   def adjust_purchase_prices
     purchase_percentage = params[:purchase_percentage].to_f
     return unless purchase_percentage.present?
@@ -143,6 +171,13 @@ class ProductsController < ApplicationController
 
   private
 
+  def adjust_purchase_price(product, percentage, method)
+    case product.name
+    when /^VIGA/, /^CAIBRO/, /^FRECHAL/, /^RIPA/
+      product.send(method, percentage)
+    end
+  end
+  
   def product_params
     params.require(:product).permit(:name, :unity, :sale_price, :purchase_price)
   end

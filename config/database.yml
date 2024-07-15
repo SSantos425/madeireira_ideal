@@ -16,7 +16,6 @@ development:
   # The password associated with the postgres role (username).
   password: madeireira_ideal
 
-
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>

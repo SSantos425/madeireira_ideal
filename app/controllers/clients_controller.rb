@@ -10,7 +10,7 @@ class ClientsController < ApplicationController
   def create
     @client = Client.new(client_params)
     if @client.save
-      redirect_to clients_path
+      redirect_to clients_path, notice: "Cliente cadastrado com sucesso!"
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class ClientsController < ApplicationController
     @client = Client.find(params[:id])
 
     if @client.update(client_params)
-      redirect_to clients_path
+      redirect_to clients_path, notice: "Cliente Atualizado com sucesso!"
     else
       render :edit, status: :unprocessable_entity
     end

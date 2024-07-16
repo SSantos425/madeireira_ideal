@@ -11,7 +11,7 @@ class InventoriesController < ApplicationController
     @inventory = Inventory.find(params[:id])
 
     if @inventory.update(inventory_params)
-      redirect_to inventories_path
+      redirect_to inventories_path, notice: "Produto Atualizado com Sucesso"
     else
       render :edit, status: :unprocessable_entity
     end

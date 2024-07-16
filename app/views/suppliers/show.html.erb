@@ -1,46 +1,62 @@
-<div class="card card-primary" style="width: 110%;">
-    <div class="card-header d-flex justify-content-between">
-        <div class="col-11 align-self-start">
-            <h1><strong>Lista de fornecedores</strong></h1>
-        </div>
-        <div class="col align-self-end">
-            <%= link_to "Voltar", suppliers_path, class: "btn btn-warning", data: { turbo: false } %>
-        </div>
-    </div>
-    <div class="card-body">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>CEP</th>
-            <th>Endereço</th>
-            <th>Número</th>
-            <th>Complemento</th>
-            <th>Bairro</th>
-            <th>Cidade</th>
-            <th>Estado</th>
-            <th>Telefone</th>
-            <th>CNPJ</th>
-            <th>Inscrição Estadual</th>
-            <th>Nome Fantasia</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td><%= @suppliers.name %></td>
-              <td><%= @suppliers.cep %></td>
-              <td><%= @suppliers.address %></td>
-              <td><%= @suppliers.number %></td>
-              <td><%= @suppliers.complement %></td>
-              <td><%= @suppliers.district %></td>           
-              <td><%= @suppliers.city %></td>
-              <td><%= @suppliers.state %></td>
-              <td><%= @suppliers.phone %></td>
-              <td><%= @suppliers.cnpj %></td>     
-              <td><%= @suppliers.state_registration %></td>
-              <td><%= @suppliers.corporate_name %></td>         
-            </tr>
-        </tbody>
-      </table>
+<div class="card card-primary">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1 class="m-0"><strong>Detalhes do Fornecedor</strong></h1>
+      <%= link_to "Voltar", suppliers_path, class: "btn btn-warning", data: { turbo: false } %>
     </div>
   </div>
+  <div class="card-body">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <th style="width: 20%;">Nome</th>
+          <td><%= @supplier.name %></td>
+        </tr>
+        <tr>
+          <th>CEP</th>
+          <td><%= @supplier.cep %></td>
+        </tr>
+        <tr>
+          <th>Endereço</th>
+          <td><%= @supplier.address %></td>
+        </tr>
+        <tr>
+          <th>Número</th>
+          <td><%= @supplier.number %></td>
+        </tr>
+        <tr>
+          <th>Complemento</th>
+          <td><%= @supplier.complement %></td>
+        </tr>
+        <tr>
+          <th>Bairro</th>
+          <td><%= @supplier.district %></td>
+        </tr>
+        <tr>
+          <th>Cidade</th>
+          <td><%= @supplier.city %></td>
+        </tr>
+        <tr>
+          <th>Estado</th>
+          <td><%= @supplier.state %></td>
+        </tr>
+        <tr>
+          <th>Telefone</th>
+          <td><%= @supplier.phone %></td>
+        </tr>
+        <tr>
+          <th>CNPJ</th>
+          <td><%= @supplier.cnpj %></td>
+        </tr>
+        <tr>
+          <th>Inscrição Estadual</th>
+          <td><%= @supplier.state_registration %></td>
+        </tr>
+        <tr>
+          <th>Nome Fantasia</th>
+          <td><%= @supplier.corporate_name %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

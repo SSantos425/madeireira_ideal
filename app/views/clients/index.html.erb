@@ -1,64 +1,85 @@
-<h1>Lista de clientes</h1>
-<div class="card card-primary">
-  <div class="card-header">
-    <strong> Cliente : Pessoa Física</strong>
-  </div>
-  <div class="card-body">
-    <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @clients.each do |cliente| %>
-        <% if cliente.customer_type === 'Pessoa Fisica' %>
-        <tr>
-          <td><%= cliente.name %></td>        
-          <td>
-            <%= link_to "Detalhes", client_path(cliente), class: "btn btn-primary btn-sm", data: { turbo: false } %>
-            <%= link_to "Editar", edit_client_path(cliente), class: "btn btn-warning btn-sm", data: { turbo: false } %>
 
-          </td>
-        </tr>
-        <% end %>
-          
-        <% end %>
-      </tbody>
-    </table>
+<% if flash[:notice].present? %>
+  <%= content_tag :div, flash.notice, id: "flash-notice", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'success',
+        title: document.getElementById('flash-notice').innerText,
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% end %>
+
+<h1 class="justify-content-center mb-4">Lista de Clientes</h1>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card card-primary">
+      <div class="card-header">
+        <strong>Pessoa Física</strong>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover text-center">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @clients.each do |client| %>
+                <% if client.customer_type == 'Pessoa Fisica' %>
+                  <tr>
+                    <td><%= client.name %></td>
+                    <td>
+                      <%= link_to "Detalhes", client_path(client), class: "btn btn-primary btn-sm", data: { turbo: false } %>
+                      <%= link_to "Editar", edit_client_path(client), class: "btn btn-warning btn-sm", data: { turbo: false } %>
+                    </td>
+                  </tr>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card card-primary">
+      <div class="card-header">
+        <strong>Pessoa Jurídica</strong>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover text-center">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @clients.each do |client| %>
+                <% if client.customer_type == 'Pessoa Juridica' %>
+                  <tr>
+                    <td><%= client.name %></td>
+                    <td>
+                      <%= link_to "Detalhes", client_path(client), class: "btn btn-primary btn-sm", data: { turbo: false } %>
+                      <%= link_to "Editar", edit_client_path(client), class: "btn btn-warning btn-sm", data: { turbo: false } %>
+                    </td>
+                  </tr>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-
-<div class="card card-primary">
-  <div class="card-header">
-    <strong>Cliente : Pessoa Juridica</strong>
-  </div>
-  <div class="card-body">
-    <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @clients.each do |cliente| %>
-        <% if cliente.customer_type === 'Pessoa Juridica' %>
-        <tr>
-          <td><%= cliente.name %></td>       
-          <td>
-            <%= link_to "Detalhes", client_path(cliente), class: "btn btn-primary btn-sm", data: { turbo: false } %>
-            <%= link_to "Editar", edit_client_path(cliente), class: "btn btn-warning btn-sm", data: { turbo: false } %>
-
-          </td>
-        </tr>
-        <% end %>
-          
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
-

@@ -15,7 +15,8 @@
           <tr>
             <td><%= expense.name %></td>
             <td><%= link_to 'Edit', edit_account_plan__path(@account_plan, ) %></td>
-            <td><%= link_to 'Destroy', account_plan__path(@account_plan, expense), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td><%= link_to 'Destroy', account_plan_path(@account_plan, expense), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
           </tr>
         <% end %>
       </tbody>

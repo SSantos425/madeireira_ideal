@@ -1,6 +1,8 @@
 class Purchase < ApplicationRecord
   validates :supplier_id,:nota_number,:serie,:issue_date,:receipt_date,:total_nota,:total_products,:shipping, presence: true
   belongs_to :supplier
+  has_many :purchase_lists, dependent: :destroy
+  has_many :bills_payments, dependent: :destroy
 
 
   def total(valor)

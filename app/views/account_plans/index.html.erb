@@ -1,4 +1,19 @@
 
+<% if flash[:notice].present? %>
+  <%= content_tag :div, flash.notice, id: "flash-notice", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'success',
+        title: document.getElementById('flash-notice').innerText,
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% end %>
+
 <div class="card card-primary">
   <div class="card-header">
     <div class="d-flex justify-content-between">
@@ -21,6 +36,10 @@
             <td>
               <%= link_to 'Ver Detalhes', expense_path(account_plan), data: { turbo: false }, class: 'btn btn-info btn-sm' %>
               <%= link_to 'Editar', edit_account_plan_path(account_plan), data: { turbo: false }, class: 'btn btn-warning btn-sm' %>
+              <%= link_to "Excluir", account_plan_path(account_plan), data: {
+                turbo_method: :delete,
+                turbo_confirm: "Deletar Centro de Custo ?"
+              }, class: "btn btn-danger btn-sm" %>
             </td>
           </tr>
         <% end %>

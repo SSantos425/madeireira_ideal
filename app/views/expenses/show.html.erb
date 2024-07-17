@@ -1,7 +1,22 @@
+
+<% if flash[:notice].present? %>
+  <%= content_tag :div, flash.notice, id: "flash-notice", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'success',
+        title: document.getElementById('flash-notice').innerText,
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% end %>
 <div class="card">
   <div class="card-header">
     <div class="d-flex justify-content-between">
-      <h1>Plano de Custo</h1>
+      <h1>Plano de Contas - <%= @account_plan.name %></h1>
       <%= link_to 'Novo Plano de Custo', expenses_path(id:@account_plan.id), class: 'btn btn-warning' %>
     </div>
   </div>
@@ -19,6 +34,10 @@
             <td><%= expense.name %></td>
             <td>
               <%= link_to 'Editar', edit_expense_path(expense), data: { turbo: false }, class: 'btn btn-info btn-sm' %>
+              <%= link_to "Excluir", expense_path(expense), data: {
+                turbo_method: :delete,
+                turbo_confirm: "Deletar Plano de Contas?"
+              }, class: "btn btn-danger btn-sm" %>
             </td>
           </tr>
         <% end %>

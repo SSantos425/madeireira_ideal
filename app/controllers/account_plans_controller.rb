@@ -14,7 +14,7 @@ class AccountPlansController < ApplicationController
   def create
     @account_plan = AccountPlan.new(account_plan_params)
     if @account_plan.save
-      redirect_to account_plans_path
+      redirect_to account_plans_path, notice: 'Centro de Custo Cadastrado com Sucesso !!'
     else
       render :new
     end
@@ -28,7 +28,7 @@ class AccountPlansController < ApplicationController
     @account_plan = AccountPlan.find(params[:id])
 
     if @account_plan.update(account_plan_params)
-      redirect_to account_plans_path
+      redirect_to account_plans_path, notice: 'Centro de custo Cadastrado com Sucesso !!'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class AccountPlansController < ApplicationController
   def destroy
     account_plan = AccountPlan.find(params[:id])
     account_plan.destroy
-    redirect_to account_plans_path, notice: 'Account Plan was successfully destroyed.'
+    redirect_to account_plans_path, notice: 'Centro de custo Deletado com Sucesso !!.'
   end
 
   private

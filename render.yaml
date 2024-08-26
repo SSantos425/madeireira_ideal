@@ -1,12 +1,12 @@
 databases:
-  - name: madeireira_ideal
-    databaseName: mysite
-  - ipAllowList: []
+  - name: madeirira_ideal
+    databaseName: madeirira_ideal
+    user: madeirira_ideal
     plan: free
 
 services:
   - type: web
-    name: rails
+    name: madeirira_ideal
     env: ruby
     plan: free
     buildCommand: "./bin/render-build.sh"

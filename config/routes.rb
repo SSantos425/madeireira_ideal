@@ -19,11 +19,11 @@ Rails.application.routes.draw do
   post 'create_expense', to: 'expenses#create_expense', as: 'create_expense'
 
 
+
   #PRODUCTS
-  patch "adjust_all_sale_prices", to: "products#adjust_all_sale_prices", as: "adjust_all_sale_prices"
+  patch "adjust_all_sale_purchase_prices", to: "products#adjust_all_sale_purchase_prices", as: "adjust_all_sale_purchase_prices"
   patch "adjust_all_purchase_prices", to: "products#adjust_all_purchase_prices", as:"adjust_all_purchase_prices"
-  patch "adjust_purchase_prices", to: "products#adjust_purchase_prices", as:"adjust_purchase_prices"
-  patch "adjust_sale_prices", to: "products#adjust_sale_prices", as:"adjust_sale_prices"
+  patch "single_item_price_adjust", to: "products#single_item_price_adjust", as:"single_item_price_adjust"
 
 
   #SALES
@@ -32,6 +32,9 @@ Rails.application.routes.draw do
   get 'download', to: 'sales#download_pdf', as: 'download_sales_pdf'
   get 'all_sales', to: 'sales#all_sales_download_pdf', as: 'all_sales_download_pdf'
   get 'period_sales', to: 'sales#period_sales_download_pdf', as: 'period_sales_download_pdf'
+  get 'expense_report', to: 'sales#expense_report', as: 'expense_report'
+  get 'expense_report_data', to: 'sales#expense_report_data', as: 'expense_report_data'
+
 
 
   # PURCHASE
@@ -41,6 +44,7 @@ Rails.application.routes.draw do
   post 'update_item_purchaselist_cart', to: 'purchases#update_item_purchaselist_cart', as: 'update_item_purchaselist_cart'
   post 'purchase_discount_or_addition', to: 'purchases#purchase_discount_or_addition', as: 'purchase_discount_or_addition'
   post 'foward_purchase', to: 'purchases#foward_purchase', as: 'foward_purchase'
+  post 'filter_purchase', to: 'purchases#filter_purchase', as: 'filter_purchase'
 
 
   # CASH_REGISTER
@@ -60,6 +64,7 @@ Rails.application.routes.draw do
  post 'foward_sell_cart', to: 'carts#foward_sell_cart', as: 'foward_sell_cart'
  get 'new_cart', to: 'carts#new_cart', as: 'new_cart'
  get 'search_product', to: 'carts#search_product', as: 'search_product'
+ post 'filter', to: 'carts#filter', as: 'filter'
  post 'orderable_discount_or_addition', to: 'carts#orderable_discount_or_addition', as: 'orderable_discount_or_addition'
 
 

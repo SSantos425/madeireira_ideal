@@ -1,3 +1,18 @@
+<% if flash[:notice].present? %>
+  <%= content_tag :div, flash.notice, id: "flash-notice", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'success',
+        title: document.getElementById('flash-notice').innerText,
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% end %>
+
 
 <div class="card card-primary">
   <div class="card-header">
@@ -15,12 +30,16 @@
       <tbody>
         <% @inventories.each do |inventory| %>
           <tr>
-            <td><%= inventory.product.name %></td>      
-            <td><%= inventory.quantity %></td>    
-            <td><%= link_to "Editar" , edit_inventory_path(inventory), class:"btn btn-warning btn-sm", data: { turbo: false }%></td>  
+            <td><%= inventory.product.name %></td>
+            <td><%= inventory.quantity %></td>
+            <td>
+              <%= link_to "Editar", edit_inventory_path(inventory), class: "btn btn-warning btn-sm", data: { turbo: false } %>
+            </td>
           </tr>
         <% end %>
       </tbody>
     </table>
   </div>
 </div>
+
+

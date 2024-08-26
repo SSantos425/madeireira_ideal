@@ -1,6 +1,6 @@
 class SuppliersController < ApplicationController
   def index
-    @suppliers = Supplier.all
+    @suppliers = Supplier.order(created_at: :asc)
   end
 
   def new
@@ -11,7 +11,7 @@ class SuppliersController < ApplicationController
     @supplier = Supplier.new(supplier_params)
 
     if @supplier.save
-      redirect_to suppliers_path, notiece: 'Fornecedor Cadastrado com Sucesso !!!'
+      redirect_to suppliers_path, notice: 'Fornecedor Cadastrado com Sucesso !!!'
     else
       render :new, status: :unprocessable_entity
     end
@@ -22,6 +22,7 @@ class SuppliersController < ApplicationController
   end
 
   def update
+    @supplier = Supplier.find(params[:id])
     if @supplier.update(supplier_params)
       redirect_to suppliers_path, notice: 'Fornecedor Atualizado com Sucesso !!!'
     else
@@ -30,6 +31,7 @@ class SuppliersController < ApplicationController
   end
 
   def show
+    @supplier = Supplier.find(params[:id])
   end
 
   def destroy

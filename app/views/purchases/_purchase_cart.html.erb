@@ -184,211 +184,50 @@
 </div>
 
 
+
 <div class="card card-primary card-tabs">
-  <div class="card-header p-0 pt-1">
-    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
 
-      <li class="nav-item">
-        <a class="nav-link active" id="custom-tabs-one-home-tab" data-bs-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-selected="custom-tabs-one-home" aria-selected="true">RIPA</a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-profile-tab" data-bs-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-selected="custom-tabs-one-profile" aria-selected="false">CAIBRO</a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-messages-tab" data-bs-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-selected="custom-tabs-one-messages" aria-selected="false">FRECHAL</a>
-      </li>
-      
-      <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-settings-tab" data-bs-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-selected="custom-tabs-one-settings" aria-selected="false">VIGA</a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" id="custom-tabs-one-products-tab" data-bs-toggle="pill" href="#custom-tabs-one-products" role="tab" aria-selected="custom-tabs-one-products" aria-selected="false">Todos os Produtos</a>
-      </li>
-    </ul>
+  <div class="text-center mt-3 d-flex justify-content-center">
+    <%= button_to "RIPA", filter_purchase_path(product_name: "RIPA", purchase_id: @purchase.id), class: "btn btn-primary mr-2" %>
+    <%= button_to "FRECHAL", filter_purchase_path(product_name: "FRECHAL", purchase_id: @purchase.id), class: "btn btn-primary mr-2" %>
+    <%= button_to "CAIBRO", filter_purchase_path(product_name: "CAIBRO", purchase_id: @purchase.id), class: "btn btn-primary mr-2" %>
+    <%= button_to "VIGA", filter_purchase_path(product_name: "VIGA", purchase_id: @purchase.id), class: "btn btn-primary mr-2" %>
+    <%= button_to "Todos", filter_purchase_path(product_name: nil, purchase_id: @purchase.id), class: "btn btn-primary" %>
   </div>
+ 
   <div class="card-body">
-    <div class="tab-content" id="custom-tabs-one-tabContent">
-
-      <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-        <table class="table table-bordered table-hover">
-          <thead>
+    <table class="table table-bordered table-hover mt-3">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Unidade</th>
+          <th>Preço</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="product-table-body">
+       
+          <% @products.each do |product| %>
             <tr>
-              <th>Nome</th>
-              <th>Unidade</th>
-              <th>Preço</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @products.each do |product| %>
-              <% if product.name.start_with?("RIPA") %>
-                <tr>
-                  <td><%= product.name %></td>
-                  <td><%= product.unity %></td>
-                  <td><%= product.purchase_price %></td>
-                  <td>
-                    <%= form_with(url: include_products_path) do |form| %>
-                      <%= form.hidden_field :purchase_id, value: @purchase.id %>
-                      <%= form.hidden_field :product_id, value: product.id %>
-                      <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade' %>
-                      <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
-                        Incluir na compra
+              <td><%= product.name %></td>
+              <td><%= product.unity %></td>
+              <td><%= product.sale_price %></td>
+              <td>
+                <div class="d-flex">
+                  <%= form_with(url: include_products_path) do |form| %>
+                        <%= form.hidden_field :purchase_id, value: @purchase.id %>
+                        <%= form.hidden_field :product_id, value: product.id %>
+                        <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade' %>
+                        <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
+                          Incluir na compra
+                        <% end %>
                       <% end %>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Unidade</th>
-              <th>Preço</th>
-              <th>Ações</th>
+                </div>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <% @products.each do |product| %>
-              <% if product.name.start_with?("CAIBRO") %>
-                <tr>
-                  <td><%= product.name %></td>
-                  <td><%= product.unity %></td>
-                  <td><%= product.purchase_price %></td>
-                  <td>
-                    <%= form_with(url: include_products_path) do |form| %>
-                      <%= form.hidden_field :purchase_id, value: @purchase.id %>
-                      <%= form.hidden_field :product_id, value: product.id %>
-                      <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade' %>
-                      <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
-                        Incluir na compra
-                      <% end %>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Unidade</th>
-              <th>Preço</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @products.each do |product| %>
-              <% if product.name.start_with?("FRECHAL") %>
-                <tr>
-                  <td><%= product.name %></td>
-                  <td><%= product.unity %></td>
-                  <td><%= product.purchase_price %></td>
-                  <td>
-                    <%= form_with(url: include_products_path) do |form| %>
-                      <%= form.hidden_field :purchase_id, value: @purchase.id %>
-                      <%= form.hidden_field :product_id, value: product.id %>
-                      <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade' %>
-                      <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
-                        Incluir na compra
-                      <% end %>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Unidade</th>
-              <th>Preço</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @products.each do |product| %>
-              <% if product.name.start_with?("VIGA") %>
-                <tr>
-                  <td><%= product.name %></td>
-                  <td><%= product.unity %></td>
-                  <td><%= product.purchase_price %></td>
-                  <td>
-                    <%= form_with(url: include_products_path) do |form| %>
-                      <%= form.hidden_field :purchase_id, value: @purchase.id %>
-                      <%= form.hidden_field :product_id, value: product.id %>
-                      <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade' %>
-                      <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
-                        Incluir na compra
-                      <% end %>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="tab-pane fade" id="custom-tabs-one-products" role="tabpanel" aria-labelledby="custom-tabs-one-products-tab">
-        <%= form_with url: search_product_path, method: :get, class: "form-inline justify-content-center" do |form| %>
-          <div class="input-group" style="width: 500px;">
-            <%= form.text_field :product_name, placeholder: "Em desenvolvimento...", class: "form-control", disabled: true %>
-            <%= button_tag(type: 'submit', class: 'btn btn-outline-info btn-sm', disabled: true) do %>
-              <i class="fa fa-search mr-1"></i>
-            <% end %>
-          </div>
-        <% end %>
-        <table class="table table-bordered table-hover mt-3">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Unidade</th>
-              <th>Preço</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @products.each do |product| %>
-                <tr>
-                  <td><%= product.name %></td>
-                  <td><%= product.unity %></td>
-                  <td><%= product.purchase_price %></td>
-                  <td>
-                    <%= form_with(url: include_products_path) do |form| %>
-                      <%= form.hidden_field :purchase_id, value: @purchase.id %>
-                      <%= form.hidden_field :product_id, value: product.id %>
-                      <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade' %>
-                      <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
-                        Incluir na compra
-                      <% end %>
-                    <% end %>
-                  </td>
-                </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-
-    </div>
+          <% end %>
+  
+      </tbody>
+    </table>
   </div>
-  <!-- /.card -->
 </div>

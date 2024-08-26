@@ -1,0 +1,62 @@
+<div class="card card-primary">
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1 class="m-0"><strong>Detalhes do Fornecedor</strong></h1>
+      <%= link_to "Voltar", suppliers_path, class: "btn btn-warning", data: { turbo: false } %>
+    </div>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <th style="width: 20%;">Nome</th>
+          <td><%= @supplier.name %></td>
+        </tr>
+        <tr>
+          <th>CEP</th>
+          <td><%= @supplier.cep %></td>
+        </tr>
+        <tr>
+          <th>Endereço</th>
+          <td><%= @supplier.address %></td>
+        </tr>
+        <tr>
+          <th>Número</th>
+          <td><%= @supplier.number %></td>
+        </tr>
+        <tr>
+          <th>Complemento</th>
+          <td><%= @supplier.complement %></td>
+        </tr>
+        <tr>
+          <th>Bairro</th>
+          <td><%= @supplier.district %></td>
+        </tr>
+        <tr>
+          <th>Cidade</th>
+          <td><%= @supplier.city %></td>
+        </tr>
+        <tr>
+          <th>Estado</th>
+          <td><%= @supplier.state %></td>
+        </tr>
+        <tr>
+          <th>Telefone</th>
+          <td><%= @supplier.phone %></td>
+        </tr>
+        <tr>
+          <th>CNPJ</th>
+          <td><%= @supplier.cnpj %></td>
+        </tr>
+        <tr>
+          <th>Inscrição Estadual</th>
+          <td><%= @supplier.state_registration %></td>
+        </tr>
+        <tr>
+          <th>Nome Fantasia</th>
+          <td><%= @supplier.corporate_name %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

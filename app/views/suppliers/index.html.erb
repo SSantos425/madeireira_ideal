@@ -1,41 +1,56 @@
+
+<% if flash[:notice].present? %>
+  <%= content_tag :div, flash.notice, id: "flash-notice", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'success',
+        title: document.getElementById('flash-notice').innerText,
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% end %>
+
 <div class="card card-primary">
   <div class="card-header">
-     <strong>Lista de fornecedores</strong>
+    <h1><strong>Lista de Fornecedores</strong></h1>
   </div>
   <div class="card-body">
-    <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Endereço</th>
-          <th>Número</th>
-          <th>Complemento</th>
-          <th>Bairro</th>
-          <th>Cidade</th>
-          <th>Estado</th>
-          <th>Telefone</th>
-          <th>CNPJ</th>
-          <th>Inscrição Estadual</th>
-          <th>Razão Social</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @suppliers.each do |supplier| %>
-          <tr>
-            <td><%= supplier.name %></td>      
-            <td><%= supplier.address %></td>  
-            <td><%= supplier.number %></td>
-            <td><%= supplier.complement %></td>
-            <td><%= supplier.district %></td>
-            <td><%= supplier.city %></td>
-            <td><%= supplier.state %></td>
-            <td><%= supplier.phone %></td>
-            <td><%= supplier.cnpj %></td>     
-            <td><%= supplier.state_registration %></td>
-            <td><%= supplier.corporate_name %></td>         
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr style="text-align: center;">
+            <th>Nome</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Telefone</th>
+            <th>CNPJ</th>
+            <th>Insc. Estadual</th>
+            <th>Ações</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @suppliers.each do |supplier| %>
+            <tr class="align-middle text-center">
+              <td class="align-middle"><%= supplier.name %></td>
+              <td class="align-middle"><%= supplier.city %></td>
+              <td class="align-middle"><%= supplier.state %></td>
+              <td class="align-middle"><%= supplier.phone %></td>
+              <td class="align-middle"><%= supplier.cnpj %></td>
+              <td class="align-middle"><%= supplier.state_registration %></td>
+              <td class="align-middle">
+                <%= link_to "Detalhes", supplier_path(supplier), class: "btn btn-primary btn-sm btn-block", data: { turbo: false } %>
+                <%= link_to "Editar", edit_supplier_path(supplier), class: "btn btn-warning btn-sm btn-block mt-1", data: { turbo: false } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+
+

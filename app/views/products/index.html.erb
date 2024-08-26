@@ -1,88 +1,103 @@
+
+<% if flash[:notice].present? %>
+  <%= content_tag :div, flash.notice, id: "flash-notice", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'success',
+        title: document.getElementById('flash-notice').innerText,
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% end %>
+
 <div class="card">
   <div class="card-header">
-    <div class="d-flex justify-content-between">
-      <%= form_with(url: adjust_all_sale_prices_path, method: :patch) do |f| %>
-        <div class="form-group">
-          <%= f.number_field :sale_percentage, placeholder: "Ex: Digite: 5, para aumentar/reduzir em 5%", step: 0.01, class: "form-control" %>
+    <div class="row d-flex justify-content-between">
+      <div class="col-lg-5 col-md-12">
+        
+        <div class="card border border-primary mt-2">
+          <div class="mt-2 ml-2 d-flex justify-content-center"><h5>Aumentar ou Reduzir Preços Gerais</h5></div>
+          <div class="card-body ">
+            <div>
+              <%= form_with(url: adjust_all_sale_purchase_prices_path, method: :patch) do |f| %>
+                <div class="form-group">
+                  <%= f.number_field :sale_percentage, placeholder: "Ex: Digite: 5, para aumentar/reduzir em 5%", step: 0.01, class: "form-control mt-2" %>
+
+                  <div class="row mt-2">
+                    <%= f.submit "Aumentar preço de Venda", name: "increase_sale_percentage", class: "btn btn-block btn-primary ", data: { turbo_confirm: 'Tem certeza que deseja aumentar o preço de venda?' } %>
+                    <%= f.submit "Aumentar preço de Compra", name: "increase_purchase_percentage", class: "btn btn-block btn-primary ", data: { turbo_confirm: 'Tem certeza que deseja aumentar o preço de compra?' } %>
+                  </div>
+                  <div class="row mt-2">
+                    <%= f.submit "Diminuir Preço de Venda", name: "decrease_sale_percentage", class: "btn btn-block btn-warning ", data: { turbo_confirm: 'Tem certeza que deseja diminuir o preço de venda?' } %>
+                    <%= f.submit "Diminuir Preço de Compra", name: "decrease_purchase_percentage", class: "btn btn-block btn-warning ", data: { turbo_confirm: 'Tem certeza que deseja diminuir o preço de compra?' } %>
+                  </div>
+                </div>
+              <% end %>
+
+
+
+            </div>
+          </div>
         </div>
-        <%= f.submit "Aumentar Preços de Venda", name: "increase_sale_percentage", class: "btn btn-primary btn-sm mr-1" %>
-        <%= f.submit "Reduzir Preços de Venda", name: "decrease_sale_percentage", class: "btn btn-warning btn-sm"  %>
-      <% end %>
-  
-      <%= form_with(url: adjust_all_purchase_prices_path, method: :patch) do |f| %>
-        <div class="form-group">
-          <%= f.number_field :purchase_percentage, placeholder: "Ex: Digite: 5, para aumentar/reduzir em 5%", step: 0.01, class: "form-control" %>
+      </div>
+
+      <div class="col-lg-7 col-md-12">
+        <div class="card border border-primary mt-2">
+          <div class="mt-2 ml-2 d-flex justify-content-center"><h5>Aumentar ou Reduzir Preços Específicos</h5></div>
+          <div class="card-body">
+            <div>
+              <%= form_with(url: single_item_price_adjust_path, method: :patch) do |f| %>
+                <div class="form-group">
+                  <%= f.number_field :adjust_percentage_value, placeholder: "Ex: Digite: 5, para aumentar/reduzir em 5%", step: 0.01, class: "form-control mt-2" %>
+                    <%= f.select :discount_or_addition, [["Acréscimo", "Acréscimo"], ["Desconto", "Desconto"]], { prompt: "Selecione Acréscimo ou Desconto" }, class: "form-control mt-2" %>
+                    <%= f.select :purchase_or_sell, [["Venda", "Venda"], ["Compra", "Compra"]], { prompt: "Selecione Venda ou Compra" }, class: "form-control mt-2" %>
+                    <%= f.select :product_name, [["Viga", "Viga"], ["Caibro", "Caibro"], ["Frechal", "Frechal"], ["Ripa", "Ripa"]], { prompt: "Selecione o Item" }, class: "form-control mt-2" %>
+                    <%= f.submit "Aplicar", class: "btn btn-block btn-primary mt-2", data: { turbo_confirm: 'Confirmar?'} %>
+                </div>
+              <% end %>
+            </div>
+          </div>
         </div>
-        <%= f.submit "Aumentar Preços de Compra", name: "increase_purchase_percentage", class: "btn btn-primary btn-sm mr-1" %>
-        <%= f.submit "Reduzir Preços de Compra", name: "decrease_purchase_percentage", class: "btn btn-warning btn-sm"  %>
-      <% end %>
+      </div>
     </div>
   </div>
   
   <div class="card-body">
-    <table class="table table-bordered table-hover text-center">
-      <thead>
-        <tr>
-          <th>Madeira Serrada</th>
-          <th>Unidade</th>
-          <th>Preço de Compra</th>
-          <th>Preço de Venda</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @products.each do |product| %>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover text-center">
+        <thead>
           <tr>
-            <td><%= product.name %></td>
-            <td><%= product.unity %></td>
-            <td><%= number_to_currency(product.purchase_price, unit: "R$", separator: ",", delimiter: ".") %></td>
-            <td><%= number_to_currency(product.sale_price, unit: "R$", separator: ",", delimiter: ".") %></td>
-            <td>
-              <%= link_to "Editar", edit_product_path(product), class: "btn btn-warning btn-sm", data: { turbo: false } %>
-              <%= link_to "Excluir", product_path(product), method: :delete, data: { confirm: "Você tem certeza?" }, class: "btn btn-danger btn-sm" %>
-            </td>
+            <th>Madeira Serrada</th>
+            <th>Unidade</th>
+            <th>Preço de Compra</th>
+            <th>Preço de Venda</th>
+            <th>Ações</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @products.each do |product| %>
+            <tr>
+              <td><%= product.name %></td>
+              <td><%= product.unity %></td>
+              <td><%= number_to_currency(product.purchase_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+              <td><%= number_to_currency(product.sale_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+              <td>
+                <%= link_to "Editar", edit_product_path(product), class: "btn btn-warning btn-sm", data: { turbo: false } %>
+                <%= link_to "Excluir", product_path(product), method: :delete, data: { confirm: "Você tem certeza?" }, class: "btn btn-danger btn-sm" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="card-footer">
-    <div>
-      <%= form_with(url: adjust_sale_prices_path, method: :patch) do |f| %>
-        <div class="form-group mb-2 me-2">
-          <%= f.number_field :sale_percentage, placeholder: "Ex: Digite: 5, para aumentar/reduzir em 5% - PREÇO DE VENDA", step: 0.01, class: "form-control" %>
-        </div>
-        <div class="btn-group mb-2 me-2" role="group">
-          <%= f.submit "+VIGA", name: "increase_viga_sale_percentage", class: "btn btn-primary btn-sm" %>
-          <%= f.submit "-VIGA", name: "decrease_viga_sale_percentage", class: "btn btn-primary btn-sm" %>
-          <%= f.submit "+CAIBRO", name: "increase_caibro_sale_percentage", class: "btn btn-warning btn-sm" %>
-          <%= f.submit "-CAIBRO", name: "decrease_caibro_sale_percentage", class: "btn btn-warning btn-sm" %>
-          <%= f.submit "+FRECHAL", name: "increase_frechal_sale_percentage", class: "btn btn-primary btn-sm" %>
-          <%= f.submit "-FRECHAL", name: "decrease_frechal_sale_percentage", class: "btn btn-primary btn-sm" %>
-          <%= f.submit "+RIPA", name: "increase_ripa_sale_percentage", class: "btn btn-warning btn-sm" %>
-          <%= f.submit "-RIPA", name: "decrease_ripa_sale_percentage", class: "btn btn-warning btn-sm" %>
-        </div>
-      <% end %>
-  
-      <%= form_with(url: adjust_purchase_prices_path, method: :patch) do |f| %>
-        <div class="form-group mb-2 me-2">
-          <%= f.number_field :purchase_percentage, placeholder: "Ex: Digite: 5, para aumentar/reduzir em 5% - PREÇO DE COMPRA", step: 0.01, class: "form-control" %>
-        </div>
-        <div class="btn-group mb-2 me-2" role="group">
-          <%= f.submit "+VIGA", name: "increase_viga_purchase_percentage", class: "btn btn-primary btn-sm" %>
-          <%= f.submit "-VIGA", name: "decrease_viga_purchase_percentage", class: "btn btn-primary btn-sm" %>
-          <%= f.submit "+CAIBRO", name: "increase_caibro_purchase_percentage", class: "btn btn-warning btn-sm" %>
-          <%= f.submit "-CAIBRO", name: "decrease_caibro_purchase_percentage", class: "btn btn-warning btn-sm" %>
-          <%= f.submit "+FRECHAL", name: "increase_frechal_purchase_percentage", class: "btn btn-primary btn-sm" %>
-          <%= f.submit "-FRECHAL", name: "decrease_frechal_purchase_percentage", class: "btn btn-primary btn-sm" %>
-          <%= f.submit "+RIPA", name: "increase_ripa_purchase_percentage", class: "btn btn-warning btn-sm" %>
-          <%= f.submit "-RIPA", name: "decrease_ripa_purchase_percentage", class: "btn btn-warning btn-sm" %>
-        </div>
-      <% end %>
-    </div>
   </div>
-  
   </div>
-  
 </div>
+

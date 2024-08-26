@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   def index
-    @products = Product.all
+    @products = Product.order(created_at: :asc)
   end
 
   def new
@@ -12,7 +12,7 @@ class ProductsController < ApplicationController
 
     if @product.save
       Inventory.create(product_id: @product.id, quantity: 0.0)
-      redirect_to products_path, notice: 'Produto adicionado com sucesso !!'
+      redirect_to products_path, notice: 'Produto cadastrado com sucesso !!'
     else
       render :new, status: :unprocessable_entity
     end
@@ -26,7 +26,7 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
 
     if @product.update(product_params)
-      redirect_to products_path
+      redirect_to products_path, notice: 'Produto atualizado com sucesso !!'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -36,25 +36,35 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
     @product.destroy
 
-    redirect_to products_path
+    redirect_to products_path, notice: 'Produto Excluido com sucesso !!'
   end
 
-  def adjust_all_sale_prices
-    sale_percentage = params[:sale_percentage].to_f
+  def adjust_all_sale_purchase_prices
+    value = params[:sale_percentage].to_f
 
     if params[:increase_sale_percentage]
       Product.all.each do |product|
-        product.increase_sale_price_by_percentage(sale_percentage)
+        product.increase_sale_price_by_percentage(value)
         product.save
       end
     elsif params[:decrease_sale_percentage]
       Product.all.each do |product|
-        product.decrease_sale_price_by_percentage(sale_percentage)
+        product.decrease_sale_price_by_percentage(value)
+        product.save
+      end
+    elsif params[:increase_purchase_percentage]
+      Product.all.each do |product|
+        product.increase_purchase_price_by_percentage(value)
+        product.save
+      end
+    elsif params[:decrease_purchase_percentage]
+      Product.all.each do |product|
+        product.decrease_purchase_price_by_percentage(value)
         product.save
       end
     end
 
-    redirect_to products_path, notice: 'Preços ajustados com sucesso.'
+    redirect_to products_path, notice: 'Preços ajustados com sucesso !!'
   end
 
   def adjust_all_purchase_prices
@@ -75,63 +85,43 @@ class ProductsController < ApplicationController
     redirect_to products_path, notice: 'Preços ajustados com sucesso.'
   end
 
-  def adjust_purchase_prices
-    purchase_percentage = params[:purchase_percentage].to_f
-    return unless purchase_percentage.present?
+  def single_item_price_adjust
+    adjust_percentage_value = params[:adjust_percentage_value].to_f
+    discount_or_addition = params[:discount_or_addition].to_s
+    purchase_or_sell = params[:purchase_or_sell].to_s
+    return unless adjust_percentage_value.present?
 
     Product.all.each do |product|
-      if params[:increase_viga_purchase_percentage]
-        product.increase_purchase_price_by_percentage(purchase_percentage) if product.name.start_with?('VIGA')
-      elsif params[:decrease_viga_purchase_percentage]
-        product.decrease_purchase_price_by_percentage(purchase_percentage) if product.name.start_with?('VIGA')
-      elsif params[:increase_caibro_purchase_percentage]
-        product.increase_purchase_price_by_percentage(purchase_percentage) if product.name.start_with?('CAIBRO')
-      elsif params[:decrease_caibro_purchase_percentage]
-        product.decrease_purchase_price_by_percentage(purchase_percentage) if product.name.start_with?('CAIBRO')
-      elsif params[:increase_frechal_purchase_percentage]
-        product.increase_purchase_price_by_percentage(purchase_percentage) if product.name.start_with?('FRECHAL')
-      elsif params[:decrease_frechal_purchase_percentage]
-        product.decrease_purchase_price_by_percentage(purchase_percentage) if product.name.start_with?('FRECHAL')
-      elsif params[:increase_ripa_purchase_percentage]
-        product.increase_purchase_price_by_percentage(purchase_percentage) if product.name.start_with?('RIPA')
-      elsif params[:decrease_ripa_purchase_percentage]
-        product.decrease_purchase_price_by_percentage(purchase_percentage) if product.name.start_with?('RIPA')
+      case purchase_or_sell
+      when 'Compra'
+        case discount_or_addition
+        when 'Acréscimo'
+          adjust_purchase_price(product, adjust_percentage_value, :increase_purchase_price_by_percentage)
+        when 'Desconto'
+          adjust_purchase_price(product, adjust_percentage_value, :decrease_purchase_price_by_percentage)
+        end
+      when 'Venda'
+        case discount_or_addition
+        when 'Acréscimo'
+          adjust_purchase_price(product, adjust_percentage_value, :increase_sale_price_by_percentage)
+        when 'Desconto'
+          adjust_purchase_price(product, adjust_percentage_value, :decrease_sale_price_by_percentage)
+        end
       end
       product.save if product.changed?
     end
-
     redirect_to products_path, notice: 'Preços ajustados com sucesso.'
   end
 
-  def adjust_sale_prices
-    sale_percentage = params[:sale_percentage].to_f
-    return unless sale_percentage.present?
-
-    Product.all.each do |product|
-      if params[:increase_viga_sale_percentage]
-        product.increase_sale_price_by_percentage(sale_percentage) if product.name.start_with?('VIGA')
-      elsif params[:decrease_viga_sale_percentage]
-        product.decrease_sale_price_by_percentage(sale_percentage) if product.name.start_with?('VIGA')
-      elsif params[:increase_caibro_sale_percentage]
-        product.increase_sale_price_by_percentage(sale_percentage) if product.name.start_with?('CAIBRO')
-      elsif params[:decrease_caibro_sale_percentage]
-        product.decrease_sale_price_by_percentage(sale_percentage) if product.name.start_with?('CAIBRO')
-      elsif params[:increase_frechal_sale_percentage]
-        product.increase_sale_price_by_percentage(sale_percentage) if product.name.start_with?('FRECHAL')
-      elsif params[:decrease_frechal_sale_percentage]
-        product.decrease_sale_price_by_percentage(sale_percentage) if product.name.start_with?('FRECHAL')
-      elsif params[:increase_ripa_sale_percentage]
-        product.increase_sale_price_by_percentage(sale_percentage) if product.name.start_with?('RIPA')
-      elsif params[:decrease_ripa_sale_percentage]
-        product.decrease_sale_price_by_percentage(sale_percentage) if product.name.start_with?('RIPA')
-      end
-      product.save if product.changed?
-    end
-
-    redirect_to products_path, notice: 'Preços ajustados com sucesso.'
-  end
 
   private
+
+  def adjust_purchase_price(product, percentage, method)
+    case product.name
+    when /^VIGA/, /^CAIBRO/, /^FRECHAL/, /^RIPA/
+      product.send(method, percentage)
+    end
+  end
 
   def product_params
     params.require(:product).permit(:name, :unity, :sale_price, :purchase_price)

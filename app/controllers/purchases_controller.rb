@@ -1,6 +1,6 @@
 class PurchasesController < ApplicationController
   def index
-    @purchases = Purchase.all
+    @purchases = Purchase.order(created_at: :asc)
   end
 
   def new
@@ -21,8 +21,8 @@ class PurchasesController < ApplicationController
 
   def show
     @purchase = Purchase.find(params[:id])
-    @products = Product.all
-    @purchase_lists = PurchaseList.all
+    @products = Product.order(created_at: :asc)
+    @purchase_lists = PurchaseList.order(created_at: :asc)
   end
 
   def include_products
@@ -32,12 +32,27 @@ class PurchasesController < ApplicationController
 
     purchase_list = PurchaseList.new(purchase_id:, product_id:, quantity:)
     purchase_list.save
-
-    @purchase_lists = PurchaseList.all
-    @products = Product.all
+    product = Product.find_by(id:product_id)
+    @purchase_lists = PurchaseList.order(created_at: :asc)
+    if product.name.present?
+      case
+      when product.name.start_with?('VIGA')
+        @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
+      when product.name.start_with?('CAIBRO')
+        @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
+      when product.name.start_with?('FRECHAL')
+        @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
+      when product.name.start_with?('RIPA')
+        @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
+      else
+        @products = Product.all.order(created_at: :asc)
+      end
+    else
+      @products = Product.all.order(created_at: :asc)
+    end
     @purchase = Purchase.find_by(id: purchase_id)
     render turbo_stream: turbo_stream.update('purchaselist', partial: 'purchases/purchase_cart',
-                                                             locals: { purchase: @purchase })
+                                                             locals: { purchase: @purchase, products:@products })
   end
 
   def buy_purchaselist_cart
@@ -49,8 +64,10 @@ class PurchasesController < ApplicationController
 
     cash_register = CashRegister.last
 
-    @purchase_lists = PurchaseList.all
-    @products = Product.all
+    expense = Expense.find_by(name:"COMPRA DE PRODUTOS PARA REVENDA")
+
+    @purchase_lists = PurchaseList.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
 
     @purchase = Purchase.find_by(id: purchase_id)
     @purchase.update(purchase_type: 0)
@@ -62,7 +79,7 @@ class PurchasesController < ApplicationController
 
     cash_register.update(balance: cash_register.balance - total_value)
     CashRegisterList.create(cash_register_id: cash_register.id, date: data, balance: total_value,
-                            note: 'Compra de Mercadorias para Revenda', cash_register_type: 0)
+                            note: 'Compra de Mercadorias para Revenda', cash_register_type: 0, expense_id:expense.id)
 
     render turbo_stream: turbo_stream.update('purchaselist', partial: 'purchases/purchase_cart_finished',
                                                              locals: { purchase: @purchase })
@@ -74,8 +91,8 @@ class PurchasesController < ApplicationController
     quantity = params[:quantity].to_f
 
     @purchase = Purchase.find_by(id: purchase_id)
-    @purchase_lists = PurchaseList.all
-    @products = Product.all
+    @purchase_lists = PurchaseList.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
 
     current_purchaselist = PurchaseList.find_by(id: purchase_list_id)
     current_purchaselist.update(quantity:)
@@ -92,8 +109,8 @@ class PurchasesController < ApplicationController
 
     PurchaseList.find_by(id: purchase_list_id).destroy
 
-    @purchase_lists = PurchaseList.all
-    @products = Product.all
+    @purchase_lists = PurchaseList.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
     render turbo_stream: turbo_stream.update('purchaselist', partial: 'purchases/purchase_cart',
                                                              locals: { purchase: @purchase })
   end
@@ -102,9 +119,9 @@ class PurchasesController < ApplicationController
     quantity = params[:quantity].to_f
     @purchase = Purchase.find_by(id: params[:purchase_id])
 
-    @orderables = Orderable.all
-    @products = Product.all
-    @purchase_lists = PurchaseList.all
+    @orderables = Orderable.order(created_at: :asc)
+    @products = Product.order(created_at: :asc)
+    @purchase_lists = PurchaseList.order(created_at: :asc)
 
     if params[:discount]
       @purchase.update(discount: quantity)
@@ -123,6 +140,7 @@ class PurchasesController < ApplicationController
     bill_payment = BillsPayment.create(down_payment:, total_value:, purchase_id:)
     bill_payment.update(remaining_payment: bill_payment.total_value - bill_payment.down_payment)
 
+    expense = Expense.find_by(name:"COMPRA DE PRODUTOS PARA REVENDA")
     purchase_lists = PurchaseList.where(purchase_id:)
     purchase_lists.each do |purchase_list|
       inventory = Inventory.find_by(product_id: purchase_list.product.id)
@@ -132,12 +150,37 @@ class PurchasesController < ApplicationController
     cash_register.update(balance: cash_register.balance - down_payment)
     # cria um registro no caixa
     CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: down_payment,
-                            note: "Compra de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{total_value}", cash_register_type: 2)
+                            note: "Compra de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{total_value}", cash_register_type: 2, expense_id:expense.id)
 
     purchase = Purchase.find_by(id: purchase_id)
     purchase.update(purchase_type: 0)
 
     redirect_to cash_registers_path
+  end
+
+  def filter_purchase
+    product_name=params[:product_name]
+    @purchase = Purchase.find_by(id: params[:purchase_id])
+
+    # Lógica para filtrar produtos baseados no nome
+    if product_name.present?
+      case
+      when product_name.start_with?('VIGA')
+        @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
+      when product_name.start_with?('CAIBRO')
+        @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
+      when product_name.start_with?('FRECHAL')
+        @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
+      when product_name.start_with?('RIPA')
+        @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
+      else
+        @products = Product.all.order(created_at: :asc)
+      end
+    else
+      @products = Product.all.order(created_at: :asc)
+    end
+    @purchase_lists = PurchaseList.order(created_at: :asc)
+    render turbo_stream: turbo_stream.update('purchaselist',partial: 'purchases/purchase_cart', locals: { purchaselist: @purchase_lists, products:@products })
   end
 
   private

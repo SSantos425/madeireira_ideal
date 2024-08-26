@@ -2,8 +2,11 @@
 
 import "@hotwired/turbo-rails"
 import "controllers"
-import "./adminlte/plugins/jquery/jquery.min.js"
-import "./adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"
+import 'jquery'
+import 'bootstrap'
+import 'adminlte'
+// import "./adminlte/plugins/jquery/jquery.min.js"
+// import "./adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"
 //import "./adminlte/plugins/sweetalert2/sweetalert2.all.min.js"
 //import "./adminlte/plugins/toastr/toastr.min.js"
 import Swal from 'sweetalert2';

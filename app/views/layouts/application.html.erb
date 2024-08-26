@@ -8,23 +8,20 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <%= javascript_include_tag "adminlte/plugins/jquery/jquery.min", "data-turbolinks-track": "reload" %>
-    <%= javascript_include_tag "adminlte/plugins/bootstrap/js/bootstrap.bundle.min", "data-turbolinks-track": "reload" %>
-    <%= javascript_include_tag "adminlte/dist/js/adminlte.min", "data-turbolinks-track": "reload" %>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+  </head>
 
   <body class="hold-transition layout-top-nav">
     <div class="wrapper">
       <%= render "layouts/header" %>
-      <div class="content-wrapper">
+      <div class="content-wrapper"> 
         <div class="content-header">
-          <div class="container">
-            <%= yield %>
-             
+          <div class="container">     
+            <%= yield %>    
           </div>
-        </div>
+        </div>      
       </div>
-    </div>
-  
+    <div>
+    
+  </body>
 </html>

@@ -21,4 +21,14 @@ production:
   url: <%= ENV['DATABASE_URL'] %>
   database: madeireira_ideal_production
   username: madeireira_ideal
-  password: <%= ENV["MADEIREIRA_IDEAL_DATABASE_PASSWORD"] %>
+  # password: <%= ENV["MADEIREIRA_IDEAL_DATABASE_PASSWORD"] %>
+  password: madeireira_ideal
+
+
+# acessar localmente o ambiente de produção
+# production:
+#   <<: *default
+#   url: <%= ENV['DATABASE_URL'] %>
+#   database: madeireira_ideal_production
+#   username: madeireira_ideal
+#   password: madeireira_ideal

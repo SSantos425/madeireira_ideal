@@ -1,6 +1,5 @@
 <div style="display: flex; justify-content: center;">
   <div class="card">
-   
     <div class="card-header">
       <strong>Data:</strong> <%= @cart.created_at.strftime("%d/%m/%Y") %> | <!-- Mostra apenas a data -->
       <strong>Hora:</strong> <%= @cart.created_at.strftime("%H:%M:%S") %> <!-- Mostra apenas a hora -->
@@ -18,11 +17,20 @@
         <% end %>
       </ul>
     </div>
-    
-    
-    
-    
-
   </div>
-  
 </div>
+
+<% if flash[:notice].present? %>
+  <%= content_tag :div, flash[:notice], id: "flash-notice", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'success',
+        title: document.getElementById('flash-notice').innerText,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% end %>

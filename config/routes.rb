@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'cash_registers#new'
+  root 'cash_registers#index'
   devise_for :users
 
   resources :products

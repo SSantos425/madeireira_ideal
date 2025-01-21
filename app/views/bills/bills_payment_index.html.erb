@@ -30,7 +30,7 @@
                 <div class="form-inline">
                   <%= form_with(url: payment_bills_path, local: true) do |f| %>
                     <%= f.hidden_field :bill_payment_id, value: bill_payment.id %>
-                    <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
+                    <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)", min: 0 %>
                     <%= f.submit "Pagar", class: "btn btn-primary btn-sm mr-1" %>
                   <% end %>
                   <td><%= link_to "Detalhes", purchase_path(bill_payment.purchase), class: "btn btn-warning btn-sm", data: { turbo: false } %></td>

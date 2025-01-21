@@ -1,4 +1,6 @@
 <!-- Carrinho do Cliente -->
+
+
 <div class="card card-primary">
   <div class="card-header">
     <div class="float-left">
@@ -44,98 +46,97 @@
       </tbody>
     </table>
 
-    <div class="mt-3"> <!-- Espaçamento vertical -->
-      <div class="form-inline">
-        <%= form_with(url: orderable_discount_or_addition_path) do |f| %>
-          <%= f.hidden_field :client_id, value:@client.id  %>
-          <%= f.hidden_field :cart_id , value:@cart.id%>
-          <%= f.number_field :quantity, step: 0.1, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
-          <%= f.submit "Aplicar Desconto", name: "discount", class: "btn btn-primary btn-sm mr-1" %>
-          <%= f.submit "Aplicar Acréscimo", name: "addition", class: "btn btn-warning btn-sm"  %>
-        <% end %>
-      </div>
-    </div>
 
-    <% if @cart.discount > 0 %>
-      <%= "Desconto#{@cart.discount} " %>
-      <div class="card-footer mt-3">
-        <div style="display: flex; justify-content:space-between;">
-          <div class="mt-2">
-            <strong>TOTAL:</strong> <%= number_to_currency(@cart.total - @cart.discount, unit: 'R$', separator: ',', delimiter: '.') %>
-        <%= link_to sell_cart_path(cart_balance:@cart.total - @cart.discount), class: "btn btn-success btn-sm", data: { turbo: false } do %>
-          <i class="fas fa-cart-plus ml-1"></i> A VISTA 
-        <% end %>
-          </div>
-          
-          <div class="mt-1">
-            <div class="form-inline">
-              <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
-                <%= f.hidden_field :cart_balance, value:@cart.total  %>
-                <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
-                <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
-                <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
-              <% end %>
-            </div>
-          </div>
+    <% if @cart.total > 0 %>
+      <div class="mt-3"> <!-- Espaçamento vertical -->
+        <div class="form-inline">
+          <%= form_with(url: orderable_discount_or_addition_path) do |f| %>
+            <%= f.hidden_field :client_id, value:@client.id  %>
+            <%= f.hidden_field :cart_id , value:@cart.id%>
+            <%= f.number_field :quantity, step: 0.1, class: "form-control mr-1", placeholder: "Quantidade (R$)", min: 0 %>
+            <%= f.submit "Aplicar Desconto", name: "discount", class: "btn btn-primary btn-sm mr-1" %>
+            <%= f.submit "Aplicar Acréscimo", name: "addition", class: "btn btn-warning btn-sm"  %>
+          <% end %>
         </div>
-
       </div>
-    <%elsif @cart.addition > 0 %>
-      <%= "Acrescimo#{@cart.addition}" %>
-      <div class="card-footer mt-3">
-        <div style="display: flex; justify-content:space-between;">
-          <div class="mt-2">
-            <strong>TOTAL:</strong> <%= number_to_currency(@cart.total + @cart.addition, unit: 'R$', separator: ',', delimiter: '.') %>
-        <%= link_to sell_cart_path(cart_balance:@cart.total + @cart.addition), class: "btn btn-success btn-sm", data: { turbo: false } do %>
-          <i class="fas fa-cart-plus ml-1"></i> A VISTA 
-        <% end %>
-          </div>
-          
-          <div class="mt-1">
-            <div class="form-inline">
-              <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
-                <%= f.hidden_field :cart_balance, value:@cart.total  %>
-                <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
-                <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
-                <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
-              <% end %>
+      <% if @cart.discount > 0 %>
+        <%= "Desconto#{@cart.discount} " %>
+        <div class="card-footer mt-3">
+          <div style="display: flex; justify-content:space-between;">
+            <div class="mt-2">
+              <strong>TOTAL:</strong> <%= number_to_currency(@cart.total - @cart.discount, unit: 'R$', separator: ',', delimiter: '.') %>
+          <%= link_to sell_cart_path(cart_balance:@cart.total - @cart.discount), class: "btn btn-success btn-sm", data: { turbo: false } do %>
+            <i class="fas fa-cart-plus ml-1"></i> A VISTA 
+          <% end %>
             </div>
-          </div>
-        </div>
-
-      </div>
-    <% else %>
-      <div class="card-footer mt-3">
-        <div style="display: flex; justify-content:space-between;">
-          <div class="mt-2">
-            <strong>TOTAL:</strong> <%= number_to_currency(@cart.total, unit: 'R$', separator: ',', delimiter: '.') %>
-          
             
-            <%= link_to "A vista", sell_cart_path(cart_balance:@cart.total), class:"btn btn-success btn-sm mr-1", data: { turbo: false }%>
+            <div class="mt-1">
+              <div class="form-inline">
+                <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
+                  <%= f.hidden_field :cart_balance, value:@cart.total  %>
+                  <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)", min: 0 %>
+                  <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
+                  <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
+                <% end %>
+              </div>
+            </div>
           </div>
-          
-          <div class="mt-1">
-            <div class="form-inline">
-              <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
-                <%= f.hidden_field :cart_balance, value:@cart.total  %>
-                <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
-                <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
-                <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
-              <% end %>
+
+        </div>
+      <%elsif @cart.addition > 0 %>
+        <%= "Acrescimo#{@cart.addition}" %>
+        <div class="card-footer mt-3">
+          <div style="display: flex; justify-content:space-between;">
+            <div class="mt-2">
+              <strong>TOTAL:</strong> <%= number_to_currency(@cart.total + @cart.addition, unit: 'R$', separator: ',', delimiter: '.') %>
+          <%= link_to sell_cart_path(cart_balance:@cart.total + @cart.addition), class: "btn btn-success btn-sm", data: { turbo: false } do %>
+            <i class="fas fa-cart-plus ml-1"></i> A VISTA 
+          <% end %>
+            </div>
+            
+            <div class="mt-1">
+              <div class="form-inline">
+                <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
+                  <%= f.hidden_field :cart_balance, value:@cart.total  %>
+                  <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)", min: 0 %>
+                  <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
+                  <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      <% else %>
+        <div class="card-footer mt-3">
+          <div style="display: flex; justify-content:space-between;">
+            <div class="mt-2">
+              <strong>TOTAL:</strong> <%= number_to_currency(@cart.total, unit: 'R$', separator: ',', delimiter: '.') %>
+            
+              
+              <%= link_to "A vista", sell_cart_path(cart_balance:@cart.total, cart_client:@client.id), class:"btn btn-success btn-sm mr-1", data: { turbo: false }%>
+            </div>
+            
+            <div class="mt-1">
+              <div class="form-inline">
+                <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
+                  <%= f.hidden_field :cart_balance, value:@cart.total  %>
+                  <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)", min: 0 %>
+                  <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
+                  <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
-
-      </div>
-    <% end %>
-
-    
-    
+      <% end %>
+    <%else%>
+      <p style="display: flex; justify-content: center; align-items: center; font-size: 18px; color: #333; font-weight: bold; padding: 10px; background-color: #add8e6; border-radius: 8px; border: 2px solid #87ceeb; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); margin: 20px 0;">
+        <i class="fas fa-cart-plus" style="margin-right: 10px;"></i> Selecione uma quantidade e clique em "incluir no carrinho de venda" para adicionar um produto ao carrinho
+      </p>
+    <%end%>
   </div>
 </div>
-
-
-
 
 <div class="card card-primary">
   <div class="card-header">
@@ -150,11 +151,6 @@
     <%= button_to "Todos", filter_path(product_name: nil, client_id: @client.id), class: "btn btn-primary" %>
   </div>
   
-  
-  
-  
-  
-
   <div class="card-body">
     <table class="table table-bordered table-hover mt-3">
       <thead>
@@ -171,14 +167,14 @@
             <tr>
               <td><%= product.name %></td>
               <td><%= product.unity %></td>
-              <td><%= number_to_currency(product.sale_price, unit: 'R$', separator: ',', delimiter: '.') %></td>
+              <td><%= product.sale_price %></td>
               <td>
                 <div class="d-flex">
                   <%= form_with(url: cart_orderable_path) do |form| %>
                     <%= form.hidden_field :client_id, value: @client.id %>
                     <%= form.hidden_field :product_id, value: product.id %>
                     <div class="d-flex align-items-center">
-                      <%= form.number_field :quantity, step: 0.1, placeholder: 'Quantidade', class:"form-control mr-1" %>
+                      <%= form.number_field :quantity, step: 0.1, placeholder: 'Quantidade', class:"form-control mr-1", min: 0 %>
                       <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
                         <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
                       <% end %>
@@ -194,3 +190,57 @@
   </div>
 </div>
 
+
+<% if flash[:notice].present? %>
+  <%= content_tag :div, flash[:notice], id: "flash-notice", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'success',
+        title: document.getElementById('flash-notice').innerText,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% elsif flash[:alert].present? %>
+  <%= content_tag :div, flash[:alert], id: "flash-alert", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'error',
+        title: document.getElementById('flash-alert').innerText,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% elsif flash[:warning].present? %>
+  <%= content_tag :div, flash[:warning], id: "flash-warning", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'warning',
+        title: document.getElementById('flash-warning').innerText,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% elsif flash[:error].present? %>
+  <%= content_tag :div, flash[:error], id: "flash-error", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'error',
+        title: document.getElementById('flash-error').innerText,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% end %>

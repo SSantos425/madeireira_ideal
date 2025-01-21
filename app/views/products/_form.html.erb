@@ -24,7 +24,7 @@
 
           <div class="form-group">
             <%= form.label :sale_price, "Preço de Venda" %>
-            <%= form.number_field :sale_price, step: 0.01, class: 'form-control', placeholder: 'Preço de Venda' %>
+            <%= form.number_field :sale_price, step: 0.1, class: 'form-control', placeholder: 'Preço de Venda', min: 0 %>
             <% @product.errors.full_messages_for(:sale_price).each do |message| %>
               <div style="color: red;"><%= "Campo não preenchido"%></div>
             <% end %>
@@ -32,7 +32,7 @@
 
           <div class="form-group">
             <%= form.label :purchase_price, "Preço de Compra" %>
-            <%= form.number_field :purchase_price, step: 0.01, class: 'form-control', placeholder: 'Preço de Compra ' %>
+            <%= form.number_field :purchase_price, step: 0.1, class: 'form-control', placeholder: 'Preço de Compra', min: 0 %>
             <% @product.errors.full_messages_for(:purchase_price).each do |message| %>
               <div style="color: red;"><%= "Campo não preenchido"%></div>
             <% end %>

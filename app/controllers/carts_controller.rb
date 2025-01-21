@@ -122,7 +122,8 @@ class CartsController < ApplicationController
   
       check_cart = Cart.where(balance: 0)
       check_cart.destroy_all
-      redirect_to cash_registers_path
+      flash[:notice] = "Venda Efetuada!"
+      redirect_to new_cart_path
     end
   end
 

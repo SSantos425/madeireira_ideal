@@ -25,7 +25,7 @@
             <div>
               <%= form_with(url: adjust_all_sale_purchase_prices_path, method: :patch) do |f| %>
                 <div class="form-group">
-                  <%= f.number_field :sale_percentage, placeholder: "Ex: Digite: 5, para aumentar/reduzir em 5%", step: 0.01, class: "form-control mt-2" %>
+                  <%= f.number_field :sale_percentage, placeholder: "Ex: Digite: 5, para aumentar/reduzir em 5%", step: 0.1, class: "form-control mt-2", min: 0 %>
 
                   <div class="row mt-2">
                     <%= f.submit "Aumentar preço de Venda", name: "increase_sale_percentage", class: "btn btn-block btn-primary ", data: { turbo_confirm: 'Tem certeza que deseja aumentar o preço de venda?' } %>
@@ -52,7 +52,7 @@
             <div>
               <%= form_with(url: single_item_price_adjust_path, method: :patch) do |f| %>
                 <div class="form-group">
-                  <%= f.number_field :adjust_percentage_value, placeholder: "Ex: Digite: 5, para aumentar/reduzir em 5%", step: 0.01, class: "form-control mt-2" %>
+                  <%= f.number_field :adjust_percentage_value, placeholder: "Ex: Digite: 5, para aumentar/reduzir em 5%", step: 0.1, class: "form-control mt-2", min: 0 %>
                     <%= f.select :discount_or_addition, [["Acréscimo", "Acréscimo"], ["Desconto", "Desconto"]], { prompt: "Selecione Acréscimo ou Desconto" }, class: "form-control mt-2" %>
                     <%= f.select :purchase_or_sell, [["Venda", "Venda"], ["Compra", "Compra"]], { prompt: "Selecione Venda ou Compra" }, class: "form-control mt-2" %>
                     <%= f.select :product_name, [["Viga", "Viga"], ["Caibro", "Caibro"], ["Frechal", "Frechal"], ["Ripa", "Ripa"]], { prompt: "Selecione o Item" }, class: "form-control mt-2" %>

@@ -13,7 +13,7 @@
         <%= form.hidden_field :user_id ,value:current_user.id%>
         <div class="form-group">
             <%= form.label :balance, "Valor" %>
-            <%= form.number_field :balance, step:0.01, class: 'form-control', placeholder: "Valor"%>
+            <%= form.number_field :balance, step:0.1, class: 'form-control', placeholder: "Valor", min: 0%>
 
         </div>
 
@@ -27,7 +27,7 @@
 
         <div class="form-group">
           <%= form.label :cash_replenishment, "Reforço" %>
-          <%= form.number_field :cash_replenishment, step:0.01, class: 'form-control', placeholder: "reforco"  %>
+          <%= form.number_field :cash_replenishment, step:0.1, class: 'form-control', placeholder: "reforco", min: 0  %>
         </div>
 
 

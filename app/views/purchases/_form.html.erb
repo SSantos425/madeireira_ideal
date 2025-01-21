@@ -22,7 +22,7 @@
 
           <div class="form-group">
             <%= form.label :nota_number, "Número da Nota" %>
-            <%= form.number_field :nota_number, step:0.01, class: 'form-control', placeholder: "Número da Nota" %>
+            <%= form.number_field :nota_number, step:0.01, class: 'form-control', placeholder: "Número da Nota", min: 0 %>
             <% @purchase.errors.full_messages_for(:nota_number).each do |message| %>
               <div style="color: red;"><%= message %></div>
             <% end %>
@@ -30,7 +30,7 @@
 
           <div class="form-group">
             <%= form.label :serie, "Série" %>
-            <%= form.number_field :serie, step:0.01, class: 'form-control', placeholder: "Série" %>
+            <%= form.number_field :serie, step:0.01, class: 'form-control', placeholder: "Série", min: 0 %>
             <% @purchase.errors.full_messages_for(:serie).each do |message| %>
               <div style="color: red;"><%= message %></div>
             <% end %>
@@ -56,7 +56,7 @@
         <div class="col-md-5">
           <div class="form-group">
             <%= form.label :total_nota, "Total da Nota" %>
-            <%= form.number_field :total_nota, step:0.01, class: 'form-control', placeholder: "Total da Nota" %>
+            <%= form.number_field :total_nota, step:0.01, class: 'form-control', placeholder: "Total da Nota", min: 0 %>
             <% @purchase.errors.full_messages_for(:total_nota).each do |message| %>
               <div style="color: red;"><%= message %></div>
             <% end %>
@@ -64,7 +64,7 @@
 
           <div class="form-group">
             <%= form.label :total_products, "Total de Produtos" %>
-            <%= form.number_field :total_products, step:0.01, class: 'form-control', placeholder: "Total de Produtos" %>
+            <%= form.number_field :total_products, step:0.01, class: 'form-control', placeholder: "Total de Produtos", min: 0 %>
             <% @purchase.errors.full_messages_for(:total_products).each do |message| %>
               <div style="color: red;"><%= message %></div>
             <% end %>
@@ -72,7 +72,7 @@
 
           <div class="form-group">
             <%= form.label :discount, "Desconto" %>
-            <%= form.number_field :discount, value:0, class: 'form-control'%>
+            <%= form.number_field :discount, value:0, class: 'form-control', min: 0%>
             <% @purchase.errors.full_messages_for(:discount).each do |message| %>
               <div style="color: red;"><%= message %></div>
             <% end %>
@@ -80,7 +80,7 @@
 
           <div class="form-group">
             <%= form.label :addition, "Acréscimos" %>
-            <%= form.number_field :additon, value:0, class: 'form-control'%>
+            <%= form.number_field :additon, value:0, class: 'form-control', min: 0%>
             <% @purchase.errors.full_messages_for(:additon).each do |message| %>
               <div style="color: red;"><%= message %></div>
             <% end %>
@@ -88,7 +88,7 @@
 
           <div class="form-group">
             <%= form.label :tax, "Imposto" %>
-            <%= form.number_field :tax, step:0.01, class: 'form-control', placeholder: "Imposto" %>
+            <%= form.number_field :tax, step:0.01, class: 'form-control', placeholder: "Imposto", min: 0 %>
             <% @purchase.errors.full_messages_for(:tax).each do |message| %>
               <div style="color: red;"><%= message %></div>
             <% end %>
@@ -96,7 +96,7 @@
 
           <div class="form-group">
             <%= form.label :shipping, "Frete" %>
-            <%= form.number_field :shipping, step:0.01, class: 'form-control', placeholder: "Frete" %>
+            <%= form.number_field :shipping, step:0.01, class: 'form-control', placeholder: "Frete", min: 0 %>
             <% @purchase.errors.full_messages_for(:shipping).each do |message| %>
               <div style="color: red;"><%= message %></div>
             <% end %>

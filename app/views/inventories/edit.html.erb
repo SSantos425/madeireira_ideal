@@ -13,7 +13,7 @@
 
           <div class="form-group">
             <%= form.label :quantity, "Quantidade" %>
-              <%= form.number_field :quantity, step:0.01, class: 'form-control' %>
+              <%= form.number_field :quantity, step:0.1, class: 'form-control', min: 0 %>
           </div>
           <%= form.submit 'Atualizar' , class: 'btn btn-block btn-primary' %>
             <% end %>

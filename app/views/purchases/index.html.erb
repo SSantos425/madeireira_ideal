@@ -24,10 +24,10 @@
             <td><%= purchase.supplier.name %></td>
             <td><%= purchase.nota_number %></td>
             <td><%= purchase.serie %></td>
-            <td><%= purchase.total_nota %></td>
-            <td><%= purchase.total_products %></td>
-            <td><%= purchase.discount %></td>
-            <td><%= purchase.additon %></td>
+            <td><%= number_to_currency(purchase.total_nota, unit: 'R$', separator: ',', delimiter: '.') %></td>
+            <td><%= number_to_currency(purchase.total_products, unit: 'R$', separator: ',', delimiter: '.') %></td>
+            <td><%= number_to_currency(purchase.discount, unit: 'R$', separator: ',', delimiter: '.') %></td>
+            <td><%= number_to_currency(purchase.additon, unit: 'R$', separator: ',', delimiter: '.') %></td>
             <td>
               <% if purchase.purchase_type == 1 %>
                 <%= link_to "Incluir Produtos", purchase_path(purchase), class: "btn btn-primary btn-sm", data: { turbo: false } %>

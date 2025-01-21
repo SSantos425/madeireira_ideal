@@ -6,6 +6,8 @@
           <%="Saldo do dia: #{number_to_currency(@cash_register_last.balance, unit: 'R$' , separator: ',' ,
             delimiter: '.' )}" %>
         </h1>
+
+        <h1> <%= Date.today.strftime('%d/%m/%Y') %></h1>
         <%= form_with(url: close_cash_register_path) do |f| %>
           <%= f.hidden_field :cash_register_id, value: @cash_register_last.id %>
           <%= f.hidden_field :date, value: @cash_register_last.date %>

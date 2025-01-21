@@ -35,7 +35,11 @@ class CartsController < ApplicationController
     current_orderable = @cart.orderables.find_by(product_id: product_id)
 
     if current_orderable.nil?
-      Orderable.create(product_id: product_id, cart_id: @cart.id, client_id: @client.id, quantity: quantity)
+      if quantity.to_f > Inventory.find(product_id).quantity
+        flash.now[:warning] = "Quantidade indisponivel no estoque."
+      else
+        Orderable.create(product_id: product_id, cart_id: @cart.id, client_id: @client.id, quantity: quantity)
+      end
     else
       current_orderable.update(quantity: quantity)
     end
@@ -100,21 +104,26 @@ class CartsController < ApplicationController
     expense = Expense.find_by(name:"VENDAS DE MERCADORIAS")
 
     cart_orderables = Orderable.where(cart_id: cart_last.id)
-    cart_orderables.each do |cart_orderable|
-      inventory = Inventory.find_by(product_id: cart_orderable.product.id)
-      inventory.update(quantity: inventory.quantity - cart_orderable.quantity)
+    if cart_orderables.empty?
+      flash[:error] = "Carrinho Vazio!"
+      redirect_to request.referer
+    else
+      cart_orderables.each do |cart_orderable|
+        inventory = Inventory.find_by(product_id: cart_orderable.product.id)
+        inventory.update(quantity: inventory.quantity - cart_orderable.quantity)
+      end
+  
+      # atualiza o valor do caixa
+      CashRegister.last.update(balance: CashRegister.last.balance + cart_last.balance)
+  
+      # cria um registro no caixa
+      CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: cart_last.balance,
+                              note: 'Venda de Mercadoria(Madeira)', cash_register_type: 1,expense_id: expense.id)
+  
+      check_cart = Cart.where(balance: 0)
+      check_cart.destroy_all
+      redirect_to cash_registers_path
     end
-
-    # atualiza o valor do caixa
-    CashRegister.last.update(balance: CashRegister.last.balance + cart_last.balance)
-
-    # cria um registro no caixa
-    CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: cart_last.balance,
-                            note: 'Venda de Mercadoria(Madeira)', cash_register_type: 1,expense_id: expense.id)
-
-    check_cart = Cart.where(balance: 0)
-    check_cart.destroy_all
-    redirect_to cash_registers_path
   end
 
   def orderable_discount_or_addition

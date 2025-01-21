@@ -27,7 +27,7 @@
                   <%= form_with(url: update_orderable_item_path) do |f| %>
                     <%= f.hidden_field :client_id, value: @client.id %>
                     <%= f.hidden_field :orderable_id, value: orderable.id %>
-                    <%= f.number_field :quantity, step: 0.01, value: orderable.quantity, class: "form-control" %>
+                    <%= f.number_field :quantity, step: 0.1, value: orderable.quantity, class: "form-control", min: 0 %>
                     <%= f.submit "Atualizar", class: "btn btn-success btn-sm mr-1" %>
                   <% end %>
                   <%= form_with(url: remove_orderable_item_path) do |f| %>
@@ -49,7 +49,7 @@
         <%= form_with(url: orderable_discount_or_addition_path) do |f| %>
           <%= f.hidden_field :client_id, value:@client.id  %>
           <%= f.hidden_field :cart_id , value:@cart.id%>
-          <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
+          <%= f.number_field :quantity, step: 0.1, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
           <%= f.submit "Aplicar Desconto", name: "discount", class: "btn btn-primary btn-sm mr-1" %>
           <%= f.submit "Aplicar Acréscimo", name: "addition", class: "btn btn-warning btn-sm"  %>
         <% end %>
@@ -71,7 +71,7 @@
             <div class="form-inline">
               <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
                 <%= f.hidden_field :cart_balance, value:@cart.total  %>
-                <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+                <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
                 <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
                 <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
               <% end %>
@@ -95,7 +95,7 @@
             <div class="form-inline">
               <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
                 <%= f.hidden_field :cart_balance, value:@cart.total  %>
-                <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+                <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
                 <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
                 <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
               <% end %>
@@ -118,7 +118,7 @@
             <div class="form-inline">
               <%= form_with url: foward_sell_cart_path, method: :post, data: { turbo: false } do |f|%>
                 <%= f.hidden_field :cart_balance, value:@cart.total  %>
-                <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+                <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
                 <%= f.text_field :obs, class: "form-control mr-1", placeholder: "Cliente" %>
                 <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
               <% end %>
@@ -171,14 +171,14 @@
             <tr>
               <td><%= product.name %></td>
               <td><%= product.unity %></td>
-              <td><%= product.sale_price %></td>
+              <td><%= number_to_currency(product.sale_price, unit: 'R$', separator: ',', delimiter: '.') %></td>
               <td>
                 <div class="d-flex">
                   <%= form_with(url: cart_orderable_path) do |form| %>
                     <%= form.hidden_field :client_id, value: @client.id %>
                     <%= form.hidden_field :product_id, value: product.id %>
                     <div class="d-flex align-items-center">
-                      <%= form.number_field :quantity, step: 0.01, placeholder: 'Quantidade', class:"form-control mr-1" %>
+                      <%= form.number_field :quantity, step: 0.1, placeholder: 'Quantidade', class:"form-control mr-1" %>
                       <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
                         <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
                       <% end %>

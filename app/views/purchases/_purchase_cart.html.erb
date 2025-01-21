@@ -24,14 +24,14 @@
         <tr>
           <td><%= @purchase.nota_number %></td>
           <td><%= @purchase.serie %></td>
-          <td><%= @purchase.issue_date%></td>
-          <td><%= @purchase.receipt_date%></td>
-          <td><%= @purchase.total_nota %></td>
-          <td><%= @purchase.total_products %></td>
-          <td><%= @purchase.discount %></td>
-          <td><%= @purchase.additon %></td>
-          <td><%= @purchase.shipping %></td>
-          <td><%= @purchase.tax%></td>
+          <td><%= @purchase.issue_date.strftime("%d/%m/%Y") %></td>
+          <td><%= @purchase.receipt_date.strftime("%d/%m/%Y") %></td>
+          <td><%= number_to_currency(@purchase.total_nota, unit: 'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_currency(@purchase.total_products, unit: 'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_currency(@purchase.discount, unit: 'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_currency(@purchase.additon, unit: 'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_currency(@purchase.shipping, unit: 'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_currency(@purchase.tax, unit: 'R$', separator: ',', delimiter: '.') %></td>
         </tr>
       </tbody>
     </table>
@@ -54,13 +54,14 @@
               <tr>
                 <td><%= purchase_list.product.name %></td>
                 <td><%= purchase_list.product.unity %></td>
-                <td><%= purchase_list.product.purchase_price %></td>
+                <td><%= number_to_currency(purchase_list.product.purchase_price, unit: 'R$', separator: ',', delimiter: '.') %></td>
+
                 <td>
                   <div class="form-inline">
                     <%= form_with(url: update_item_purchaselist_cart_path) do |f| %> 
                       <%= f.hidden_field :purchase_list,value:purchase_list.id %>                  
                       <%= f.hidden_field :purchase_id, value:purchase_list.purchase_id %> 
-                      <%= f.number_field :quantity, step:0.01, value: purchase_list.quantity, min: 0, class: "form-control"%>           
+                      <%= f.number_field :quantity, step:0.1, value: purchase_list.quantity, min: 0, class: "form-control"%>           
                       <%= f.submit "Atualizar", class: "btn btn-success btn-sm mr-1" %>
                     <% end %>
         
@@ -71,8 +72,7 @@
                     <% end %>
                   </div>
                 </td>
-
-                <td><%= purchase_list.total_compra_parcial %></td>
+                <td><%= number_to_currency(purchase_list.total_compra_parcial, unit: 'R$', separator: ',', delimiter: '.') %></td>
               </tr>
             <% end %>
           <% end %>
@@ -84,7 +84,7 @@
       <div class="form-inline">
         <%= form_with(url: purchase_discount_or_addition_path) do |f| %>
           <%= f.hidden_field :purchase_id, value:@purchase.id%>
-          <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)" %>
+          <%= f.number_field :quantity, step: 0.1, class: "form-control mr-1", placeholder: "Quantidade (R$)", min: 0 %>
           <%= f.submit "Aplicar Desconto", name: "discount", class: "btn btn-primary btn-sm mr-1" %>
           <%= f.submit "Aplicar Acréscimo", name: "addition", class: "btn btn-warning btn-sm"  %>
         <% end %>
@@ -115,7 +115,7 @@
             <%= form_with url: foward_purchase_path, method: :post, data: { turbo: false } do |f|%>
               <%= f.hidden_field :purchase_id, value: @purchase.id %>
               <%= f.hidden_field :total_value, value: @purchase.total_compra(@purchase.id) - @purchase.discount %>
-              <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+              <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)", min: 0 %>
               <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
             <% end %>
           </div>
@@ -145,7 +145,7 @@
             <%= form_with url: foward_purchase_path, method: :post, data: { turbo: false } do |f|%>
               <%= f.hidden_field :purchase_id, value: @purchase.id %>
               <%= f.hidden_field :total_value, value: @purchase.total_compra(@purchase.id) + @purchase.additon %>
-              <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+              <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)", min: 0 %>
               <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
             <% end %>
           </div>
@@ -173,7 +173,7 @@
           <%= form_with url: foward_purchase_path, method: :post, data: { turbo: false } do |f|%>
             <%= f.hidden_field :purchase_id, value: @purchase.id %>
             <%= f.hidden_field :total_value, value: @purchase.total_compra(@purchase.id) %>
-            <%= f.number_field :down_payment, step: 0.01, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)" %>
+            <%= f.number_field :down_payment, step: 0.1, class: "form-control mr-1", placeholder: "Valor de Entrada (R$)", min: 0 %>
             <%= f.submit "A Prazo", class: "btn btn-primary btn-sm" %>
           <% end %>
         </div>
@@ -211,13 +211,14 @@
             <tr>
               <td><%= product.name %></td>
               <td><%= product.unity %></td>
-              <td><%= product.sale_price %></td>
+              <td><%= number_to_currency(product.sale_price, unit: 'R$', separator: ',', delimiter: '.') %></td>
+
               <td>
                 <div class="d-flex">
                   <%= form_with(url: include_products_path) do |form| %>
                         <%= form.hidden_field :purchase_id, value: @purchase.id %>
                         <%= form.hidden_field :product_id, value: product.id %>
-                        <%= form.number_field :quantity, step:0.01, placeholder: 'Quantidade' %>
+                        <%= form.number_field :quantity, step:0.1, placeholder: 'Quantidade', min: 0 %>
                         <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
                           Incluir na compra
                         <% end %>

@@ -107,13 +107,19 @@
   </div>
 
 <%else%>
-
+  
   <div class="card card-primary">
 
     <div class="card-header d-flex justify-content-between align-items-center">
       <div>
         <strong>
-          <%= "Saldo de Abertura: #{number_to_currency(@cash_register_last.open_value, unit: 'R$' , separator: ',' , delimiter: '.' )}"
+          <%= "Data: #{Date.today.strftime('%d/%m/%Y')}" %>
+        </strong>
+      </div>
+
+      <div>
+        <strong>
+          <%= "Saldo de Fechamento: #{number_to_currency(@cash_register_last.close_value, unit: 'R$' , separator: ',' , delimiter: '.' )}"
             %>
         </strong>
       </div>

@@ -7,6 +7,7 @@ class BillsController < ApplicationController
   def receive_bills
     bill_id = params[:bill_id]
     quantity = params[:quantity].to_f
+    expense = Expense.find_by(name:"VENDAS DE MERCADORIAS") #VERIFICAR SE ESTA CORRETO
 
     bill = BillsReceive.find_by(id: bill_id)
     bill.update(remaining_payment: bill.remaining_payment - quantity)
@@ -16,7 +17,8 @@ class BillsController < ApplicationController
 
     # cria um registro no caixa
     CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: quantity,
-                            note: "Contas a receber - Cliente: #{bill.obs} - Valor R$:#{quantity} - Falta pagar R$:#{bill.remaining_payment}", cash_register_type: 1)
+                            note: "Contas a receber - Cliente: #{bill.obs} - Valor R$:#{quantity} - Falta pagar R$:#{bill.remaining_payment}",
+                            cash_register_type: 1, expense_id:expense.id)
 
     redirect_to bills_path
   end
@@ -24,6 +26,7 @@ class BillsController < ApplicationController
   def payment_bills
     bill_payment_id = params[:bill_payment_id]
     quantity = params[:quantity].to_f
+    expense = Expense.find_by(name:"VENDAS DE MERCADORIAS") #VERIFICAR SE ESTA CORRETO
 
     bill_payment = BillsPayment.find(bill_payment_id)
 
@@ -34,7 +37,10 @@ class BillsController < ApplicationController
 
     # cria um registro no caixa
     CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: quantity,
-                            note: "Contas a Pagar - Fornecedor: #{bill_payment.purchase.supplier.name} - Valor R$:#{quantity} - Falta pagar R$:#{bill_payment.remaining_payment}", cash_register_type: 2)
+                            note: "Contas a Pagar - Fornecedor: #{bill_payment.purchase.supplier.name} - Valor R$:#{quantity} - Falta pagar R$:#{bill_payment.remaining_payment}",
+                            cash_register_type: 0,expense_id:expense.id)
+
+
     redirect_to bills_payment_index_path
   end
 

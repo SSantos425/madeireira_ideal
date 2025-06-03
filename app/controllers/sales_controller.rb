@@ -18,6 +18,158 @@ class SalesController < ApplicationController
     @carts = Cart.where(date: params[:date])
   end
 
+  def report_month_sales
+    start_date = Date.today.beginning_of_month
+    end_date = Date.today.end_of_month
+
+    sold_carts = Cart.where(created_at: start_date..end_date).where("balance > 0")
+    orderables = Orderable.includes(:product).where(cart_id: sold_carts)
+    produtos = {}
+    totais_por_categoria = Hash.new(0)
+
+    orderables.each do |o|
+      produto = o.product
+      nome = produto.name
+      categoria =
+        if nome.upcase.include?("VIGA")
+          "VIGAS"
+        elsif nome.upcase.include?("CAIBRO")
+          "CAIBRO"
+        elsif nome.upcase.include?("FRECHAL")
+          "FRECHAL"
+        elsif nome.upcase.include?("RIPA")
+          "RIPA"
+        else
+          "OUTROS"
+        end
+
+      produtos[categoria] ||= {}
+      produtos[categoria][nome] ||= { quantidade: 0, valor: 0 }
+      produtos[categoria][nome][:quantidade] += o.quantity
+      produtos[categoria][nome][:valor] += o.quantity * produto.sale_price
+      totais_por_categoria[categoria] += o.quantity * produto.sale_price
+    end
+
+    pdf = Prawn::Document.new do |pdf|
+      ENV['LC_TIME'] = 'pt_BR.UTF-8'
+      mes_ano = Date.today.strftime('%B de %Y').capitalize
+      pdf.text "Relatório Mensal - #{mes_ano}", size: 18, style: :bold, align: :center
+      pdf.move_down 20
+
+      produtos.each do |categoria, itens|
+        pdf.text categoria, size: 14, style: :bold
+        data = [["Produto", "Quantidade", "Valor Total (R$)"]]
+
+        itens.each do |nome, dados|
+          valor_formatado = ActionController::Base.helpers.number_to_currency(
+            dados[:valor], unit: 'R$', separator: ',', delimiter: '.'
+          )
+          data << [nome, dados[:quantidade].to_s, valor_formatado]
+        end
+
+        pdf.table(data, header: true, row_colors: ["F0F0F0", "FFFFFF"], cell_style: { size: 10 })
+        pdf.move_down 15
+      end
+
+      pdf.move_down 20
+      pdf.text "Totais por Categoria:", size: 14, style: :bold
+      totais_por_categoria.each do |categoria, total|
+        total_formatado = ActionController::Base.helpers.number_to_currency(
+          total, unit: 'R$', separator: ',', delimiter: '.'
+        )
+        pdf.text "#{categoria}: #{total_formatado}", size: 12
+      end
+
+      pdf.move_down 10
+      total_geral = totais_por_categoria.values.sum
+      total_formatado = ActionController::Base.helpers.number_to_currency(
+        total_geral, unit: 'R$', separator: ',', delimiter: '.'
+      )
+      pdf.text "Total de Vendas: #{total_formatado}", size: 16, style: :bold, align: :right
+    end
+
+    send_data(pdf.render,
+      filename: "relatorio_mensal_#{Date.today.strftime('%Y_%m')}.pdf",
+      type: 'application/pdf')
+  end
+
+
+  def report_year_sales
+    start_date = Date.today.beginning_of_year
+    end_date = Date.today.end_of_year
+
+    sold_carts = Cart.where(created_at: start_date..end_date).where("balance > 0")
+    orderables = Orderable.includes(:product).where(cart_id: sold_carts)
+    produtos = {}
+    totais_por_categoria = Hash.new(0)
+
+    orderables.each do |o|
+      produto = o.product
+      nome = produto.name
+      categoria =
+        if nome.upcase.include?("VIGA")
+          "VIGAS"
+        elsif nome.upcase.include?("CAIBRO")
+          "CAIBRO"
+        elsif nome.upcase.include?("FRECHAL")
+          "FRECHAL"
+        elsif nome.upcase.include?("RIPA")
+          "RIPA"
+        else
+          "OUTROS"
+        end
+
+      produtos[categoria] ||= {}
+      produtos[categoria][nome] ||= { quantidade: 0, valor: 0 }
+      produtos[categoria][nome][:quantidade] += o.quantity
+      produtos[categoria][nome][:valor] += o.quantity * produto.sale_price
+      totais_por_categoria[categoria] += o.quantity * produto.sale_price
+    end
+
+    pdf = Prawn::Document.new do |pdf|
+      ENV['LC_TIME'] = 'pt_BR.UTF-8'
+      mes_ano = Date.today.strftime('%B de %Y').capitalize
+      pdf.text "Relatório Mensal - #{mes_ano}", size: 18, style: :bold, align: :center
+      pdf.move_down 20
+
+      produtos.each do |categoria, itens|
+        pdf.text categoria, size: 14, style: :bold
+        data = [["Produto", "Quantidade", "Valor Total (R$)"]]
+
+        itens.each do |nome, dados|
+          valor_formatado = ActionController::Base.helpers.number_to_currency(
+            dados[:valor], unit: 'R$', separator: ',', delimiter: '.'
+          )
+          data << [nome, dados[:quantidade].to_s, valor_formatado]
+        end
+
+        pdf.table(data, header: true, row_colors: ["F0F0F0", "FFFFFF"], cell_style: { size: 10 })
+        pdf.move_down 15
+      end
+
+      pdf.move_down 20
+      pdf.text "Totais por Categoria:", size: 14, style: :bold
+      totais_por_categoria.each do |categoria, total|
+        total_formatado = ActionController::Base.helpers.number_to_currency(
+          total, unit: 'R$', separator: ',', delimiter: '.'
+        )
+        pdf.text "#{categoria}: #{total_formatado}", size: 12
+      end
+
+      pdf.move_down 10
+      total_geral = totais_por_categoria.values.sum
+      total_formatado = ActionController::Base.helpers.number_to_currency(
+        total_geral, unit: 'R$', separator: ',', delimiter: '.'
+      )
+      pdf.text "Total de Vendas: #{total_formatado}", size: 16, style: :bold, align: :right
+    end
+
+    send_data(pdf.render,
+      filename: "relatorio_anual_#{Date.today.strftime('%Y_%m')}.pdf",
+      type: 'application/pdf')
+  end
+
+
   def download_pdf
     check_cart = Cart.where(balance: 0)
     check_cart.destroy_all

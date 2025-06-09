@@ -7,7 +7,7 @@
             delimiter: '.' )}" %>
         </h1>
 
-        <h1> <%= Date.today.strftime('%d/%m/%Y') %></h1>
+        <h1><%= @cash_register_last.date.strftime('%d/%m/%Y') %></h1>
         <%= form_with(url: close_cash_register_path) do |f| %>
           <%= f.hidden_field :cash_register_id, value: @cash_register_last.id %>
           <%= f.hidden_field :date, value: @cash_register_last.date %>
@@ -25,32 +25,31 @@
             <div class="card-body ">
               <%= form_with(url: replenishment_or_withdrawl_cash_register_path) do |f| %>
                 <%= f.hidden_field :cash_register_id, value: @cash_register_last.id %>
-                  <%= f.hidden_field :date, value: @cash_register_last.date %>
-                    <div class="form-group">
-                      <%= f.label :value, "Valor" %>
-                        <%= f.number_field :value, step:0.1, class: "form-control" , placeholder: "R$", min: 0
-                          %>
-                    </div>
+                <%= f.hidden_field :date, value: @cash_register_last.date %>
+                <div class="form-group">
+                  <%= f.label :value, "Valor" %>
+                    <%= f.number_field :value, step:0.1, class: "form-control" , placeholder: "R$", min: 0
+                      %>
+                </div>
 
-                    <div class="form-group">
-                      <%= f.label :notes, "Justificativa" %>
-                        <%= f.text_area :notes, class: "form-control" , placeholder: "Justificativa" %>
-                    </div>
+                <div class="form-group">
+                  <%= f.label :notes, "Justificativa" %>
+                    <%= f.text_area :notes, class: "form-control" , placeholder: "Justificativa" %>
+                </div>
 
-                    <div class="form-group">
-                      <%= f.label :account_plan_id, "Plano de Conta" %>
-                      <%= f.collection_select :account_plan_id, Expense.all, :id, :name, { prompt: "Selecione um Plano de Conta" }, class: "form-control" %>
-                    </div>
-                    
-
-                    <div class="row">
-                      <div class="col">
-                        <%= f.submit "Reforço", name: "replenishment", class: "btn btn-block btn-primary" %>
-                      </div>
-                      <div class="col">
-                        <%= f.submit "Retirada", name: "withdraw", class: "btn btn-block btn-danger" %>
-                      </div>
-                    </div>
+                <div class="form-group">
+                  <%= f.label :account_plan_id, "Plano de Conta" %>
+                  <%= f.collection_select :account_plan_id, Expense.all, :id, :name, { prompt: "Selecione um Plano de Conta" }, class: "form-control" %>
+                </div>
+                
+                <div class="row">
+                  <div class="col">
+                    <%= f.submit "Reforço", name: "replenishment", class: "btn btn-block btn-primary" %>
+                  </div>
+                  <div class="col">
+                    <%= f.submit "Retirada", name: "withdraw", class: "btn btn-block btn-danger" %>
+                  </div>
+                </div>
               <% end %>
             </div>
           </div>
@@ -59,61 +58,53 @@
 
         <div class="col-md-8">
           <h1>Reforços e Retiradas</h1>
-            <table class="table table-bordered table-hover mt-4">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Hora</th>
-                  <th>Valor</th>
-                  <th>Justificativa</th>
-                  <!--
-                  <th>Ações</th>
-                  -->
-                </tr>
-              </thead>
+          <table class="table table-bordered table-hover mt-4">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Valor</th>
+                <th>Justificativa</th>
+                <!--
+                <th>Ações</th>
+                -->
+              </tr>
+            </thead>
 
-              <tbody>
-                <% @cash_register_lists.each do |cash_register_list| %>
-                  <% if cash_register_list.date===@cash_register_last.date %>
-                    <tr>
-                      <td><%= cash_register_list.created_at.strftime("%d/%m/%Y") %></td> <!-- Mostra apenas a data -->
-                      <td><%= cash_register_list.created_at.strftime("%H:%M:%S") %></td> <!-- Mostra apenas a hora -->
+            <tbody>
+              <% @cash_register_lists.each do |cash_register_list| %>
+                <% if cash_register_list.date===@cash_register_last.date %>
+                  <tr>
+                    <td><%= cash_register_list.date.strftime("%d/%m/%Y") %></td>
+                    <td><%= cash_register_list.created_at.strftime("%H:%M:%S") %></td>
 
-                      <% if cash_register_list.cash_register_type===1 %>
-                        <td style="color: blue;">
-                          <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ +' , separator: ',' , delimiter: '.'
+                    <% if cash_register_list.cash_register_type===1 %>
+                      <td style="color: blue;">
+                        <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ +' , separator: ',' , delimiter: '.'
+                          )}" %>
+                      </td>
+                      <% else %>
+                        <td style="color: red;">
+                          <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ -' , separator: ',' , delimiter: '.'
                             )}" %>
                         </td>
-                        <% else %>
-                          <td style="color: red;">
-                            <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ -' , separator: ',' , delimiter: '.'
-                              )}" %>
-                          </td>
-                          <% end %>
-
-
-                            <td>
-                              <%= cash_register_list.note %>
-                            </td>
-                    </tr>
-                    <% end %>
                       <% end %>
-              </tbody>
-            </table>
+                      <td><%= cash_register_list.note %></td>
+                  </tr>
+                  <% end %>
+                <% end %>
+            </tbody>
+          </table>
       </div>
-
-      
     </div>
   </div>
 
 <%else%>
-  
   <div class="card card-primary">
-
     <div class="card-header d-flex justify-content-between align-items-center">
       <div>
         <strong>
-          <%= "Data: #{Date.today.strftime('%d/%m/%Y')}" %>
+          <%= "Data: #{CashRegister.last.date.strftime('%d/%m/%Y')}" %>
         </strong>
       </div>
 
@@ -222,8 +213,8 @@
                           </td>
                         </tr>
                         <% end %>
-                          <% end %>
-                            <% end %>
+                      <% end %>
+                    <% end %>
                 </tbody>
               </table>
             </div>
@@ -265,6 +256,4 @@
       </div>
     </div>
   </div>
-
-
 <% end %>

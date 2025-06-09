@@ -4,7 +4,7 @@ class CartsController < ApplicationController
   end
 
   def new_cart
-    @cart = Cart.new(balance: 0, discount: 0, addition: 0, date: Date.today)
+    @cart = Cart.new(balance: 0, discount: 0, addition: 0, date: CashRegister.last.date)
 
     if @cart.save
 
@@ -112,14 +112,14 @@ class CartsController < ApplicationController
         inventory = Inventory.find_by(product_id: cart_orderable.product.id)
         inventory.update(quantity: inventory.quantity - cart_orderable.quantity)
       end
-  
+
       # atualiza o valor do caixa
       CashRegister.last.update(balance: CashRegister.last.balance + cart_last.balance)
-  
+
       # cria um registro no caixa
-      CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: cart_last.balance,
+      CashRegisterList.create(cash_register_id: CashRegister.last.id, date: CashRegister.last.date, balance: cart_last.balance,
                               note: 'Venda de Mercadoria(Madeira)', cash_register_type: 1,expense_id: expense.id)
-  
+
       check_cart = Cart.where(balance: 0)
       check_cart.destroy_all
       flash[:notice] = "Venda Efetuada!"
@@ -170,7 +170,7 @@ class CartsController < ApplicationController
     CashRegister.last.update(balance: CashRegister.last.balance + cart_last.balance)
 
     # cria um registro no caixa
-    CashRegisterList.create(cash_register_id: CashRegister.last.id, date: Date.today, balance: down_payment,
+    CashRegisterList.create(cash_register_id: CashRegister.last.id, date: CashRegister.last.date, balance: down_payment,
                             note: "Venda de Mercadoria(Madeira) a Prazo, valor de entrada R$:#{down_payment}, valor total R$:#{cart_last.balance}", cash_register_type: 1, expense_id:expense.id)
 
     check_cart = Cart.where(balance: 0)

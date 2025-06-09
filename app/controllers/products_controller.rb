@@ -1,6 +1,23 @@
 class ProductsController < ApplicationController
   def index
     @products = Product.order(created_at: :asc)
+    @grouped_products = Product.order(created_at: :asc).group_by do |product|
+      if product.name.include?("VIGA 6X12")
+        "VIGAS 6x12"
+      elsif product.name.include?("VIGA 8X18")
+        "VIGAS 8x18"
+      elsif product.name.include?("CAIBRO 3,5X6")
+        "CAIBRO 3,5x6"
+      elsif product.name.include?("CAIBRO 1,0M")
+        "CAIBRO CURTO"
+      elsif product.name.include?("FRECHAL")
+        "FRECHAL"
+      elsif product.name.include?("RIPA")
+        "RIPA"
+      else
+        "Outros"
+        end
+    end
   end
 
   def new

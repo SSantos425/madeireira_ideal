@@ -68,31 +68,34 @@
   
   <div class="card-body">
     <div class="table-responsive">
-      <table class="table table-bordered table-hover text-center">
-        <thead>
-          <tr>
-            <th>Madeira Serrada</th>
-            <th>Unidade</th>
-            <th>Preço de Compra</th>
-            <th>Preço de Venda</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @products.each do |product| %>
+      <% @grouped_products.each do |group_name, products| %>
+        <h5 style="text-align: center;"><strong><%= group_name %></strong></h5>
+        <table class="table table-bordered table-hover text-center">
+          <thead class="table-light">
             <tr>
-              <td><%= product.name %></td>
-              <td><%= product.unity %></td>
-              <td><%= number_to_currency(product.purchase_price, unit: "R$", separator: ",", delimiter: ".") %></td>
-              <td><%= number_to_currency(product.sale_price, unit: "R$", separator: ",", delimiter: ".") %></td>
-              <td>
-                <%= link_to "Editar", edit_product_path(product), class: "btn btn-warning btn-sm", data: { turbo: false } %>
-                <%= link_to "Excluir", product_path(product), method: :delete, data: { confirm: "Você tem certeza?" }, class: "btn btn-danger btn-sm" %>
-              </td>
+              <th>Madeira Serrada</th>
+              <th>Unidade</th>
+              <th>Preço de Compra</th>
+              <th>Preço de Venda</th>
+              <th>Ações</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% products.each do |product| %>
+              <tr>
+                <td><%= product.name.split.last %></td>
+                <td><%= product.unity %></td>
+                <td><%= number_to_currency(product.purchase_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+                <td><%= number_to_currency(product.sale_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+                <td>
+                  <%= link_to "Editar", edit_product_path(product), class: "btn btn-warning btn-sm", data: { turbo: false } %>
+                  <%= link_to "Excluir", product_path(product), method: :delete, data: { confirm: "Você tem certeza?" }, class: "btn btn-danger btn-sm" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
     </div>
   </div>
 

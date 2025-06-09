@@ -84,7 +84,7 @@
       <div class="form-inline">
         <%= form_with(url: purchase_discount_or_addition_path) do |f| %>
           <%= f.hidden_field :purchase_id, value:@purchase.id%>
-          <%= f.number_field :quantity, step: 0.1, class: "form-control mr-1", placeholder: "Quantidade (R$)", min: 0 %>
+          <%= f.number_field :quantity, step: 0.01, class: "form-control mr-1", placeholder: "Quantidade (R$)", min: 0 %>
           <%= f.submit "Aplicar Desconto", name: "discount", class: "btn btn-primary btn-sm mr-1" %>
           <%= f.submit "Aplicar Acréscimo", name: "addition", class: "btn btn-warning btn-sm"  %>
         <% end %>

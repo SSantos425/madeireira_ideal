@@ -17,9 +17,6 @@
         <th>Data</th>
         <th>Valor</th>
         <th>Justificativa</th>
-        <!--
-        <th>Ações</th>
-        -->
       </tr>
     </thead>
 
@@ -39,11 +36,7 @@
                   <%="#{number_to_currency(cash_register_list.balance, unit: 'R$ -' , separator: ',' , delimiter: '.' )}" %>
                 </td>
             <% end %>
-
-
-                    <td>
-                      <%= cash_register_list.note %>
-                    </td>
+            <td><%= cash_register_list.note %></td>
           </tr>
           <% end %>
         <% end %>
@@ -64,12 +57,7 @@
         </div>
       <% end %>
   </div>
-
-
 </div>
-
-
-
 
 <div class="card card-primary">
   <div class="card-header">

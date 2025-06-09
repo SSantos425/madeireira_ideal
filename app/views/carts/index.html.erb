@@ -1,7 +1,7 @@
 <div style="display: flex; justify-content: center;">
   <div class="card">
     <div class="card-header">
-      <strong>Data:</strong> <%= @cart.created_at.strftime("%d/%m/%Y") %> | <!-- Mostra apenas a data -->
+      <strong>Data:</strong> <%= CashRegister.last.date.strftime("%d/%m/%Y") %> | <!-- Mostra apenas a data -->
       <strong>Hora:</strong> <%= @cart.created_at.strftime("%H:%M:%S") %> <!-- Mostra apenas a hora -->
     </div>
   

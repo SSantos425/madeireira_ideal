@@ -56,12 +56,13 @@ class CashRegistersController < ApplicationController
     note = params[:notes]
 
     if params[:withdraw]
-      cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance: value, note:,
+      cash_register_list = CashRegisterList.new(cash_register_id:, date:, balance: value, note:,
                                                   cash_register_type: 0, expense_id:account_plan_id)
-      cash_resgister_list.save
+      cash_register_list.save
 
-      cash_resgister = CashRegister.last
-      cash_resgister.update(balance: cash_resgister.balance - value)
+      cash_register = CashRegister.last
+      cash_register.update(balance: cash_register.balance - value)
+      flash[:notice] = "Retirada Efetuada!"
       redirect_to cash_registers_path
     elsif params[:replenishment]
       cash_resgister_list = CashRegisterList.new(cash_register_id:, date:, balance: value, note:,
@@ -70,7 +71,7 @@ class CashRegistersController < ApplicationController
 
       cash_resgister = CashRegister.last
       cash_resgister.update(balance: cash_resgister.balance + value)
-
+      flash[:notice] = "Reforço Aplicado!"
       redirect_to cash_registers_path
     end
   end

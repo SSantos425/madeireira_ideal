@@ -1,0 +1,79 @@
+<% @orderables.each do |orderable| %>
+  <% if orderable.cart_id === @cart.id %>
+    <tr>
+      <td><%= orderable.product.name %></td>
+      <td><%= number_to_currency(orderable.product.sale_price, unit: 'R$', separator: ',', delimiter: '.') %></td>
+      <td>
+        <div class="form-inline">
+          <%= form_with(url: update_orderable_item_path) do |f| %>
+            <%= f.hidden_field :client_id, value: @client.id %>
+            <%= f.hidden_field :orderable_id, value: orderable.id %>
+            <%= f.number_field :quantity, step: 0.1, value: orderable.quantity, class: "form-control", min: 0 %>
+            <%= f.submit "Atualizar", class: "btn btn-success btn-sm mr-1" %>
+          <% end %>
+          <%= form_with(url: remove_orderable_item_path) do |f| %>
+            <%= f.hidden_field :client_id, value: @client.id %>
+            <%= f.hidden_field :orderable_id, value: orderable.id %>
+            <%= f.submit "Remover", class: "btn btn-danger btn-sm" %>
+          <% end %>
+        </div>
+      </td>
+      <td><%= number_to_currency(orderable.total, unit: 'R$', separator: ',', delimiter: '.') %></td> 
+    </tr>
+  <% end %>
+<% end %>
+
+
+<% if flash[:notice].present? %>
+  <%= content_tag :div, flash[:notice], id: "flash-notice", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'success',
+        title: document.getElementById('flash-notice').innerText,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% elsif flash[:alert].present? %>
+  <%= content_tag :div, flash[:alert], id: "flash-alert", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'error',
+        title: document.getElementById('flash-alert').innerText,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% elsif flash[:warning].present? %>
+  <%= content_tag :div, flash[:warning], id: "flash-warning", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'warning',
+        title: document.getElementById('flash-warning').innerText,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% elsif flash[:error].present? %>
+  <%= content_tag :div, flash[:error], id: "flash-error", style: "display: none;" %>
+  <script>
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: 'error',
+        title: document.getElementById('flash-error').innerText,
+        timer: 3000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+  </script>
+<% end %>

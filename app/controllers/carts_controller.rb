@@ -15,13 +15,10 @@ class CartsController < ApplicationController
   end
 
   def show
-    # products_name = params[:products_name]
     @cart = Cart.find(params[:cart_id])
     @client = Client.find(params[:client_id])
 
-    # @products_name = Product.where("name LIKE ?", "%#{products_name}%")
-
-    @products = Product.order(created_at: :asc)
+    @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
     @orderables = Orderable.order(created_at: :asc)
   end
 
@@ -39,33 +36,29 @@ class CartsController < ApplicationController
         flash.now[:warning] = "Quantidade indisponivel no estoque."
       else
         Orderable.create(product_id: product_id, cart_id: @cart.id, client_id: @client.id, quantity: quantity)
+        flash[:notice] = "Produto Adicionado!"
       end
     else
       current_orderable.update(quantity: quantity)
     end
 
     # Lógica para filtrar produtos baseados no nome
-    if product_id.present?
-      product = Product.find(product_id)
-      case
-      when product.name.start_with?('VIGA')
-        @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
-      when product.name.start_with?('CAIBRO')
-        @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
-      when product.name.start_with?('FRECHAL')
-        @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
-      when product.name.start_with?('RIPA')
-        @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
-      else
-        @products = Product.all.order(created_at: :asc)
-      end
+    product = Product.find(product_id)
+    case
+    when product.name.start_with?('VIGA')
+      @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
+    when product.name.start_with?('CAIBRO')
+      @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
+    when product.name.start_with?('FRECHAL')
+      @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
+    when product.name.start_with?('RIPA')
+      @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
     else
-      @products = Product.all.order(created_at: :asc)
+      @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
     end
 
     @orderables = Orderable.order(created_at: :asc)
-    render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
-                                                     locals: { orderables: @orderables, cart: @cart, products: @products, client: @client })
+    render turbo_stream: turbo_stream.update('orderables-table-body', partial: 'carts/orderables_table_body', locals: { orderables: @orderables, cart: @cart, client: @client })
   end
 
   def remove_orderable_item
@@ -75,7 +68,21 @@ class CartsController < ApplicationController
 
     @cart = Cart.last
     @orderables = Orderable.order(created_at: :asc)
-    @products = Product.order(created_at: :asc)
+
+    product = Product.all
+    case
+    when product.name.start_with?('VIGA')
+      @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
+    when product.name.start_with?('CAIBRO')
+      @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
+    when product.name.start_with?('FRECHAL')
+      @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
+    when product.name.start_with?('RIPA')
+      @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
+    else
+      @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
+    end
+
     @client = Client.find_by(id: params[:client_id])
     render turbo_stream: turbo_stream.update('cart', partial: 'carts/cart',
                                                      locals: { orderable: @orderable, cart: @cart, product: @products, client: @client })
@@ -179,25 +186,21 @@ class CartsController < ApplicationController
   end
 
   def filter
-    product_name=params[:product_name]
+    product_name = params[:product_name]
     @client = Client.find_by(id: params[:client_id])
 
     # Lógica para filtrar produtos baseados no nome
-    if product_name.present?
-      case
-      when product_name.start_with?('VIGA')
-        @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
-      when product_name.start_with?('CAIBRO')
-        @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
-      when product_name.start_with?('FRECHAL')
-        @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
-      when product_name.start_with?('RIPA')
-        @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
-      else
-        @products = Product.all.order(created_at: :asc)
-      end
+    case
+    when product_name.start_with?('VIGA')
+      @products = Product.where('name LIKE ?', 'VIGA%').order(created_at: :asc)
+    when product_name.start_with?('CAIBRO')
+      @products = Product.where('name LIKE ?', 'CAIBRO%').order(created_at: :asc)
+    when product_name.start_with?('FRECHAL')
+      @products = Product.where('name LIKE ?', 'FRECHAL%').order(created_at: :asc)
+    when product_name.start_with?('RIPA')
+      @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
     else
-      @products = Product.all.order(created_at: :asc)
+      @products = Product.where('name LIKE ?', 'RIPA%').order(created_at: :asc)
     end
 
     @cart = Cart.last

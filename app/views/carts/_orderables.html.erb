@@ -18,31 +18,9 @@
           <th>Total Parcial</th>
         </tr>
       </thead>
-      <tbody>
-        <% @orderables.each do |orderable| %>
-          <% if orderable.cart_id === @cart.id %>
-            <tr>
-              <td><%= orderable.product.name %></td>
-              <td><%= number_to_currency(orderable.product.sale_price, unit: 'R$', separator: ',', delimiter: '.') %></td>
-              <td>
-                <div class="form-inline">
-                  <%= form_with(url: update_orderable_item_path) do |f| %>
-                    <%= f.hidden_field :client_id, value: @client.id %>
-                    <%= f.hidden_field :orderable_id, value: orderable.id %>
-                    <%= f.number_field :quantity, step: 0.1, value: orderable.quantity, class: "form-control", min: 0 %>
-                    <%= f.submit "Atualizar", class: "btn btn-success btn-sm mr-1" %>
-                  <% end %>
-                  <%= form_with(url: remove_orderable_item_path) do |f| %>
-                    <%= f.hidden_field :client_id, value: @client.id %>
-                    <%= f.hidden_field :orderable_id, value: orderable.id %>
-                    <%= f.submit "Remover", class: "btn btn-danger btn-sm" %>
-                  <% end %>
-                </div>
-              </td>
-              <td><%= number_to_currency(orderable.total, unit: 'R$', separator: ',', delimiter: '.') %></td> 
-            </tr>
-          <% end %>
-        <% end %>
+
+      <tbody id="orderables-table-body">
+        <%= render partial: 'carts/orderables_table_body', locals: { orderables: @orderables, cart: @cart, client: @client } %>
       </tbody>
     </table>
 
@@ -148,7 +126,6 @@
     <%= button_to "FRECHAL", filter_path(product_name: "FRECHAL", client_id: @client.id), class: "btn btn-primary mr-2" %>
     <%= button_to "CAIBRO", filter_path(product_name: "CAIBRO", client_id: @client.id), class: "btn btn-primary mr-2" %>
     <%= button_to "VIGA", filter_path(product_name: "VIGA", client_id: @client.id), class: "btn btn-primary mr-2" %>
-    <%= button_to "Todos", filter_path(product_name: nil, client_id: @client.id), class: "btn btn-primary" %>
   </div>
   
   <div class="card-body">
@@ -162,85 +139,28 @@
         </tr>
       </thead>
       <tbody id="product-table-body">
-       
-          <% @products.each do |product| %>
-            <tr>
-              <td><%= product.name %></td>
-              <td><%= product.unity %></td>
-              <td><%= product.sale_price %></td>
-              <td>
-                <div class="d-flex">
-                  <%= form_with(url: cart_orderable_path) do |form| %>
-                    <%= form.hidden_field :client_id, value: @client.id %>
-                    <%= form.hidden_field :product_id, value: product.id %>
-                    <div class="d-flex align-items-center">
-                      <%= form.number_field :quantity, step: 0.1, placeholder: 'Quantidade', class:"form-control mr-1", min: 0 %>
-                      <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
-                        <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
-                      <% end %>
-                    </div>
-                  <% end %>
-                </div>
-              </td>
-            </tr>
-          <% end %>
-
+        <% @products.each do |product| %>
+          <tr>
+            <td><%= product.name %></td>
+            <td><%= product.unity %></td>
+            <td><%= product.sale_price %></td>
+            <td>
+              <div class="d-flex">
+                <%= form_with(url: cart_orderable_path) do |form| %>
+                  <%= form.hidden_field :client_id, value: @client.id %>
+                  <%= form.hidden_field :product_id, value: product.id %>
+                  <div class="d-flex align-items-center">
+                    <%= form.number_field :quantity, step: 0.1, placeholder: 'Quantidade', class:"form-control mr-1", min: 0 %>
+                    <%= button_tag(type: 'submit', class: 'btn btn-primary btn-sm') do %>
+                      <i class="fas fa-cart-plus mr-1"></i> Incluir no Carrinho de Venda
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
 </div>
-
-
-<% if flash[:notice].present? %>
-  <%= content_tag :div, flash[:notice], id: "flash-notice", style: "display: none;" %>
-  <script>
-    Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: 'success',
-        title: document.getElementById('flash-notice').innerText,
-        timer: 3000,
-        showConfirmButton: false,
-        timerProgressBar: true,
-      });
-  </script>
-<% elsif flash[:alert].present? %>
-  <%= content_tag :div, flash[:alert], id: "flash-alert", style: "display: none;" %>
-  <script>
-    Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: 'error',
-        title: document.getElementById('flash-alert').innerText,
-        timer: 3000,
-        showConfirmButton: false,
-        timerProgressBar: true,
-      });
-  </script>
-<% elsif flash[:warning].present? %>
-  <%= content_tag :div, flash[:warning], id: "flash-warning", style: "display: none;" %>
-  <script>
-    Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: 'warning',
-        title: document.getElementById('flash-warning').innerText,
-        timer: 3000,
-        showConfirmButton: false,
-        timerProgressBar: true,
-      });
-  </script>
-<% elsif flash[:error].present? %>
-  <%= content_tag :div, flash[:error], id: "flash-error", style: "display: none;" %>
-  <script>
-    Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: 'error',
-        title: document.getElementById('flash-error').innerText,
-        timer: 3000,
-        showConfirmButton: false,
-        timerProgressBar: true,
-      });
-  </script>
-<% end %>

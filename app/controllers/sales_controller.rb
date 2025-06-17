@@ -19,8 +19,8 @@ class SalesController < ApplicationController
   end
 
   def report_month_sales
-    start_date = Date.today.beginning_of_month
-    end_date = Date.today.end_of_month
+    start_date = params[:start_date]
+    end_date = params[:end_date]
 
     sold_carts = Cart.where(created_at: start_date..end_date).where("balance > 0")
     orderables = Orderable.includes(:product).where(cart_id: sold_carts)
@@ -50,42 +50,53 @@ class SalesController < ApplicationController
       totais_por_categoria[categoria] += o.quantity * produto.sale_price
     end
 
-    pdf = Prawn::Document.new do |pdf|
+    pdf = Prawn::Document.new(page_size: 'A4', page_layout: :landscape) do |pdf|
       ENV['LC_TIME'] = 'pt_BR.UTF-8'
       mes_ano = Date.today.strftime('%B de %Y').capitalize
       pdf.text "Relatório Mensal - #{mes_ano}", size: 18, style: :bold, align: :center
+
       pdf.move_down 20
+
+      data = [["Produto", "Quantidade", "Custo Médio (R$)", "Valor Médio (R$)", "Valor Total (R$)", "Lucro (%)"]]
 
       produtos.each do |categoria, itens|
-        pdf.text categoria, size: 14, style: :bold
-        data = [["Produto", "Quantidade", "Valor Total (R$)"]]
-
         itens.each do |nome, dados|
-          valor_formatado = ActionController::Base.helpers.number_to_currency(
-            dados[:valor], unit: 'R$', separator: ',', delimiter: '.'
-          )
-          data << [nome, dados[:quantidade].to_s, valor_formatado]
-        end
+          valor_total = dados[:valor]
+          quantidade = dados[:quantidade]
+          valor_medio = quantidade > 0 ? (valor_total / quantidade) : 0
 
-        pdf.table(data, header: true, row_colors: ["F0F0F0", "FFFFFF"], cell_style: { size: 10 })
-        pdf.move_down 15
+          produto = Product.find_by(name: nome)
+          custo_unitario = produto&.purchase_price || 0
+          custo_total = custo_unitario * quantidade
+          custo_medio = quantidade > 0 ? (custo_total / quantidade) : 0
+
+          lucro = valor_total - custo_total
+          percentual_lucro = custo_total > 0 ? (lucro / custo_total * 100) : 0
+
+          valor_total_formatado = number_to_currency(valor_total, unit: 'R$', separator: ',', delimiter: '.')
+          valor_medio_formatado = number_to_currency(valor_medio, unit: 'R$', separator: ',', delimiter: '.')
+          custo_medio_formatado = number_to_currency(custo_medio, unit: 'R$', separator: ',', delimiter: '.')
+
+          percentual_lucro_formatado = "#{percentual_lucro.round(1)}%"
+
+          data << [
+            nome,
+            quantidade.to_s,
+            custo_medio_formatado,
+            valor_medio_formatado,
+            valor_total_formatado,
+            percentual_lucro_formatado
+          ]
+        end
       end
+
+      pdf.table(data, header: true, cell_style: { size: 10, borders: [], padding: [4, 14]})
 
       pdf.move_down 20
-      pdf.text "Totais por Categoria:", size: 14, style: :bold
-      totais_por_categoria.each do |categoria, total|
-        total_formatado = ActionController::Base.helpers.number_to_currency(
-          total, unit: 'R$', separator: ',', delimiter: '.'
-        )
-        pdf.text "#{categoria}: #{total_formatado}", size: 12
-      end
 
-      pdf.move_down 10
       total_geral = totais_por_categoria.values.sum
-      total_formatado = ActionController::Base.helpers.number_to_currency(
-        total_geral, unit: 'R$', separator: ',', delimiter: '.'
-      )
-      pdf.text "Total de Vendas: #{total_formatado}", size: 16, style: :bold, align: :right
+      total_formatado = number_to_currency(total_geral, unit: 'R$', separator: ',', delimiter: '.')
+      pdf.text "Total de Vendas: #{total_formatado}", style: :bold, align: :right
     end
 
     send_data(pdf.render,
@@ -137,7 +148,7 @@ class SalesController < ApplicationController
         data = [["Produto", "Quantidade", "Valor Total (R$)"]]
 
         itens.each do |nome, dados|
-          valor_formatado = ActionController::Base.helpers.number_to_currency(
+          valor_formatado = number_to_currency(
             dados[:valor], unit: 'R$', separator: ',', delimiter: '.'
           )
           data << [nome, dados[:quantidade].to_s, valor_formatado]
@@ -150,7 +161,7 @@ class SalesController < ApplicationController
       pdf.move_down 20
       pdf.text "Totais por Categoria:", size: 14, style: :bold
       totais_por_categoria.each do |categoria, total|
-        total_formatado = ActionController::Base.helpers.number_to_currency(
+        total_formatado = number_to_currency(
           total, unit: 'R$', separator: ',', delimiter: '.'
         )
         pdf.text "#{categoria}: #{total_formatado}", size: 12
@@ -158,7 +169,7 @@ class SalesController < ApplicationController
 
       pdf.move_down 10
       total_geral = totais_por_categoria.values.sum
-      total_formatado = ActionController::Base.helpers.number_to_currency(
+      total_formatado = number_to_currency(
         total_geral, unit: 'R$', separator: ',', delimiter: '.'
       )
       pdf.text "Total de Vendas: #{total_formatado}", size: 16, style: :bold, align: :right
